@@ -111,7 +111,7 @@ def publish_activate_token(sender, instance, **kwargs):
             expired_at=datetime.now()+timedelta(days=settings.ACTIVATION_EXPIRED_DAYS),
         )
         subject = 'Please Activate Your Account'
-        message = f'URLにアクセスして本登録を行なってください。\n http://127.0.0.1:8000/users/{user_activate_token.activate_token}/activation/'
+        message = f'URLにアクセスして本登録を行なってください。\n http://43.207.177.211:8000/users/{user_activate_token.activate_token}/activation/'
 
 #    以下は本登録が完了した後にメールを送る設定だが、
 #    ログイン時にもメールが送られてしまったため実装断念。
