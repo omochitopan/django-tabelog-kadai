@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}トップページ{% endblock %}
+{% block contents %}
+
+<!-- 検索フォーム -->
+<div class="top-container">
+	<form method="get" action="">
+		{% csrf_token %}
+		<label for="">店舗名で検索</label>
+		<input class="search-box" type="text" name="title" value="{{title}}">
+		<button type="submit" class="search-btn">検索</button>
+	</form>
+</div>
+
+<!-- 検索結果の数 -->
+{% if query %}
+<p>{{posts.count}}件</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,111 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 1080px;
+  margin: 0 auto 0 auto;
+  font-family: "Source Sans Pro", "Hiragino Kaku Gothic ProN", Meiryo, Arial, sans-serif;
+}
+
+header {
+  height: 80px;
+  background-color: gray;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+.header-logo {
+  display: flex;
+}
+
+.logo {
+  height: 60px;
+  margin: 10px 20px;
+}
+
+.nav-pc {
+  margin: auto 20px auto 0;
+}
+
+.nav-pc ul {
+  display: flex;
+  padding-left: none;
+}
+
+.nav-pc li {
+  list-style: none;
+}
+
+.nav-pc a {
+  text-decoration: none;
+  margin-left: 20px;
+  color: #0d0d0d;
+}
+
+.nav-pc a:hover {
+  text-decoration: underline;
+}
+
+main {
+  margin-top: 80px;
+}
+
+.login-container {
+  max-width: 400px;
+  padding-top: 40px;
+  padding-left: 100px;
+}
+
+.login-check {
+  margin-bottom: 30px;
+}
+
+.login-ref {
+  margin-top: 15px;
+}
+
+.login-ref > a {
+  color: rgb(125, 125, 125);
+  text-decoration: none;
+}
+
+.login-ref > a:hover {
+  color: rgb(180, 91, 162);
+  text-decoration: underline;
+}
+
+.passwordreset-container {
+  max-width: 600px;
+  padding-top: 40px;
+  padding-left: 100px;
+}
+
+.signup-container {
+  max-width: 600px;
+  padding-top: 40px;
+  padding-left: 100px;
+}
+
+.temp-registration {
+  width: 100%;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.top-container {
+  text-align: center;
+  margin-top: 150px;
+}
+
+#search-box {
+  width: 200px;
+  margin: 0 10px;
+}
