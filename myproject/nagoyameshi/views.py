@@ -11,6 +11,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 
+import environ
+import os
+
+env = environ.Env()
+env_ip = env('IP_ADDRESS')
+
 # Create your views here.
 class LoginView(LoginView):
     form_class = AuthenticationForm
@@ -53,7 +59,7 @@ def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
     if hasattr(activated_user, 'is_active'):
         if activated_user.is_active:
-            message = "本登録が完了しました！<br><a href=\"http://43.207.177.211:8000/login/\">ログインページ</a>"
+            message = "本登録が完了しました！<br><a href=\"http://" + env_ip + ":8000/login/\">ログインページ</a>"
         if not activated_user.is_active:
             message = '本登録に失敗しました。'
     if not hasattr(activated_user, 'is_active'):
