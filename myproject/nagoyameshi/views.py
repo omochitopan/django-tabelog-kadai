@@ -53,7 +53,7 @@ def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
     if hasattr(activated_user, 'is_active'):
         if activated_user.is_active:
-            message = "本登録が完了しました！<br><a href=\"http://127.0.0.1:8000/login/\">ログインページ</a>"
+            message = "本登録が完了しました！<br><a href=\"http://43.207.177.211:8000/login/\">ログインページ</a>"
         if not activated_user.is_active:
             message = '本登録に失敗しました。'
     if not hasattr(activated_user, 'is_active'):
