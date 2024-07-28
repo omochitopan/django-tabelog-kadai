@@ -27,6 +27,11 @@ class LogoutView(LoginRequiredMixin, LogoutView):
 
 class UserCreatedView(TemplateView):
     template_name = 'user_created.html'
+    
+    # user_created.htmlに変数を書き出し
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['register_URL'] = "http://" + env_ip + ":8000/users/{user_activate_token.activate_token}/activation/"
 
 class ListView(ListView):
     model = Restaurant
