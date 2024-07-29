@@ -68,9 +68,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(verbose_name="お名前（漢字）", max_length=20)
     kana_name = models.CharField(verbose_name="お名前（フリガナ）", max_length=20)
     email = models.EmailField(verbose_name="e-mail", max_length=100, unique=True)
-    password_regex = RegexValidator(regex=r'^(?=.*[A-Z])(?=.*[.?/-])[a-zA-Z0-9.?/-]{8,24}$', 
-                                    message = ("パスワードは半角8文字以上24文字以内で大文字と記号（.?/-）をそれぞれ1文字以上含めてください"))
-    password = models.CharField(verbose_name="パスワード", validators=[password_regex], max_length=24)
+    # password_regex = RegexValidator(regex=r'^(?=.*[A-Z])(?=.*[.?/-])[a-zA-Z0-9.?/-]{8,24}$', 
+    #                                 message = ("パスワードは半角8文字以上24文字以内で大文字と記号（.?/-）をそれぞれ1文字以上含めてください"))
+    # password = models.CharField(verbose_name="パスワード", validators=[password_regex], max_length=256)
     postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号は半角数字7文字で入力してください"))
     postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
     address = models.CharField(verbose_name="住所", max_length=150)

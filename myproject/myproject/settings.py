@@ -29,8 +29,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
 
 # Application definition
 
@@ -83,8 +82,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / env('DATA_BASE_URL'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'NAGOYAMESHI',
+        'USER': 'stsmorinaga@gmail.com',
+        'PASSWORD': env('DATABASE_PASSWORD')
     }
 }
 
@@ -104,6 +105,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    # カスタムバリデーションクラス
+    {
+        "NAME": "nagoyameshi.utils.password_validator.PasswordValidator",
     },
 ]
 
