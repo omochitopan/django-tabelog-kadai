@@ -15,7 +15,7 @@ import environ
 import os
 
 env = environ.Env()
-env_ip = env('IP_ADDRESS')
+register_ip = env('REGISTER_IP')
 
 # Create your views here.
 class LoginView(LoginView):
@@ -64,7 +64,7 @@ def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
     if hasattr(activated_user, 'is_active'):
         if activated_user.is_active:
-            message = "本登録が完了しました！<br><a href=\"http://" + env_ip + ":8000/login/\">ログインページ</a>"
+            message = "本登録が完了しました！<br><a href=\"http://" + register_ip + "/login/\">ログインページ</a>"
         if not activated_user.is_active:
             message = '本登録に失敗しました。'
     if not hasattr(activated_user, 'is_active'):
