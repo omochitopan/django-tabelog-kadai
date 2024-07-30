@@ -15,7 +15,8 @@ import environ
 import os
 
 env = environ.Env()
-register_ip = env('REGISTER_IP')
+ip_port = env('IP_PORT')
+login_url = f'http://{ip_port}/login/'
 
 # Create your views here.
 class LoginView(LoginView):
@@ -31,7 +32,7 @@ class UserCreatedView(TemplateView):
     # user_created.htmlに変数を書き出し
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['register_URL'] = "http://" + env_ip + ":8000/users/{user_activate_token.activate_token}/activation/"
+        context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
 
 class ListView(ListView):
     model = Restaurant
@@ -64,7 +65,7 @@ def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
     if hasattr(activated_user, 'is_active'):
         if activated_user.is_active:
-            message = "本登録が完了しました！<br><a href=\"http://" + register_ip + "/login/\">ログインページ</a>"
+            message = f'本登録が完了しました！<br><a href={login_url}>ログインページ</a>'
         if not activated_user.is_active:
             message = '本登録に失敗しました。'
     if not hasattr(activated_user, 'is_active'):
