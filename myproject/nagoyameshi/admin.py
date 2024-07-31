@@ -7,8 +7,10 @@ class RestaurantAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'created_at', 'updated_at')
-    search_fields = ('email',)
+    list_display = ('id', 'name', 'kana_name', 'email', 'is_staff')
+    search_fields = ('name', 'kana_name', 'email',)
+    list_filter = ('is_staff',)
+    list_per_page = 15
     
 class UserActivateTokensAdmin(admin.ModelAdmin):
     list_display = ('token_id', 'user', 'activate_token', 'expired_at')
