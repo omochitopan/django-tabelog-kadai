@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin, Group, Permission
-from django.core.validators import RegexValidator, MinLengthValidator 
+from django.core.validators import RegexValidator, MinLengthValidator
+from django.core.exceptions import ValidationError
 from django.conf import settings
 import uuid
 from datetime import datetime, timedelta
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 import environ
@@ -13,28 +14,44 @@ import os
 env = environ.Env()
 ip_port = env('IP_PORT')
 
-class Restaurant(models.Model):
-    PRICE_RANGES = (
-        ('1', '¥0~999'),
-        ('2', '¥1,000~1,999'),
-        ('3', '¥2,000~2,999'),
-        ('4', '¥3,000~3,999'),
-        ('5', '¥4,000~4,999'),
-        ('6', '¥5,000~9,999'),
-        ('7', '¥10,000~30,000'),
-        ('8', '¥30,000~')
-    )
-    
-    name = models.CharField(verbose_name="店舗名", max_length=50)
-    url = models.URLField(verbose_name="URL", blank=True, null=True)
-    text = models.TextField(verbose_name="店舗説明", max_length=1000)
-    address = models.CharField(verbose_name="店舗住所", max_length=200)
-    price = models.CharField(verbose_name="価格帯", max_length=20, choices=PRICE_RANGES)
+postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号は半角数字7文字で入力してください"))
+tel_number_regex = RegexValidator(regex=r'^[0-9]+$', message = ("電話番号は半角数字15文字以内で入力してください"))
+
+class Category(models.Model):
+    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
     def __str__(self):
-        return self.name
+        return self.category_name
+
+class RegularHoliday(models.Model):
+    holiday = models.CharField(verbose_name="定休日", max_length=3)
+    holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+    
+    def __str__(self):
+        return self.holiday
+
+class Restaurant(models.Model):
+    restaurant_name = models.CharField(verbose_name="店舗名", max_length=50)
+    image = models.ImageField(verbose_name='店舗画像', default='noImage.png')
+    description = models.TextField(verbose_name="説明", max_length=1000)
+    lowest_price = models.PositiveIntegerField(verbose_name="最低価格", blank=True, null=True)
+    highest_price = models.PositiveIntegerField(verbose_name="最高価格", blank=True, null=True)
+    postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
+    address = models.CharField(verbose_name="店舗住所", max_length=200)
+    opening_time = models.TimeField(verbose_name='開店時間')
+    closing_time = models.TimeField(verbose_name='閉店時間')
+    holiday = models.ManyToManyField(RegularHoliday, verbose_name='定休日', blank=True)    
+    seating_capacity = models.PositiveIntegerField(verbose_name='予約可能な座席数')
+    category_name = models.ManyToManyField(Category, verbose_name='カテゴリ（3つまで選択可）', blank=True)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+    
+    def __str__(self):
+        return self.restaurant_name
 
 class UserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -71,10 +88,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # password_regex = RegexValidator(regex=r'^(?=.*[A-Z])(?=.*[.?/-])[a-zA-Z0-9.?/-]{8,24}$', 
     #                                 message = ("パスワードは半角8文字以上24文字以内で大文字と記号（.?/-）をそれぞれ1文字以上含めてください"))
     # password = models.CharField(verbose_name="パスワード", validators=[password_regex], max_length=256)
-    postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号は半角数字7文字で入力してください"))
     postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
     address = models.CharField(verbose_name="住所", max_length=150)
-    tel_number_regex = RegexValidator(regex=r'^[0-9]+$', message = ("電話番号は半角数字15文字以内で入力してください"))
     tel_number = models.CharField(verbose_name='電話番号', validators=[tel_number_regex], max_length=15)
     birthday = models.DateField(verbose_name="誕生日", blank=True, null=True)
     is_staff = models.BooleanField(verbose_name="スタッフ", default=False)
