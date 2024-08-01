@@ -18,7 +18,7 @@ postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号
 tel_number_regex = RegexValidator(regex=r'^[0-9]+$', message = ("電話番号は半角数字15文字以内で入力してください"))
 
 class Category(models.Model):
-    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
+    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20, primary_key=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
@@ -26,7 +26,7 @@ class Category(models.Model):
         return self.category_name
 
 class RegularHoliday(models.Model):
-    holiday = models.CharField(verbose_name="定休日", max_length=3)
+    holiday = models.CharField(verbose_name="定休日", max_length=3, primary_key=True)
     holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
@@ -56,7 +56,7 @@ class Restaurant(models.Model):
 class UserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError('e-mailは必須項目です')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -85,9 +85,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(verbose_name="お名前（漢字）", max_length=20)
     kana_name = models.CharField(verbose_name="お名前（フリガナ）", max_length=20)
     email = models.EmailField(verbose_name="e-mail", max_length=100, unique=True)
-    # password_regex = RegexValidator(regex=r'^(?=.*[A-Z])(?=.*[.?/-])[a-zA-Z0-9.?/-]{8,24}$', 
-    #                                 message = ("パスワードは半角8文字以上24文字以内で大文字と記号（.?/-）をそれぞれ1文字以上含めてください"))
-    # password = models.CharField(verbose_name="パスワード", validators=[password_regex], max_length=256)
     postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
     address = models.CharField(verbose_name="住所", max_length=150)
     tel_number = models.CharField(verbose_name='電話番号', validators=[tel_number_regex], max_length=15)
