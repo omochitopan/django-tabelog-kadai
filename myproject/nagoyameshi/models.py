@@ -18,7 +18,7 @@ postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号
 tel_number_regex = RegexValidator(regex=r'^[0-9]+$', message = ("電話番号は半角数字15文字以内で入力してください"))
 
 class Category(models.Model):
-    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20, primary_key=True)
+    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
@@ -30,7 +30,7 @@ class Category(models.Model):
         return self.category_name
 
 class RegularHoliday(models.Model):
-    holiday = models.CharField(verbose_name="定休日", max_length=3, primary_key=True)
+    holiday = models.CharField(verbose_name="定休日", max_length=3)
     holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
@@ -137,7 +137,7 @@ class UserActivateTokens(models.Model):
     objects = UserActivateTokensManager()
     
     class Meta:
-        db_table = 'nagoyameshi_useractivatetoken'
+        db_table = 'nagoyameshi_useractivatetokens'
         verbose_name = verbose_name_plural = 'メール認証トークン'
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
