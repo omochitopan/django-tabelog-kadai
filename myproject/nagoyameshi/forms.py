@@ -29,17 +29,18 @@ class RestaurantAdminForm(forms.ModelForm):
             cleaned_data.get('category_name') == []
         elif len(cleaned_data.get('category_name')) > 3:
             raise ValidationError('カテゴリは3つまで選択可能です')
-
-    holiday = forms.MultipleChoiceField(
-        choices = RegularHoliday.objects.values_list('holiday', 'holiday').distinct(),
-        label = '定休日',
-        widget = forms.CheckboxSelectMultiple,
-        required = False,
-        )
+        
+    #以下はチェックボックススタイル適用
+    #holiday = forms.MultipleChoiceField(
+    #    choices = RegularHoliday.objects.values_list('holiday', 'holiday').distinct(),
+    #    label = '定休日',
+    #    widget = forms.CheckboxSelectMultiple,
+    #    required = False,
+    #    )
     
-    category_name = forms.MultipleChoiceField(
-        choices = Category.objects.values_list('category_name', 'category_name').distinct(),
-        label = 'カテゴリ（3つまで選択可）',
-        widget = forms.CheckboxSelectMultiple,
-        required = False,
-        )
+    #category_name = forms.MultipleChoiceField(
+    #    choices = Category.objects.values_list('category_name', 'category_name').distinct(),
+    #    label = 'カテゴリ（3つまで選択可）',
+    #    widget = forms.CheckboxSelectMultiple,
+    #    required = False,
+    #    )

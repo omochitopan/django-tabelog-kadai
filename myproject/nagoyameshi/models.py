@@ -22,6 +22,10 @@ class Category(models.Model):
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
+    class Meta:
+        db_table = 'nagoyameshi_category'
+        verbose_name = verbose_name_plural = 'カテゴリ'
+    
     def __str__(self):
         return self.category_name
 
@@ -30,6 +34,10 @@ class RegularHoliday(models.Model):
     holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+    
+    class Meta:
+        db_table = 'nagoyameshi_regularholiday'
+        verbose_name = verbose_name_plural = '定休日'
     
     def __str__(self):
         return self.holiday
@@ -50,6 +58,10 @@ class Restaurant(models.Model):
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
+    class Meta:
+        db_table = 'nagoyameshi_restaurant'
+        verbose_name = verbose_name_plural = 'レストラン'
+
     def __str__(self):
         return self.restaurant_name
 
@@ -99,6 +111,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
+    
+    class Meta:
+        db_table = 'nagoyameshi_user'
+        verbose_name = verbose_name_plural = 'ユーザー'
 
 class UserActivateTokensManager(models.Manager):
     def activate_user_by_token(self, activate_token):
@@ -119,6 +135,10 @@ class UserActivateTokens(models.Model):
     expired_at = models.DateTimeField()
 
     objects = UserActivateTokensManager()
+    
+    class Meta:
+        db_table = 'nagoyameshi_useractivatetoken'
+        verbose_name = verbose_name_plural = 'メール認証トークン'
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def publish_activate_token(sender, instance, **kwargs):

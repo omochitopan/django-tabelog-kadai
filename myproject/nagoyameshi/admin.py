@@ -4,19 +4,20 @@ from .models import Restaurant, User, UserActivateTokens, Category, RegularHolid
 
 # Register your models here.
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ('id', 'restaurant_name', 'postal_code', 'address')
+    list_display = ('id', 'restaurant_name', 'postal_code', 'address',)
     search_fields = ('restaurant_name',)
     list_per_page = 15
     form = RestaurantAdminForm
+    filter_horizontal = ('holiday', 'category_name',)
     
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'kana_name', 'email', 'is_staff')
+    list_display = ('id', 'name', 'kana_name', 'email', 'is_staff',)
     search_fields = ('name', 'kana_name', 'email',)
     list_filter = ('is_staff',)
     list_per_page = 15
     
 class UserActivateTokensAdmin(admin.ModelAdmin):
-    list_display = ('token_id', 'user', 'activate_token', 'expired_at')
+    list_display = ('token_id', 'user', 'activate_token', 'expired_at',)
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category_name',)
@@ -24,6 +25,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class RegularHolidayAdmin(admin.ModelAdmin):
     list_display = ('holiday', 'holiday_index',)
+    ordering = ('holiday_index',)
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)
