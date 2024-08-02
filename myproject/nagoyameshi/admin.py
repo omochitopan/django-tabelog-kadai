@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .forms import RestaurantAdminForm
+#from .forms import RestaurantAdminForm
 from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday
 
 # Register your models here.
@@ -7,7 +7,7 @@ class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('id', 'restaurant_name', 'postal_code', 'address')
     search_fields = ('restaurant_name',)
     list_per_page = 15
-    form = RestaurantAdminForm
+#    form = RestaurantAdminForm
     
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'kana_name', 'email', 'is_staff')
