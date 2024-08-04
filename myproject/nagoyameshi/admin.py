@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import RestaurantAdminForm
-from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday
+from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Company, Terms
 
 # Register your models here.
 class RestaurantAdmin(admin.ModelAdmin):
@@ -26,9 +26,17 @@ class CategoryAdmin(admin.ModelAdmin):
 class RegularHolidayAdmin(admin.ModelAdmin):
     list_display = ('holiday', 'holiday_index',)
     ordering = ('holiday_index',)
+    
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('company_name', 'postal_code', 'address',)
+
+class TermsAdmin(admin.ModelAdmin):
+    list_display = ('id',)
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(UserActivateTokens, UserActivateTokensAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(RegularHoliday, RegularHolidayAdmin)
+admin.site.register(Company, CompanyAdmin)
+admin.site.register(Terms, TermsAdmin)

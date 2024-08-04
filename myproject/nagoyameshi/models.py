@@ -18,31 +18,60 @@ postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号
 tel_number_regex = RegexValidator(regex=r'^[0-9]+$', message = ("電話番号は半角数字15文字以内で入力してください"))
 
 class Category(models.Model):
-    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
-    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
-    
     class Meta:
         db_table = 'nagoyameshi_category'
         verbose_name = verbose_name_plural = 'カテゴリ'
+    
+    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
     def __str__(self):
         return self.category_name
 
 class RegularHoliday(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_regularholiday'
+        verbose_name = verbose_name_plural = '定休日'
+    
     holiday = models.CharField(verbose_name="定休日", max_length=3)
     holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
-    class Meta:
-        db_table = 'nagoyameshi_regularholiday'
-        verbose_name = verbose_name_plural = '定休日'
-    
     def __str__(self):
         return self.holiday
+    
+class Company(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_company'
+        verbose_name = verbose_name_plural = '会社概要'
+    
+    company_name = models.CharField(verbose_name="会社名", max_length=50)
+    postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
+    address = models.CharField(verbose_name="店舗住所", max_length=200)
+    representative = models.CharField(verbose_name="代表者", max_length=50)
+    establishment_date = models.DateField(verbose_name="設立年月日")
+    capital = models.CharField(verbose_name="資本金", max_length=50)
+    business = models.CharField(verbose_name="事業内容", max_length=100)
+    number_of_employees = models.CharField(verbose_name="従業員数", max_length=50)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+
+class Terms(models.Model):
+    class Meta:
+        db_table = "nagoyameshi_terms"
+        verbose_name = verbose_name_plural = '利用規約'
+    
+    content = models.TextField(verbose_name="利用規約の本文")
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
 
 class Restaurant(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_restaurant'
+        verbose_name = verbose_name_plural = 'レストラン'
+
     restaurant_name = models.CharField(verbose_name="店舗名", max_length=50)
     image = models.ImageField(verbose_name='店舗画像', default='noImage.png')
     description = models.TextField(verbose_name="説明", max_length=1000)
@@ -58,10 +87,6 @@ class Restaurant(models.Model):
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
-    class Meta:
-        db_table = 'nagoyameshi_restaurant'
-        verbose_name = verbose_name_plural = 'レストラン'
-
     def __str__(self):
         return self.restaurant_name
 
@@ -94,8 +119,12 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(verbose_name="お名前（漢字）", max_length=20)
-    kana_name = models.CharField(verbose_name="お名前（フリガナ）", max_length=20)
+    class Meta:
+        db_table = 'nagoyameshi_user'
+        verbose_name = verbose_name_plural = 'ユーザー'
+
+    name = models.CharField(verbose_name="お名前（漢字）", max_length=50)
+    kana_name = models.CharField(verbose_name="お名前（フリガナ）", max_length=50)
     email = models.EmailField(verbose_name="e-mail", max_length=100, unique=True)
     postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
     address = models.CharField(verbose_name="住所", max_length=150)
@@ -112,10 +141,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     
-    class Meta:
-        db_table = 'nagoyameshi_user'
-        verbose_name = verbose_name_plural = 'ユーザー'
-
 class UserActivateTokensManager(models.Manager):
     def activate_user_by_token(self, activate_token):
         user_activate_token = self.filter(
@@ -129,6 +154,10 @@ class UserActivateTokensManager(models.Manager):
             return user
 
 class UserActivateTokens(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_useractivatetokens'
+        verbose_name = verbose_name_plural = 'メール認証トークン'
+    
     token_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     activate_token = models.UUIDField(default=uuid.uuid4)
@@ -136,10 +165,6 @@ class UserActivateTokens(models.Model):
 
     objects = UserActivateTokensManager()
     
-    class Meta:
-        db_table = 'nagoyameshi_useractivatetokens'
-        verbose_name = verbose_name_plural = 'メール認証トークン'
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def publish_activate_token(sender, instance, **kwargs):
     if not instance.is_active:
