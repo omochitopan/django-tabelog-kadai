@@ -16,7 +16,7 @@ class RestaurantResource(resources.ModelResource):
 class RestaurantAdmin(ImportExportModelAdmin):
     list_display = ('id', 'restaurant_name', 'postal_code', 'address',)
     search_fields = ('restaurant_name',)
-    list_per_page = 15
+    list_per_page = 25
     form = RestaurantAdminForm
     filter_horizontal = ('holiday', 'category_name',)
     resource_class = RestaurantResource
@@ -31,7 +31,7 @@ class UserAdmin(ImportExportModelAdmin):
     list_display = ('id', 'name', 'kana_name', 'email', 'is_staff',)
     search_fields = ('name', 'kana_name', 'email',)
     list_filter = ('is_staff',)
-    list_per_page = 15
+    list_per_page = 25
     resource_class = UserResource
     
 class UserActivateTokensAdmin(admin.ModelAdmin):
