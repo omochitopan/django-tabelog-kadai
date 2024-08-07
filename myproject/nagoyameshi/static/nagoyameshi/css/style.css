@@ -109,3 +109,13 @@ main {
   width: 200px;
   margin: 0 10px;
 }
+
+.outerRestaurantcontainer {
+  width: 100px;
+  display: flex;
+}
+
+.innerRestaurantcontainer > img {
+  width: 90px;
+  height: auto;
+}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}トップページ{% endblock %}
+{% block contents %}
+
+<!-- 検索フォーム -->
+<div class="top-container">
+	<form method="get" action="">
+		{% csrf_token %}
+		<label for="">キーワードから探す</label>
+		<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
+		<button type="submit" class="search-btn">検索</button>
+	</form>
+</div>
+<div>
+	<div>
+		<h2>評価が高いお店</h2>
+		<div class="outerRestaurantcontainer">
+			{% for restaurant in evaluated_restaurants %}
+			<div class="innerRestaurantcontainer">
+				<img src="{{ restaurant.image.url }}" alt="店舗画像">
+				<p>{{ restaurant.restaurant_name }}</p>
+				<p>{{ restaurant.category_name }}</p>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div>
+		<h2>新規掲載店</h2>
+		<div class="outerRestaurantcontainer">
+			{% for restaurant in new_restaurants %}
+			<div class="smallRestaurantcontainer">
+				<img src="{{ restaurant.image.url }}" style="width:100px height:auto" alt="店舗画像">
+				<p>{{ restaurant.restaurant_name }}</p>
+				<p>{{ restaurant.category_name }}</p>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

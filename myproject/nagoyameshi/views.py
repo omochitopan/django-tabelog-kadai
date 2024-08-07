@@ -35,6 +35,18 @@ class UserCreatedView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
 
+class TopView(TemplateView):
+    template_name = "top.html"
+    model = Restaurant
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurants = Restaurant.objects.all()
+        context['evaluated_restaurants'] = restaurants.order_by('-id')[:6]
+        context['new_restaurants'] = restaurants.order_by('created_at')[:6]
+        return context
+
+
 class ListView(ListView):
     model = Restaurant
     
@@ -46,7 +58,7 @@ class ListView(ListView):
             Q(restaurant_name__icontains=query) | Q(address__icontains=query)
             )
         else:
-            restaurants = Restaurant.objects.all()
+            restaurants = Restaurant.objects.all()[:6]
         return restaurants
    
     def get_context_data(self, **kwargs):

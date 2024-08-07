@@ -28,7 +28,8 @@ urlpatterns = [
     path('passwordreset/', views.PasswordresetView.as_view(), name="passwordreset"),
     path('signup/', views.SignupView.as_view(), name="signup"),
     path('logout/', views.LogoutView.as_view(), name="logout"),
-    path('', views.ListView.as_view(), name="list"),
+    path('', views.TopView.as_view(), name="top"),
+    path('list/', views.ListView.as_view(), name='list'),
     path('users/<uuid:activate_token>/activation/', activate_user, name='users-activation'),
 ]
 

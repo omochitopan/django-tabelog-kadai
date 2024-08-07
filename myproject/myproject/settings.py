@@ -140,10 +140,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 if DEBUG:
-    STATIC_URL = '/static/'
+    STATIC_URL = '/nagoyameshi/static/'
     # 画像関連の設定
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media_local'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media_local')
 
 if not DEBUG:
     AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
@@ -157,9 +157,9 @@ if not DEBUG:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # ログイン認証
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'list'
-LOGOUT_REDIECT_URL = 'list'
+LOGIN_URL = 'top'
+LOGIN_REDIRECT_URL = 'top'
+LOGOUT_REDIECT_URL = 'top'
 
 # メール認証 情報源: https://qiita.com/koseidaiki/items/85279375555a533c9318）
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # コンソールにメール内容を表示する
