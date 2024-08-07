@@ -155,7 +155,7 @@ if not DEBUG:
     AWS_DEFAULT_ACL = None
     #STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATIC_URL = '/static/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # ログイン認証
 LOGIN_URL = 'top'
