@@ -2,14 +2,15 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
-from .forms import SignUpForm
 from django.urls import reverse_lazy
-from .forms import PasswordresetForm
-from .models import Restaurant, User, UserActivateTokens
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.db.models import Q
 from django.http import HttpResponse
+from .models import Restaurant, User, UserActivateTokens
+from .forms import SignUpForm, PasswordresetForm
 
 import environ
 import os
@@ -38,11 +39,15 @@ class ListView(ListView):
     model = Restaurant
     
     def get_queryset(self):
-        query = super().get_queryset()
-        title = self.request.GET.get('title', None)
-        if title:
-            query = query.filter(title__icontains=title)
-        return query
+        query = self.request.GET.get('query')
+
+        if query:
+            restaurants = Restaurant.objects.filter(
+            Q(restaurant_name__icontains=query) | Q(address__icontains=query)
+            )
+        else:
+            restaurants = Restaurant.objects.all()
+        return restaurants
    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

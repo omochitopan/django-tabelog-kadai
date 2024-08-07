@@ -14,8 +14,10 @@
 </div>
 
 <!-- 検索結果の数 -->
-{% if query %}
-<p>{{posts.count}}件</p>
+{% if object_list %}
+<p>{{ object_list.count }}件</p>
 {% endif %}
-
+{% for restaurant in object_list %}
+<li>{{ restaurant.restaurant_name }}</li>
+{% endfor %}
 {% endblock %}
