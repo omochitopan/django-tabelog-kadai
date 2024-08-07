@@ -141,7 +141,7 @@ STATIC_URL = '/static/'
 #STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] 
 
 if DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATIC_URL = '/static/'
     # 画像関連の設定
     MEDIA_URL = '/media/'
