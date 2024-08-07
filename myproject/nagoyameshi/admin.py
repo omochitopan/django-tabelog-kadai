@@ -1,27 +1,52 @@
 from django.contrib import admin
 from .forms import RestaurantAdminForm
 from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Company, Terms
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from import_export.fields import Field
+
 
 # Register your models here.
-class RestaurantAdmin(admin.ModelAdmin):
+class RestaurantResource(resources.ModelResource):
+   class Meta:
+       model = Restaurant
+       skip_unchanged = True
+       use_bulk = True
+
+class RestaurantAdmin(ImportExportModelAdmin):
     list_display = ('id', 'restaurant_name', 'postal_code', 'address',)
     search_fields = ('restaurant_name',)
     list_per_page = 15
     form = RestaurantAdminForm
     filter_horizontal = ('holiday', 'category_name',)
+    resource_class = RestaurantResource
+
+class UserResource(resources.ModelResource):
+   class Meta:
+       model = User
+       skip_unchanged = True
+       use_bulk = True
     
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(ImportExportModelAdmin):
     list_display = ('id', 'name', 'kana_name', 'email', 'is_staff',)
     search_fields = ('name', 'kana_name', 'email',)
     list_filter = ('is_staff',)
     list_per_page = 15
+    resource_class = UserResource
     
 class UserActivateTokensAdmin(admin.ModelAdmin):
     list_display = ('token_id', 'user', 'activate_token', 'expired_at',)
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryResource(resources.ModelResource):
+   class Meta:
+       model = Category
+       skip_unchanged = True
+       use_bulk = True
+
+class CategoryAdmin(ImportExportModelAdmin):
     list_display = ('category_name',)
     search_fields = ('category_name',)
+    resource_class = CategoryResource
 
 class RegularHolidayAdmin(admin.ModelAdmin):
     list_display = ('holiday', 'holiday_index',)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nagoyameshi.apps.NagoyameshiConfig',
     'bootstrapform',
+    'import_export',
     'storages',
 ]
 
@@ -126,6 +127,8 @@ TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 
 USE_TZ = True
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
