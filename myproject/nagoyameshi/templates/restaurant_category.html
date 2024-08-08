@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}トップページ{% endblock %}
+{% block contents %}
+
+<!-- 検索フォーム -->
+<div class="search-container">
+	<form class="search-form" method="get" action="{% url 'list' %}">
+		{% csrf_token %}
+		<label for="">キーワードから探す</label>
+		<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
+		<button type="submit" class="search-btn">検索</button>
+	</form>
+</div>
+
+<!-- 検索結果の数 -->
+{% if object_list %}
+<p>{{ object_list.count }}件</p>
+{% else %}
+<p>お探しの店は見つかりませんでした</p>
+{% endif %}
+{% for restaurant in object_list %}
+<div>
+	<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" style="width:100px height:auto" alt="店舗画像"></a>
+	<a href="{% url 'restaurant-detail' restaurant.pk %}">{{ restaurant.restaurant_name }}</a>
+	<p>{{ restaurant.category_name }}</p>
+</div>
+{% endfor %}
+{% endblock %}

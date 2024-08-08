@@ -60,9 +60,32 @@ class ListView(ListView):
             Q(restaurant_name__icontains=query) | Q(address__icontains=query) #| Q(category_name__in=query)
             )
         else:
-            restaurants = Restaurant.objects.all()[:6]
+            restaurants = []
         return restaurants
-   
+
+class RestaurantCategoryList(ListView):
+    model = Restaurant
+    template_name = "restaurant_category.html"
+
+    #def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    #    restaurants = Restaurant.objects.all()[0]
+    #    categories = []
+    #    for category in restaurants.category_name.all():
+    #        categories.append(category.category_name)
+    #    context['category'] = categories
+    #    return context
+        
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        restaurants = Restaurant.objects.all()
+        categoryRestaurants = []
+        for restaurant in restaurants:
+            for category in restaurant.category_name.all():
+                if query == category.category_name:
+                    categoryRestaurants.append(restaurant)
+        return categoryRestaurants
+    
 class RestaurantDetailView(DetailView):
     model = Restaurant
     template_name = "restaurant_detail.html"
@@ -70,14 +93,7 @@ class RestaurantDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant = Restaurant.objects.all()[0]
-        #context['restaurant_name'] = restaurant.restaurant_name
-        #context['description'] = restaurant.description
-        context['value'] = f'{restaurant.lowest_price}~{restaurant.highest_price}'
-        #context['postal_code'] = restaurant.postal_code
-        #context['address'] = restaurant.address
-        #context['business_hour'] = f'{restaurant.opening_time}~{restaurant.closing_time}'
         context['holiday'] = lambda: '、'.join([holiday for holiday in {restaurant.holiday}])
-        #context['seat'] = f'{restaurant.seating_capacity}席'
         context['category'] = lambda: '、'.join([category for category in {restaurant.category_name}])
         return context
 

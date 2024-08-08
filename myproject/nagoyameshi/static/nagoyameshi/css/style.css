@@ -154,6 +154,10 @@ main {
   margin-right: 10px;
 }
 
+.top-text-container {
+  margin: 0 5px;
+}
+
 .topCategoryContainer {
   position: relative;
 }
@@ -164,14 +168,19 @@ main {
 }
 
 .top-restaurant-name {
+  color: black;
   font-size: 14px;
-  margin: 0 5px;
+  text-decoration: none;
+}
+
+.top-restaurant-name:hover {
+  text-decoration: underline;
 }
 
 .category-name {
   color: gray;
   font-size: 12px;
-  margin: 5px;
+  margin: 5px 0;
 }
 
 .categoryRef {
@@ -207,7 +216,7 @@ main {
 
 .restaurant-description {
   font-size: 12px;
-  margin: 5px;
+  margin: 5px 0;
 }
 
 footer {

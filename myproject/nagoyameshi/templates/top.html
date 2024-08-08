@@ -25,10 +25,12 @@
 			{% for restaurant in evaluated_restaurants %}
 			<div class="topInnerContainer">
 				<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
-				<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
-				{% for category in restaurant.category_name.all %}
-				<p class="category-name">{{ category }}</p>
-				{% endfor %}
+				<div class="top-text-container">
+					<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
+					{% for category in restaurant.category_name.all %}
+					<p class="category-name">{{ category }}</p>
+					{% endfor %}
+				</div>
 			</div>
 			{% endfor %}
 		</div>
@@ -37,37 +39,43 @@
 		<h4>カテゴリから探す</h4>
 		<div class="categoryContainer">
 			<div class="topFlexContainer">
-				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/washoku.jpg" class="top-image categoryImage" alt="和食の写真"></a>
-					<a href="" class="categoryRef">和食</a>
-				</div>
-				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/udon.jpg" class="top-image categoryImage" alt="うどんの写真"></a>
-					<a href="" class="categoryRef">うどん</a>
-				</div>
-				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/don.jpg" class="top-image categoryImage" alt="丼物の写真"></a>
-					<a href="" class="categoryRef">丼物</a>
-				</div>
-				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/ramen.jpg" class="top-image categoryImage" alt="ラーメンの写真"></a>
-					<a href="" class="categoryRef">ラーメン</a>
-				</div>
-				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/oden.jpg" class="top-image categoryImage" alt="おでんの写真"></a>
-					<a href="" class="categoryRef">おでん</a>
-				</div>
-				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/fried.jpg" class="top-image categoryImage" alt="揚げ物の写真"></a>
-					<a href="" class="categoryRef">揚げ物</a>
-				</div>
+				<form class="topInnerContainer topCategoryContainer" method="get" action="{% url 'category' %}">
+					{% csrf_token %}
+					<button type="submit" class="big-category-btn" name="query" value="和食"><img src="/media/washoku.jpg" class="top-image category-image" alt="和食を検索"></button>
+					<button type="submit" class="category-text" name="query" value="和食">和食</button>
+				</form>
+				<form class="topInnerContainer topCategoryContainer" method="get" action="{% url 'category' %}">
+					{% csrf_token %}
+					<button type="submit" class="big-category-btn" name="query" value="うどん"><img src="/media/udon.jpg" class="top-image category-image" alt="和食を検索"></button>
+					<button type="submit" class="category-text" name="query" value="うどん">うどん</button>
+				</form>
+				<form class="topInnerContainer topCategoryContainer" method="get" action="{% url 'category' %}">
+					{% csrf_token %}
+					<button type="submit" class="big-category-btn" name="query" value="丼物"><img src="/media/don.jpg" class="top-image category-image" alt="和食を検索"></button>
+					<button type="submit" class="category-text" name="query" value="丼物">丼物</button>
+				</form>
+				<form class="topInnerContainer topCategoryContainer" method="get" action="{% url 'category' %}">
+					{% csrf_token %}
+					<button type="submit" class="big-category-btn" name="query" value="ラーメン"><img src="/media/ramen.jpg" class="top-image category-image" alt="和食を検索"></button>
+					<button type="submit" class="category-text" name="query" value="ラーメン">ラーメン</button>
+				</form>
+				<form class="topInnerContainer topCategoryContainer" method="get" action="{% url 'category' %}">
+					{% csrf_token %}
+					<button type="submit" class="big-category-btn" name="query" value="おでん"><img src="/media/oden.jpg" class="top-image category-image" alt="和食を検索"></button>
+					<button type="submit" class="category-text" name="query" value="おでん">おでん</button>
+				</form>
+				<form class="topInnerContainer topCategoryContainer" method="get" action="{% url 'category' %}">
+					{% csrf_token %}
+					<button type="submit" class="big-category-btn" name="query" value="揚げ物"><img src="/media/fried.jpg" class="top-image category-image" alt="和食を検索"></button>
+					<button type="submit" class="category-text" name="query" value="揚げ物">揚げ物</button>
+				</form>
 			</div>
-			<div class="categoryref-constainer">
+			<form class="" method="get" action="{% url 'category' %}">
+				{% csrf_token %}
 				{% for category in categories %}
-				{% comment %} 検索店舗一覧にとぶ {% endcomment %}
-				<a href="{}">{{ category.category_name }}</a>  
+				<button type="submit" class="category-btn" name="query" value={{ category.category_name }}>{{ category.category_name }}</button>
 				{% endfor %}
-			</div>
+			</form>
 		</div>
 	</div>
 	<div class="topOuterContainer">
@@ -76,11 +84,13 @@
 			{% for restaurant in new_restaurants %}
 			<div class="topInnerContainer">
 				<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
-				<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
-				{% for category in restaurant.category_name.all %}
-				<p class="category-name">{{ category }}</p>
-				{% endfor %}
-				<p class="restaurant-description">{{ restaurant.description }}</p>
+				<div class="top-text-container">
+					<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
+					{% for category in restaurant.category_name.all %}
+					<p class="category-name">{{ category }}</p>
+					{% endfor %}
+					<p class="restaurant-description">{{ restaurant.description }}</p>
+				</div>
 			</div>
 			{% endfor %}
 		</div>
