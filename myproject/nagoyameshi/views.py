@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
-from .models import Restaurant, User, UserActivateTokens
+from .models import Restaurant, User, UserActivateTokens, Category
 from .forms import SignUpForm, PasswordresetForm
 
 import environ
@@ -37,13 +37,15 @@ class UserCreatedView(TemplateView):
 
 class TopView(TemplateView):
     template_name = "top.html"
-    model = Restaurant
+    model = Restaurant, Category
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurants = Restaurant.objects.all()
-        context['evaluated_restaurants'] = restaurants.order_by('-id')[:6]
+        categories = Category.objects.all()
+        context['evaluated_restaurants'] = restaurants.order_by('id')[:6]
         context['new_restaurants'] = restaurants.order_by('created_at')[:6]
+        context['categories'] = categories.order_by('id')
         return context
 
 

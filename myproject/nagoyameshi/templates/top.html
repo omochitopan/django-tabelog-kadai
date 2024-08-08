@@ -2,35 +2,78 @@
 
 {% block title %}トップページ{% endblock %}
 {% block contents %}
-
+<div class="topVisualContainer">
+	<img src="/media/udon.jpg" class="topVisual" alt="TopVisual">
+	<div class="topVisualText">
+		<h1>名古屋ならではの味を、<br>みつけよう</h1>
+		<p>NAGOYAMESHIは、<br>名古屋市の応援グルメ専門のレビューサイトです。</p>
+	</div>
+</div>
 <!-- 検索フォーム -->
-<div class="top-container">
-	<form method="get" action="">
+<div class="searchContainer">
+	<form method="get" action="{% url 'list' %}">
 		{% csrf_token %}
 		<label for="">キーワードから探す</label>
 		<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
 		<button type="submit" class="search-btn">検索</button>
 	</form>
 </div>
-<div>
-	<div>
+<div class="topContainer">
+	<div class="topOuterContainer">
 		<h2>評価が高いお店</h2>
-		<div class="outerRestaurantcontainer">
+		<div class="topFlexContainer">
 			{% for restaurant in evaluated_restaurants %}
-			<div class="innerRestaurantcontainer">
-				<img src="{{ restaurant.image.url }}" alt="店舗画像">
+			<div class="topInnerContainer">
+				<img src="{{ restaurant.image.url }}" class="topImage" alt="店舗画像">
 				<p>{{ restaurant.restaurant_name }}</p>
 				<p>{{ restaurant.category_name }}</p>
 			</div>
 			{% endfor %}
 		</div>
 	</div>
-	<div>
-		<h2>新規掲載店</h2>
-		<div class="outerRestaurantcontainer">
-			{% for restaurant in new_restaurants %}
-			<div class="smallRestaurantcontainer">
-				<img src="{{ restaurant.image.url }}" style="width:100px height:auto" alt="店舗画像">
+	<div class="topOuterContainer">
+		<h2>カテゴリから探す</h2>
+		<div class="categoryContainer">
+			<div class="topFlexContainer">
+				<div class="topInnerContainer topCategoryContainer">
+					<a href=""><img src="/media/washoku.jpg" class="topImage categoryImage" alt="和食の写真"></a>
+					<a href="" class="categoryRef">和食</a>
+				</div>
+				<div class="topInnerContainer topCategoryContainer">
+					<a href=""><img src="/media/udon.jpg" class="topImage categoryImage" alt="うどんの写真"></a>
+					<a href="" class="categoryRef">うどん</a>
+				</div>
+				<div class="topInnerContainer topCategoryContainer">
+					<a href=""><img src="/media/don.jpg" class="topImage categoryImage" alt="丼物の写真"></a>
+					<a href="" class="categoryRef">丼物</a>
+				</div>
+				<div class="topInnerContainer topCategoryContainer">
+					<a href=""><img src="/media/ramen.jpg" class="topImage categoryImage" alt="ラーメンの写真"></a>
+					<a href="" class="categoryRef">ラーメン</a>
+				</div>
+				<div class="topInnerContainer topCategoryContainer">
+					<a href=""><img src="/media/oden.jpg" class="topImage categoryImage" alt="おでんの写真"></a>
+					<a href="" class="categoryRef">おでん</a>
+				</div>
+				<div class="topInnerContainer topCategoryContainer">
+					<a href=""><img src="/media/fried.jpg" class="topImage categoryImage" alt="揚げ物の写真"></a>
+					<a href="" class="categoryRef">揚げ物</a>
+				</div>
+			</div>
+			<div class="categoryRefConstainer">
+				{% for category in categories %}
+				{% comment %} 検索店舗一覧にとぶ {% endcomment %}
+				<a href="{}">{{ category.category_name }}</a>  
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div class="topOuterContainer">
+		<h2>評価が高いお店</h2>
+		<div class="topFlexContainer">
+			{% for restaurant in evaluated_restaurants %}
+			<div class="topInnerContainer">
+				<img src="{{ restaurant.image.url }}" class="topImage" alt="店舗画像">
 				<p>{{ restaurant.restaurant_name }}</p>
 				<p>{{ restaurant.category_name }}</p>
 			</div>

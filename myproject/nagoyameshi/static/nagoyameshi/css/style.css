@@ -9,10 +9,12 @@ body {
 }
 
 header {
-  height: 80px;
-  background-color: gray;
+  height: 60px;
+  background-color: white;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   position: fixed;
   width: 100%;
   top: 0;
@@ -22,13 +24,13 @@ h1 {
   font-size: 20px;
 }
 
-.header-logo {
+.header-logo-wrap {
   display: flex;
 }
 
-.logo {
-  height: 60px;
-  margin: 10px 20px;
+.header-logo {
+  height: 30px;
+  margin: auto 20px;
 }
 
 .nav-pc {
@@ -100,22 +102,89 @@ main {
   text-align: center;
 }
 
-.top-container {
+.topVisualContainer {
+  position: relative;
+}
+
+.topVisual {
+  width: 100%;
+  object-fit: cover;
+  height: 300px;
+  filter: brightness(50%);
+}
+
+.topVisualText {
+  color: white;
+  position: absolute;
+  top: 70px;
+  left: 50px;
+}
+
+.searchContainer {
+  height: 60px;
   text-align: center;
-  margin-top: 150px;
+  background-color: whitesmoke;
 }
 
 #search-box {
   width: 200px;
-  margin: 0 10px;
 }
 
-.outerRestaurantcontainer {
-  width: 100px;
+.topOuterContainer {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.topFlexContainer {
   display: flex;
 }
 
-.innerRestaurantcontainer > img {
-  width: 90px;
-  height: auto;
+.topInnerContainer {
+  width: 130px;
+}
+
+.topCategoryContainer {
+  position: relative;
+}
+
+.categoryRef {
+  color: white;
+  text-decoration: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.topImage {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.categoryImage {
+  filter: brightness(50%);
+}
+
+footer {
+  text-align: center;
+  background-color: whitesmoke;
+}
+
+.footer-logo-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.footer-logo {
+  height: 25px;
+  margin-right: 10px;
+}
+
+.footer-ref > a {
+  color: gray;
+  text-decoration: none;
+}
+
+.footer-copyright {
+  color: grey;
 }
