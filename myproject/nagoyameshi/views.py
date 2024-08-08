@@ -44,7 +44,7 @@ class TopView(TemplateView):
         restaurants = Restaurant.objects.all()
         categories = Category.objects.all()
         context['evaluated_restaurants'] = restaurants.order_by('id')[:6]
-        context['new_restaurants'] = restaurants.order_by('created_at')[:6]
+        context['new_restaurants'] = restaurants.order_by('-created_at')[:6]
         context['categories'] = categories.order_by('id')
         return context
 
@@ -57,7 +57,7 @@ class ListView(ListView):
 
         if query:
             restaurants = Restaurant.objects.filter(
-            Q(restaurant_name__icontains=query) | Q(address__icontains=query)
+            Q(restaurant_name__icontains=query) | Q(address__icontains=query) #| Q(category_name__in=query)
             )
         else:
             restaurants = Restaurant.objects.all()[:6]

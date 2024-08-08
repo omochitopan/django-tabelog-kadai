@@ -10,8 +10,8 @@
 	</div>
 </div>
 <!-- 検索フォーム -->
-<div class="searchContainer">
-	<form method="get" action="{% url 'list' %}">
+<div class="search-container">
+	<form class="search-form" method="get" action="{% url 'list' %}">
 		{% csrf_token %}
 		<label for="">キーワードから探す</label>
 		<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
@@ -20,47 +20,49 @@
 </div>
 <div class="topContainer">
 	<div class="topOuterContainer">
-		<h2>評価が高いお店</h2>
+		<h4>評価が高いお店</h4>
 		<div class="topFlexContainer">
 			{% for restaurant in evaluated_restaurants %}
 			<div class="topInnerContainer">
-				<img src="{{ restaurant.image.url }}" class="topImage" alt="店舗画像">
-				<p>{{ restaurant.restaurant_name }}</p>
-				<p>{{ restaurant.category_name }}</p>
+				<img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像">
+				<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
+				{% for category in restaurant.category_name.all %}
+				<p class="category-name">{{ category }}</p>
+				{% endfor %}
 			</div>
 			{% endfor %}
 		</div>
 	</div>
 	<div class="topOuterContainer">
-		<h2>カテゴリから探す</h2>
+		<h4>カテゴリから探す</h4>
 		<div class="categoryContainer">
 			<div class="topFlexContainer">
 				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/washoku.jpg" class="topImage categoryImage" alt="和食の写真"></a>
+					<a href=""><img src="/media/washoku.jpg" class="top-image categoryImage" alt="和食の写真"></a>
 					<a href="" class="categoryRef">和食</a>
 				</div>
 				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/udon.jpg" class="topImage categoryImage" alt="うどんの写真"></a>
+					<a href=""><img src="/media/udon.jpg" class="top-image categoryImage" alt="うどんの写真"></a>
 					<a href="" class="categoryRef">うどん</a>
 				</div>
 				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/don.jpg" class="topImage categoryImage" alt="丼物の写真"></a>
+					<a href=""><img src="/media/don.jpg" class="top-image categoryImage" alt="丼物の写真"></a>
 					<a href="" class="categoryRef">丼物</a>
 				</div>
 				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/ramen.jpg" class="topImage categoryImage" alt="ラーメンの写真"></a>
+					<a href=""><img src="/media/ramen.jpg" class="top-image categoryImage" alt="ラーメンの写真"></a>
 					<a href="" class="categoryRef">ラーメン</a>
 				</div>
 				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/oden.jpg" class="topImage categoryImage" alt="おでんの写真"></a>
+					<a href=""><img src="/media/oden.jpg" class="top-image categoryImage" alt="おでんの写真"></a>
 					<a href="" class="categoryRef">おでん</a>
 				</div>
 				<div class="topInnerContainer topCategoryContainer">
-					<a href=""><img src="/media/fried.jpg" class="topImage categoryImage" alt="揚げ物の写真"></a>
+					<a href=""><img src="/media/fried.jpg" class="top-image categoryImage" alt="揚げ物の写真"></a>
 					<a href="" class="categoryRef">揚げ物</a>
 				</div>
 			</div>
-			<div class="categoryRefConstainer">
+			<div class="categoryref-constainer">
 				{% for category in categories %}
 				{% comment %} 検索店舗一覧にとぶ {% endcomment %}
 				<a href="{}">{{ category.category_name }}</a>  
@@ -69,13 +71,16 @@
 		</div>
 	</div>
 	<div class="topOuterContainer">
-		<h2>評価が高いお店</h2>
+		<h4>新規掲載店</h4>
 		<div class="topFlexContainer">
-			{% for restaurant in evaluated_restaurants %}
+			{% for restaurant in new_restaurants %}
 			<div class="topInnerContainer">
-				<img src="{{ restaurant.image.url }}" class="topImage" alt="店舗画像">
-				<p>{{ restaurant.restaurant_name }}</p>
-				<p>{{ restaurant.category_name }}</p>
+				<img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像">
+				<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
+				{% for category in restaurant.category_name.all %}
+				<p class="category-name">{{ category }}</p>
+				{% endfor %}
+				<p class="restaurant-description">{{ restaurant.description }}</p>
 			</div>
 			{% endfor %}
 		</div>

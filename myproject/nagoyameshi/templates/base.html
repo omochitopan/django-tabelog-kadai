@@ -60,16 +60,18 @@
     {% endblock %}
   </main>
   <footer>
-    <div class="footer-logo-wrap">
-      <a href="{% url 'top' %}"><img class="footer-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ"></a>
-      <h4>Nagoyameshi</h4>
-    </div>
-    <div class="footer-ref">
-      <a href="">会社概要</a>
-      <a href="">利用規約</a>
-    </div>
-    <div class="footer-copyright">
-      <p>&copy;NAGOYAMESHI All rights reserved</p>
+    <div class="footer-container">
+      <div class="footer-logo-wrap">
+        <a href="{% url 'top' %}"><img class="footer-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ"></a>
+        <h4>Nagoyameshi</h4>
+      </div>
+      <div class="footer-ref">
+        <a href="">会社概要</a>
+        <a href="">利用規約</a>
+      </div>
+      <div class="footer-copyright">
+        <p>&copy;NAGOYAMESHI All rights reserved</p>
+      </div>
     </div>
   </footer>
   <script src="{% static 'nagoyameshi/javascript/nagoyameshi.js' %}"></script>

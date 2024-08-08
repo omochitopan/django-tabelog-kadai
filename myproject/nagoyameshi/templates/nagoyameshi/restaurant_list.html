@@ -4,8 +4,8 @@
 {% block contents %}
 
 <!-- 検索フォーム -->
-<div class="top-container">
-	<form method="get" action="">
+<div class="search-container">
+	<form class="search-form" method="get" action="{% url 'list' %}">
 		{% csrf_token %}
 		<label for="">キーワードから探す</label>
 		<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
@@ -16,6 +16,8 @@
 <!-- 検索結果の数 -->
 {% if object_list %}
 <p>{{ object_list.count }}件</p>
+{% else %}
+<p>お探しの店は見つかりませんでした</p>
 {% endif %}
 {% for restaurant in object_list %}
 <div>
