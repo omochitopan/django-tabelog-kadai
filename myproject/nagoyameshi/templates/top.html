@@ -24,8 +24,8 @@
 		<div class="topFlexContainer">
 			{% for restaurant in evaluated_restaurants %}
 			<div class="topInnerContainer">
-				<img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像">
-				<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
+				<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
+				<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
 				{% for category in restaurant.category_name.all %}
 				<p class="category-name">{{ category }}</p>
 				{% endfor %}
@@ -75,8 +75,8 @@
 		<div class="topFlexContainer">
 			{% for restaurant in new_restaurants %}
 			<div class="topInnerContainer">
-				<img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像">
-				<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
+				<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
+				<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
 				{% for category in restaurant.category_name.all %}
 				<p class="category-name">{{ category }}</p>
 				{% endfor %}

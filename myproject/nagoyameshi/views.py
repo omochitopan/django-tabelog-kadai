@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -48,7 +49,6 @@ class TopView(TemplateView):
         context['categories'] = categories.order_by('id')
         return context
 
-
 class ListView(ListView):
     model = Restaurant
     
@@ -63,9 +63,22 @@ class ListView(ListView):
             restaurants = Restaurant.objects.all()[:6]
         return restaurants
    
+class RestaurantDetailView(DetailView):
+    model = Restaurant
+    template_name = "restaurant_detail.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = self.request.GET.get('title', '')
+        restaurant = Restaurant.objects.all()[0]
+        #context['restaurant_name'] = restaurant.restaurant_name
+        #context['description'] = restaurant.description
+        context['value'] = f'{restaurant.lowest_price}~{restaurant.highest_price}'
+        #context['postal_code'] = restaurant.postal_code
+        #context['address'] = restaurant.address
+        #context['business_hour'] = f'{restaurant.opening_time}~{restaurant.closing_time}'
+        context['holiday'] = lambda: '、'.join([holiday for holiday in {restaurant.holiday}])
+        #context['seat'] = f'{restaurant.seating_capacity}席'
+        context['category'] = lambda: '、'.join([category for category in {restaurant.category_name}])
         return context
 
 class SignupView(CreateView):

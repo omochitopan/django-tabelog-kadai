@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}トップページ{% endblock %}
+{% block contents %}
+{{ object.restaurant_name }}
+<div>
+	<div>
+		<a href="">予約</a>
+		<a href="">レビュー</a>
+	</div>
+	<img src="{{ object.image.url }}" alt="店舗イメージ">
+	<table>
+		<tr>
+			<th>店舗名</th>
+			<td>{{ object.restaurant_name }}</td>
+		</tr>
+		<tr>
+			<th>説明</th>
+			<td>{{ object.description }}</td>
+		</tr>
+		<tr>
+			<th>価格帯</th>
+			<td>{{ object.lowest_price }}~{{ object.highest_price }}円</td>
+		</tr>
+		<tr>
+			<th>郵便番号</th>
+			<td>{{ object.postal_code}}</td>
+		</tr>
+		<tr>
+			<th>住所</th>
+			<td>{{ object.address }}</td>
+		</tr>
+		<tr>
+			<th>営業時間</th>
+			<td>{{ object.opening_time }}~{{ object.closing_time }}</td>
+		</tr>
+		<tr>
+			<th>定休日</th>
+			<td></td>
+		</tr>
+		<tr>
+			<th>座席数</th>
+			<td>{{ object.seating_capacity }}</td>
+		</tr>
+		<tr>
+			<th>カテゴリ</th>
+			<td></td>
+		</tr>
+	</table>
+</div>
+{% endblock %}

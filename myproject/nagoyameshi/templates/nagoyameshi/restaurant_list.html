@@ -21,8 +21,8 @@
 {% endif %}
 {% for restaurant in object_list %}
 <div>
-	<img src="{{ restaurant.image.url }}" style="width:100px height:auto" alt="店舗画像">
-	<h3>{{ restaurant.restaurant_name }}</h3>
+	<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" style="width:100px height:auto" alt="店舗画像"></a>
+	<a href="{% url 'restaurant-detail' restaurant.pk %}">{{ restaurant.restaurant_name }}</a>
 	<p>{{ restaurant.category_name }}</p>
 </div>
 {% endfor %}

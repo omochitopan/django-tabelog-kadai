@@ -30,6 +30,7 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name="logout"),
     path('', views.TopView.as_view(), name="top"),
     path('list/', views.ListView.as_view(), name='list'),
+    path('restaurant_detail/<int:pk>/', views.RestaurantDetailView.as_view(), name="restaurant-detail"),
     path('users/<uuid:activate_token>/activation/', activate_user, name='users-activation'),
 ]
 
