@@ -37,6 +37,12 @@ header {
   margin: auto 20px;
 }
 
+.header-logo-ref {
+  color: black;
+  font-size: 20px;
+  text-decoration: none;
+}
+
 .nav-pc {
   margin: 15px 20px 0 0;
 }
@@ -288,6 +294,13 @@ footer {
 .footer-logo {
   height: 25px;
   margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.footer-logo-ref {
+  color: black;
+  font-size: 18px;
+  text-decoration: none;
 }
 
 .footer-ref > a {
@@ -307,4 +320,47 @@ footer {
   font-size: 12px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.detail-outer-container {
+  width: 500px;
+  margin: 0 auto;
+}
+
+.restaurant-name-container {
+  width: 100%;
+  text-align: center;
+}
+
+.detail-ref-container > a {
+  width: 70px;
+}
+
+.detail-image {
+  width: 500px;
+}
+
+.restaurant-table {
+  margin: 20px 0 30px 0;
+}
+
+.tableheader {
+  font-size: 15px;
+  padding: 5px 10px;
+  border-bottom-color: #2710d5;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  width: 100px;
+}
+
+.cell {
+  font-size: 15px;
+  padding: 5px 15px;
+  border-bottom-color: #ececec;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.list-image {
+  height: 250px;
 }

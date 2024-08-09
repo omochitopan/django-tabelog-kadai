@@ -31,7 +31,7 @@ urlpatterns = [
     path('', views.TopView.as_view(), name="top"),
     path('list/', views.ListView.as_view(), name='list'),
     path('category/', views.RestaurantCategoryList.as_view(), name='category'),
-    path('restaurant_detail/<int:pk>/', views.RestaurantDetailView.as_view(), name="restaurant-detail"),
+    path('detail/<int:pk>/', views.RestaurantDetailView.as_view(), name="detail"),
     path('users/<uuid:activate_token>/activation/', activate_user, name='users-activation'),
 ]
 

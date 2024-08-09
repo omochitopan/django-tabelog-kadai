@@ -24,9 +24,9 @@
 		<div class="flex-container">
 			{% for restaurant in evaluated_restaurants %}
 			<div class="topInnerContainer">
-				<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
+				<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
 				<div class="top-text-container">
-					<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
+					<a href="{% url 'detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
 					{% for category in restaurant.category_name.all %}
 					<p class="category-name">{{ category }}</p>
 					{% endfor %}
@@ -86,9 +86,9 @@
 		<div class="flex-container">
 			{% for restaurant in new_restaurants %}
 			<div class="topInnerContainer">
-				<a href="{% url 'restaurant-detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
+				<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
 				<div class="top-text-container">
-					<a href="{% url 'restaurant-detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
+					<a href="{% url 'detail' restaurant.pk %}" class="top-restaurant-name">{{ restaurant.restaurant_name }}</a>
 					{% for category in restaurant.category_name.all %}
 					<p class="category-name">{{ category }}</p>
 					{% endfor %}
