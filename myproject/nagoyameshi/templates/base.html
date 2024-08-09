@@ -21,31 +21,31 @@
     <nav class="nav-pc">
       <ul>
         {% if user.is_authenticated %}
-        <span>
+        <span class="welcome">
           ようこそ、{{user.name}}さん
         </span>
         <li class="nav-item">
           <form action="" method="post">
             {% csrf_token %}
-            <input class="nav-link" type="submit" value="お気に入り一覧">
+            <input class="button" type="submit" value="お気に入り一覧">
           </form>
         </li>
         <li class="nav-item">
           <form action="" method="post">
             {% csrf_token %}
-            <input class="nav-link" type="submit" value="予約一覧">
+            <input class="button" type="submit" value="予約一覧">
           </form>
         </li>
         <li class="nav-item">
           <form action="" method="post">
             {% csrf_token %}
-            <input class="nav-link" type="submit" value="会員情報">
+            <input class="button" type="submit" value="会員情報">
           </form>
         </li>
         <li class="nav-item">
           <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <input class="nav-link" type="submit" value="ログアウト">
+            <input class="button" type="submit" value="ログアウト">
           </form>
         </li>
         {% else %}
