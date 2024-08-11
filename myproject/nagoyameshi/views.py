@@ -35,6 +35,7 @@ class UserCreatedView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
+        return context
 
 class TopView(TemplateView):
     template_name = "top.html"
@@ -60,22 +61,13 @@ class ListView(ListView):
             Q(restaurant_name__icontains=query) | Q(address__icontains=query) #| Q(category_name__in=query)
             )
         else:
-            restaurants = []
+            restaurants = Restaurant.objects.none()
         return restaurants
 
 class RestaurantCategoryList(ListView):
     model = Restaurant
     template_name = "restaurant_category.html"
 
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    restaurants = Restaurant.objects.all()[0]
-    #    categories = []
-    #    for category in restaurants.category_name.all():
-    #        categories.append(category.category_name)
-    #    context['category'] = categories
-    #    return context
-        
     def get_queryset(self):
         query = self.request.GET.get('query')
         restaurants = Restaurant.objects.all()
@@ -85,6 +77,19 @@ class RestaurantCategoryList(ListView):
                 if query == category.category_name:
                     categoryRestaurants.append(restaurant)
         return categoryRestaurants
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('query')
+        restaurants = Restaurant.objects.all()
+        categoryRestaurants = []
+        for restaurant in restaurants:
+            for category in restaurant.category_name.all():
+                if query == category.category_name:
+                    categoryRestaurants.append(restaurant)
+        context["data"] = categoryRestaurants
+        return context
+
     
 class RestaurantDetailView(DetailView):
     model = Restaurant
