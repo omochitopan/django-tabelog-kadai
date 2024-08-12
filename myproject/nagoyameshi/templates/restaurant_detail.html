@@ -2,52 +2,62 @@
 
 {% block title %}トップページ{% endblock %}
 {% block contents %}
-<div class="detail-outer-container">
-	<div class="restaurant-name-container">
-		<h4>{{ object.restaurant_name }}</h4>
+<div class="detail">
+	<div class="outer-container">
+		<div class="restaurant-name">
+			<h4>{{ object.restaurant_name }}</h4>
+		</div>
+		<div class="ref-container">
+			<a href="" class="ref">予約</a>
+			<a href="" class="ref">レビュー</a>
+		</div>
+		<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
+		<table class="restaurant-table">
+			<tr>
+				<th class="tableheader">店舗名</th>
+				<td class="cell">{{ object.restaurant_name }}</td>
+			</tr>
+			<tr>
+				<th class="tableheader">説明</th>
+				<td class="cell">{{ object.description }}</td>
+			</tr>
+			<tr>
+				<th class="tableheader">価格帯</th>
+				<td class="cell">{{ object.lowest_price }}~{{ object.highest_price }}円</td>
+			</tr>
+			<tr>
+				<th class="tableheader">郵便番号</th>
+				<td class="cell">{{ object.postal_code}}</td>
+			</tr>
+			<tr>
+				<th class="tableheader">住所</th>
+				<td class="cell">{{ object.address }}</td>
+			</tr>
+			<tr>
+				<th class="tableheader">営業時間</th>
+				<td class="cell">{{ object.opening_time }}~{{ object.closing_time }}</td>
+			</tr>
+			<tr>
+				<th class="tableheader">定休日</th>
+				<td class="cell">
+					{% for holiday in object.holiday.all %}
+					<span>{{ holiday }} </span>
+					{% endfor %}
+				</td>
+			</tr>
+			<tr>
+				<th class="tableheader">座席数</th>
+				<td class="cell">{{ object.seating_capacity }}</td>
+			</tr>
+			<tr>
+				<th class="tableheader">カテゴリ</th>
+				<td class="cell">
+					{% for category in object.category_name.all %}
+					<span>{{ category }}　</span>
+					{% endfor %}
+				</td>
+			</tr>
+		</table>
 	</div>
-	<div class="detail-ref-container">
-		<a href="">予約</a>
-		<a href="">レビュー</a>
-	</div>
-	<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
-	<table class="restaurant-table">
-		<tr>
-			<th class="tableheader">店舗名</th>
-			<td class="cell">{{ object.restaurant_name }}</td>
-		</tr>
-		<tr>
-			<th class="tableheader">説明</th>
-			<td class="cell">{{ object.description }}</td>
-		</tr>
-		<tr>
-			<th class="tableheader">価格帯</th>
-			<td class="cell">{{ object.lowest_price }}~{{ object.highest_price }}円</td>
-		</tr>
-		<tr>
-			<th class="tableheader">郵便番号</th>
-			<td class="cell">{{ object.postal_code}}</td>
-		</tr>
-		<tr>
-			<th class="tableheader">住所</th>
-			<td class="cell">{{ object.address }}</td>
-		</tr>
-		<tr>
-			<th class="tableheader">営業時間</th>
-			<td class="cell">{{ object.opening_time }}~{{ object.closing_time }}</td>
-		</tr>
-		<tr>
-			<th class="tableheader">定休日</th>
-			<td class="cell"></td>
-		</tr>
-		<tr>
-			<th class="tableheader">座席数</th>
-			<td class="cell">{{ object.seating_capacity }}</td>
-		</tr>
-		<tr>
-			<th class="tableheader">カテゴリ</th>
-			<td class="cell"></td>
-		</tr>
-	</table>
-</div>
+</div>	
 {% endblock %}

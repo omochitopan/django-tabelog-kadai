@@ -15,7 +15,7 @@ h1 {
 header {
   max-width: 1080px;
   height: 60px;
-  background-color: white;
+  background-color: whitesmoke;
   z-index: 100;
   display: flex;
   justify-content: space-between;
@@ -228,13 +228,13 @@ main {
   width: 100%;
 }
 
-.top-restaurant-name {
+.top .restaurant-name {
   color: black;
   font-size: 14px;
   text-decoration: none;
 }
 
-.top-restaurant-name:hover {
+.top .restaurant-name:hover {
   text-decoration: underline;
 }
 
@@ -325,26 +325,36 @@ footer {
   padding-bottom: 5px;
 }
 
-.detail-outer-container {
+.detail .outer-container {
   width: 500px;
-  margin: 0 auto;
+  margin: 80px auto 0 auto;
 }
 
-.restaurant-name-container {
+.detail .restaurant-name {
   width: 100%;
   text-align: center;
 }
 
-.detail-ref-container > a {
-  width: 70px;
+.detail .ref-container {
+  margin: 10px 0 10px 0;
+}
+
+.detail .ref {
+  color: black;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.detail .ref:hover {
+  text-decoration: underline;
 }
 
 .detail-image {
   width: 500px;
 }
 
-.restaurant-table {
-  margin: 20px 0 30px 0;
+.detail .restaurant-table {
+  width: 500px;
 }
 
 .tableheader {
