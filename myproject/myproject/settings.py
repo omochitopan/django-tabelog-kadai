@@ -177,3 +177,7 @@ EMAIL_USE_TLS = True
 
 # メール認証の有効期限
 ACTIVATION_EXPIRED_DAYS = 1
+
+# 本番環境用session情報
+# SESSION_COOKIE_AGE = 20
+# SESSION_SAVE_EVERY_REQUEST = True

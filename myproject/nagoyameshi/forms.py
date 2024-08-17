@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Restaurant, Category, RegularHoliday
 from django.core.exceptions import ValidationError
 from django import forms
+from .models import User, Restaurant, Category, RegularHoliday, Review
 
 class SignUpForm(UserCreationForm):
     class Meta:
@@ -44,3 +44,22 @@ class RestaurantAdminForm(forms.ModelForm):
     #    widget = forms.CheckboxSelectMultiple,
     #    required = False,
     #    )
+
+class ReviewForm(forms.ModelForm):
+    score = forms.fields.ChoiceField(
+        choices = (
+            (1, 1),
+            (2, 2),
+            (3, 3),
+            (4, 4),
+            (5, 5),
+        ),
+        widget = forms.widgets.RadioSelect
+    )
+    
+    class Meta:
+        model = Review
+        fields = (
+            "score",
+            "content",
+        )

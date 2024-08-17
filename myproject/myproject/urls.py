@@ -25,14 +25,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.TopView.as_view(), name="top"),
     path('login/', views.LoginView.as_view(), name="login"),
-    path('user_created', views.UserCreatedView.as_view(), name="usercreated"),
+    path('usercreated', views.UserCreatedView.as_view(), name="usercreated"),
     path('passwordreset/', views.PasswordresetView.as_view(), name="passwordreset"),
     path('signup/', views.SignupView.as_view(), name="signup"),
-    path('logout/', views.LogoutView.as_view(), name="logout"),
-    path('list/', views.ListView.as_view(), name='list'),
-    path('category/', views.RestaurantCategoryList.as_view(), name='category'),
-    path('detail/<int:pk>/', views.RestaurantDetailView.as_view(), name="detail"),
     path('users/<uuid:activate_token>/activation/', activate_user, name='users-activation'),
+    path('logout/', views.LogoutView.as_view(), name="logout"),
+    path('restaurant/', views.RestaurantListView.as_view(), name='list'),
+    path('restaurant/category/', views.RestaurantCategoryList.as_view(), name='category'),
+    path('restaurant/<int:pk>/detail/', views.RestaurantDetailView.as_view(), name="detail"),
+    path('restaurant/<int:restaurant_id>/review/', views.ReviewListView.as_view(), name="reviewlist"),
+    path('restaurant/<int:restaurant_id>/review/create/', views.ReviewCreateView.as_view(), name="reviewcreate"),
+    path('restaurant/<int:restaurant_id>/review/<int:pk>/update/', views.ReviewUpdateView.as_view(), name="reviewupdate"),
 ]
 
 if settings.DEBUG:

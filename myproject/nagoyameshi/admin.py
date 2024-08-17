@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import RestaurantAdminForm
-from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Company, Terms
+from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Company, Terms, Review
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
@@ -58,6 +58,17 @@ class CompanyAdmin(admin.ModelAdmin):
 class TermsAdmin(admin.ModelAdmin):
     list_display = ('id',)
 
+class ReviewResource(resources.ModelResource):
+   class Meta:
+       model = Review
+       skip_unchanged = True
+       use_bulk = True
+
+class ReviewAdmin(ImportExportModelAdmin):
+    list_display = ('restaurant_id', 'user_id',)
+    #search_fields = ('restaurant_id',)
+    resource_class = ReviewResource
+
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(UserActivateTokens, UserActivateTokensAdmin)
@@ -65,3 +76,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(RegularHoliday, RegularHolidayAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Terms, TermsAdmin)
+admin.site.register(Review, ReviewAdmin)

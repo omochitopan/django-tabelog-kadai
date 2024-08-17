@@ -5,11 +5,15 @@
 <div class="detail">
 	<div class="outer-container">
 		<div class="restaurant-name">
-			<h4>{{ object.restaurant_name }}</h4>
+			<h2>{{ object.restaurant_name }}</h2>
 		</div>
-		<div class="ref-container">
-			<a href="" class="ref">予約</a>
-			<a href="" class="ref">レビュー</a>
+		<div class="flex-container ref-container">
+			<form method="get" action="" class="transition-form">
+				<button type="submit" class="btn" name="reservation_id" value="{{ object.pk }}">予約</button>
+			</form>
+			<form method="get" action="{% url 'reviewlist' object.pk %}" class="transition-form">
+				<button type="submit" class="btn" name="restaurant_id" value="{{ object.pk }}">レビュー</button>
+			</form>
 		</div>
 		<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
 		<table class="restaurant-table">

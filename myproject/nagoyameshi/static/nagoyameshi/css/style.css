@@ -113,7 +113,7 @@ main {
   padding-left: 100px;
 }
 
-.signup-container {
+.signup .container {
   max-width: 600px;
   padding-top: 40px;
   padding-left: 100px;
@@ -339,10 +339,22 @@ footer {
   margin: 10px 0 10px 0;
 }
 
-.detail .ref {
+.detail .transition-form {
+  margin: 0 10px;
+}
+
+.detail .btn {
   color: black;
-  text-decoration: none;
-  margin-right: 20px;
+  font-size: 14px;
+  background-color: white;
+  padding: 4px;
+  border: solid 1px gray;
+}
+
+.detail .btn:hover {
+  color: white;
+  background-color: orangered;
+  border: solid 1px white;
 }
 
 .detail .ref:hover {
@@ -439,4 +451,112 @@ footer {
 .restaurant-table .category {
   color: gray;
   font-size: 15px;
+}
+
+.reviewlist {
+  margin-top: 80px;
+}
+
+.reviewlist .average {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.review-table {
+  width: 500px;
+  margin: 20px auto 30px auto;
+  border: solid 1px gray;
+}
+
+.reviewlist .restaurant-name {
+  text-align: center;
+}
+
+.reviewlist .user-name {
+  font-size: 18px;
+  background-color: whitesmoke;
+  border-bottom: solid 1px gray;
+  padding: 2px 4px;
+}
+
+.review-table span {
+  font-size: 14px;
+}
+
+.reviewlist .star {
+  border-bottom: solid 1px gray;
+  padding: 2px 4px;
+}
+
+.review-table .content {
+  padding: 2px 4px;
+}
+
+.review-table .update {
+  font-size: 13px;
+  padding: 2px 4px;
+}
+
+.reviewlist .form-container {
+  justify-content: space-between;
+  width: 400px;
+  margin: 30px auto;
+}
+
+.reviewlist .btn {
+  color: black;
+  font-size: 14px;
+  background-color: white;
+  padding: 4px;
+  border: solid 1px gray;
+}
+
+.reviewlist .btn:hover {
+  color: white;
+  background-color: orangered;
+  border: solid 1px white;
+}
+
+.reviewcreate .outer-container {
+  width: 500px;
+  margin: 80px auto 30px auto;
+}
+
+.reviewcreate .score {
+  margin: 30px 0;
+}
+
+.reviewcreate .restaurant-name {
+  text-align: center;
+}
+
+.reviewcreate .review-form {
+  width: 500px;
+}
+
+.reviewcreate .choice {
+  margin-right: 50px;
+}
+
+.reviewcreate textarea {
+  width: 500px;
+  height: 200px;
+}
+
+.reviewcreate .btn-container {
+  text-align: center;
+}
+
+.reviewcreate .btn {
+  color: black;
+  font-size: 14px;
+  background-color: white;
+  padding: 4px;
+  border: solid 1px gray;
+}
+
+.reviewcreate .btn:hover {
+  color: white;
+  background-color: orangered;
+  border: solid 1px white;
 }

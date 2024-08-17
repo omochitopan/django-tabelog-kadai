@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}レビュー一覧ページ{% endblock %}
+{% block contents %}
+<div class="reviewlist">
+	<h2 class="restaurant-name">{{ restaurant_name }}</h2>
+	<p class="average">平均：{{ average_score }}点（{{ target_reviews|length }}件）</p>
+	{% for review in target_reviews %}
+	<table class="review-table">
+		<tr class="user-name-index">
+			<td class="user-name">{{ review.user.name }}<span> さん</span></td>
+		</tr>
+		<tr>
+			{% if review.score == 1 %}
+			<td class="star">★☆☆☆☆</td>
+			{% elif review.score == 2 %}
+			<td class="star">★★☆☆☆</td>
+			{% elif review.score == 3 %}
+			<td class="star">★★★☆☆</td>
+			{% elif review.score == 4 %}
+			<td class="star">★★★★☆</td>
+			{% elif review.score == 5 %}
+			<td class="star">★★★★★</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td class="content">{{ review.content }}</td>
+		</tr>
+		<tr>
+			<td class="update">日時：{{ review.updated_at }}</td>
+		</tr>
+	</table>
+	{% endfor %}
+	<div class="flex-container form-container">
+		{% if not writtenreview %}
+		<form method="get" action="{% url 'reviewcreate' restaurant_id %}" class="review-form">
+			<button type="submit" class="btn">レビューを投稿する</button>
+		</form>
+		{% else %}
+		<form method="get" action="{% url 'reviewupdate' restaurant_id writtenreview.pk %}" class="review-form">
+			<button type="submit" class="btn">レビューを編集する</button>
+		</form>
+		{% endif %}
+		<form method="get" action="{% url 'detail' restaurant_id %}">
+			<button type="submit" class="btn">レストラン情報に戻る</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

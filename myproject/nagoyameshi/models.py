@@ -1,15 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin, Group, Permission
-from django.core.validators import RegexValidator, MinLengthValidator
+from django.core.validators import RegexValidator, MinLengthValidator, MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.conf import settings
-import uuid
-from datetime import datetime, timedelta
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from datetime import datetime, timedelta
 import environ
 import os
+import uuid
 
 env = environ.Env()
 ip_port = env('IP_PORT')
@@ -189,3 +189,15 @@ def publish_activate_token(sender, instance, **kwargs):
             instance.email,
         ]
         send_mail(subject, message, from_email, recipient_list)
+
+class Review(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_review'
+        verbose_name = verbose_name_plural = 'レビュー'
+    
+    content = models.TextField(verbose_name="レビュー内容", max_length=1000)
+    score = models.PositiveIntegerField(verbose_name="スコア", validators=[MinValueValidator(1), MaxValueValidator(5)])
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)    
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)

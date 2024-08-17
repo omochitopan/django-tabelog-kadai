@@ -41,39 +41,32 @@
 			<div class="categoryContainer">
 				<div class="flex-container">
 					<form class="category-container" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						<button type="submit" class="big-category-btn" name="query" value="和食"><img src="/media/washoku.jpg" class="top-image category-image" alt="和食を検索"></button>
 						<button type="submit" class="category-text" name="query" value="和食">和食</button>
 					</form>
 					<form class="category-container" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						<button type="submit" class="big-category-btn" name="query" value="うどん"><img src="/media/udon.jpg" class="top-image category-image" alt="和食を検索"></button>
 						<button type="submit" class="category-text" name="query" value="うどん">うどん</button>
 					</form>
 					<form class="category-container" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						<button type="submit" class="big-category-btn" name="query" value="丼物"><img src="/media/don.jpg" class="top-image category-image" alt="和食を検索"></button>
 						<button type="submit" class="category-text" name="query" value="丼物">丼物</button>
 					</form>
 					<form class="category-container" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						<button type="submit" class="big-category-btn" name="query" value="ラーメン"><img src="/media/ramen.jpg" class="top-image category-image" alt="和食を検索"></button>
 						<button type="submit" class="category-text" name="query" value="ラーメン">ラーメン</button>
 					</form>
 					<form class="category-container" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						<button type="submit" class="big-category-btn" name="query" value="おでん"><img src="/media/oden.jpg" class="top-image category-image" alt="和食を検索"></button>
 						<button type="submit" class="category-text" name="query" value="おでん">おでん</button>
 					</form>
 					<form class="category-container" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						<button type="submit" class="big-category-btn" name="query" value="揚げ物"><img src="/media/fried.jpg" class="top-image category-image" alt="和食を検索"></button>
 						<button type="submit" class="category-text" name="query" value="揚げ物">揚げ物</button>
 					</form>
 				</div>
 				<div class="lower-category-container">
 					<form class="small-category-form" method="get" action="{% url 'category' %}">
-						{% csrf_token %}
 						{% for category in categories %}
 						<button type="submit" class="small-category-btn" name="query" value={{ category.category_name }}>{{ category.category_name }}</button>
 						{% endfor %}
