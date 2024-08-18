@@ -29,13 +29,15 @@ urlpatterns = [
     path('passwordreset/', views.PasswordresetView.as_view(), name="passwordreset"),
     path('signup/', views.SignupView.as_view(), name="signup"),
     path('users/<uuid:activate_token>/activation/', activate_user, name='users-activation'),
-    path('logout/', views.LogoutView.as_view(), name="logout"),
+    path('logout/', views.logout_view, name="logout"),
     path('restaurant/', views.RestaurantListView.as_view(), name='list'),
     path('restaurant/category/', views.RestaurantCategoryList.as_view(), name='category'),
     path('restaurant/<int:pk>/detail/', views.RestaurantDetailView.as_view(), name="detail"),
     path('restaurant/<int:restaurant_id>/review/', views.ReviewListView.as_view(), name="reviewlist"),
     path('restaurant/<int:restaurant_id>/review/create/', views.ReviewCreateView.as_view(), name="reviewcreate"),
     path('restaurant/<int:restaurant_id>/review/<int:pk>/update/', views.ReviewUpdateView.as_view(), name="reviewupdate"),
+    path('restaurant/<int:restaurant_id>/reservation/', views.ReservationCreateView.as_view(), name="reservationcreate"),
+    path('restaurant/<int:user_id>/reservationlist/', views.ReservationListView.as_view(), name="reservationlist"),
 ]
 
 if settings.DEBUG:

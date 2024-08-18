@@ -8,11 +8,13 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout
 from django.contrib import messages
 from django.db.models import Q, Avg
 from django.http import HttpResponse
-from .models import Restaurant, User, UserActivateTokens, Category, Review
-from .forms import SignUpForm, PasswordresetForm, ReviewForm
+from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation
+from .forms import SignUpForm, PasswordresetForm, ReviewForm, ReservationForm
+from datetime import date
 import environ
 import os
 
@@ -24,9 +26,10 @@ login_url = f'http://{ip_port}/login/'
 class LoginView(LoginView):
     form_class = AuthenticationForm
     template_name = 'login.html'
-
-class LogoutView(LoginRequiredMixin, LogoutView):
-    template_name = 'nagoyameshi/restaurant_list.html'
+    
+def logout_view(request):
+    logout(request)
+    return redirect('top')
 
 class UserCreatedView(TemplateView):
     template_name = 'user_created.html'
@@ -45,6 +48,7 @@ class TopView(TemplateView):
         context = super().get_context_data(**kwargs)
         restaurants = Restaurant.objects.all()
         categories = Category.objects.all()
+        context['user_id'] = self.request.user.pk
         context['evaluated_restaurants'] = restaurants.order_by('id')[:6]
         context['new_restaurants'] = restaurants.order_by('-created_at')[:6]
         context['categories'] = categories.order_by('id')
@@ -63,6 +67,11 @@ class RestaurantListView(ListView):
         else:
             restaurants = Restaurant.objects.none()
         return restaurants
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)        
+        context['user_id'] = self.request.user.pk
+        return context
 
 class RestaurantCategoryList(ListView):
     model = Restaurant
@@ -88,6 +97,7 @@ class RestaurantCategoryList(ListView):
                 if query == category.category_name:
                     categoryRestaurants.append(restaurant)
                     break
+        context['user_id'] = self.request.user.pk
         context["data"] = categoryRestaurants
         return context
     
@@ -99,6 +109,11 @@ class RestaurantDetailView(DetailView):
         request.session["restaurant_id"] = self.get_object().pk
         request.session["restaurant_name"] = self.get_object().restaurant_name        
         return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)        
+        context['user_id'] = self.request.user.pk
+        return context    
 
 class SignupView(CreateView):
     form_class = SignUpForm
@@ -144,7 +159,8 @@ class ReviewListView(ListView):
             if review.user == self.request.user:
                 writtenreview = review
                 break
-        context["restaurant_id"] = self.request.session["restaurant_id"]
+        context['user_id'] = self.request.user.pk
+        context["restaurant_id"] = restaurant_id
         context["restaurant_name"] = self.request.session["restaurant_name"]
         context["target_reviews"] = target_reviews
         context["average_score"] = average_score
@@ -161,6 +177,7 @@ class ReviewCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
         context["restaurant_name"] = self.request.session["restaurant_name"]
         return context
 
@@ -183,5 +200,45 @@ class ReviewUpdateView(UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
         context["restaurant_name"] = self.request.session["restaurant_name"]
+        return context
+
+class ReservationCreateView(CreateView):
+    form_class = ReservationForm
+    model = Reservation
+    
+    def get_success_url(self):
+        restaurant_id = self.request.session["restaurant_id"]
+        return reverse_lazy('detail', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurant_id = self.request.session["restaurant_id"]
+        target_reviews = Review.objects.filter(restaurant = restaurant_id)
+        average_score = target_reviews.aggregate(Avg('score'))['score__avg']
+        if average_score == None:
+            average_score = "---"
+        else:
+            average_score = "{:.2f}".format(average_score)
+        context['user_id'] = self.request.user.pk
+        context["restaurant_name"] = self.request.session["restaurant_name"]
+        context["restaurant_id"] = self.request.session["restaurant_id"]
+        context["target_reviews"] = target_reviews
+        context["average_score"] = average_score
+        return context
+
+class ReservationListView(ListView):
+    model = Reservation
+    template_name = "reservation_list.html"
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        target_reservations = Reservation.objects.filter(user = user)
+        # 現在の日付以降の予約のみを取得したい
+        # target_reviews = target_reviews.filter(reserved_datetime__range = (date.today(),)).order_by('reserved_datetime')
+        context['user_id'] = self.request.user.pk
+        context["target_reservations"] = target_reservations
         return context

@@ -201,3 +201,16 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)    
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+
+class Reservation(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_rervation'
+        verbose_name = verbose_name_plural = '予約'
+    
+    reserved_datetime = models.DateTimeField(verbose_name="予約日時")
+    number_of_people = models.PositiveIntegerField(verbose_name="予約人数")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)    
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+        

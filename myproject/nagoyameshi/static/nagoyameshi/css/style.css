@@ -45,11 +45,8 @@ header {
 }
 
 .nav-pc {
-  margin: 15px 10px 0 0;
-}
-
-.nav-pc form {
-  margin: auto 15px;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .nav-pc ul {
@@ -64,17 +61,26 @@ header {
 .welcome {
   color: rgb(0, 105, 140);
   font-weight: bold;
-  margin-right: 15px;
+  text-align: right;
+  margin: 3px 0;
 }
 
-.button {
-  color: rgb(120, 120, 120);
+.link-container {
+  display: flex;
+}
+
+.base .nav-link {
+  color: rgb(125, 125, 125);
+  text-decoration: none;
+  margin-left: 30px;
+}
+
+.base .nav-input {
   background: none;
   border: none;
-  text-decoration: none;
 }
 
-.button:hover {
+.nav-link:hover {
   color: rgb(0, 0, 0);
   text-decoration: underline;
 }
@@ -91,15 +97,6 @@ main {
 
 .login-check {
   margin-bottom: 30px;
-}
-
-.login-ref {
-  margin-top: 15px;
-}
-
-.login-ref > a {
-  color: rgb(125, 125, 125);
-  text-decoration: none;
 }
 
 .login-ref > a:hover {
@@ -335,26 +332,25 @@ footer {
   text-align: center;
 }
 
-.detail .ref-container {
+.ref-container {
   margin: 10px 0 10px 0;
 }
 
-.detail .transition-form {
+.transition-form {
   margin: 0 10px;
 }
 
 .detail .btn {
   color: black;
   font-size: 14px;
-  background-color: white;
+  background-color: rgb(255, 210, 197);
   padding: 4px;
-  border: solid 1px gray;
+  border: none;
 }
 
 .detail .btn:hover {
   color: white;
   background-color: orangered;
-  border: solid 1px white;
 }
 
 .detail .ref:hover {
@@ -457,6 +453,11 @@ footer {
   margin-top: 80px;
 }
 
+.reviewlist .outer-container {
+  width: 500px;
+  margin: 0 auto;
+}
+
 .reviewlist .average {
   text-align: center;
   margin-top: 10px;
@@ -506,15 +507,14 @@ footer {
 .reviewlist .btn {
   color: black;
   font-size: 14px;
-  background-color: white;
+  background-color: rgb(255, 210, 197);
   padding: 4px;
-  border: solid 1px gray;
+  border: none;
 }
 
 .reviewlist .btn:hover {
   color: white;
   background-color: orangered;
-  border: solid 1px white;
 }
 
 .reviewcreate .outer-container {
@@ -550,13 +550,44 @@ footer {
 .reviewcreate .btn {
   color: black;
   font-size: 14px;
-  background-color: white;
+  background-color: rgb(255, 210, 197);
   padding: 4px;
-  border: solid 1px gray;
+  border: none;
 }
 
 .reviewcreate .btn:hover {
   color: white;
   background-color: orangered;
-  border: solid 1px white;
+}
+
+.reservationcreate .outer-container {
+  width: 500px;
+  margin: 80px auto 30px auto;
+}
+
+.reservationcreate .restaurant-name, .average {
+  text-align: center;
+}
+
+.reservationcreate .reservation-form {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.reservationcreate .btn-container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.reservationcreate .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px;
+  border: none;
+}
+
+.reservationcreate .btn:hover {
+  color: white;
+  background-color: orangered;
 }

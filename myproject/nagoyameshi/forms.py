@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
-from .models import User, Restaurant, Category, RegularHoliday, Review
+from .models import User, Restaurant, Category, RegularHoliday, Review, Reservation
 
 class SignUpForm(UserCreationForm):
     class Meta:
@@ -62,4 +62,12 @@ class ReviewForm(forms.ModelForm):
         fields = (
             "score",
             "content",
+        )
+
+class ReservationForm(forms.ModelForm):
+    class Meta:
+        model = Reservation
+        fields = (
+            "reserved_datetime",
+            "number_of_people",
         )
