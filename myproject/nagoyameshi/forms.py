@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
+from django.contrib.admin.widgets import AdminDateWidget
+import datetime
 from .models import User, Restaurant, Category, RegularHoliday, Review, Reservation
 
 class SignUpForm(UserCreationForm):
@@ -65,9 +67,26 @@ class ReviewForm(forms.ModelForm):
         )
 
 class ReservationForm(forms.ModelForm):
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super(ReservationForm, self).__init__(*args, **kwargs)
+        
     class Meta:
         model = Reservation
         fields = (
-            "reserved_datetime",
+            "reserved_date",
+            "reserved_time",
             "number_of_people",
         )
+        widgets = {
+            "reserved_date": forms.NumberInput(attrs={
+                "type": "date"
+            })
+        }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('reserved_date') <= datetime.date.today():
+            raise ValidationError('明日以降の日付を選択してください')
+        if cleaned_data.get('number_of_people') > self.request.session["seating_capacity"]:
+            raise ValidationError('予約人数を減らしてください')

@@ -36,6 +36,7 @@ urlpatterns = [
     path('restaurant/<int:restaurant_id>/review/', views.ReviewListView.as_view(), name="reviewlist"),
     path('restaurant/<int:restaurant_id>/review/create/', views.ReviewCreateView.as_view(), name="reviewcreate"),
     path('restaurant/<int:restaurant_id>/review/<int:pk>/update/', views.ReviewUpdateView.as_view(), name="reviewupdate"),
+    path('restaurant/<int:restaurant_id>/review/<int:pk>/delete/', views.ReviewDeleteView.as_view(), name="reviewdelete"),
     path('restaurant/<int:restaurant_id>/reservation/', views.ReservationCreateView.as_view(), name="reservationcreate"),
     path('restaurant/<int:user_id>/reservationlist/', views.ReservationListView.as_view(), name="reservationlist"),
 ]

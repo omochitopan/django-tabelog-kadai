@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import RestaurantAdminForm
-from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Company, Terms, Review
+from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Company, Terms, Review, Reservation
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
@@ -69,6 +69,10 @@ class ReviewAdmin(ImportExportModelAdmin):
     #search_fields = ('restaurant_id',)
     resource_class = ReviewResource
 
+class ReservationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'restaurant', 'reserved_date', 'reserved_time', 'number_of_people',)
+    #search_fields = ('user', 'restaurant',)
+
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(UserActivateTokens, UserActivateTokensAdmin)
@@ -77,3 +81,4 @@ admin.site.register(RegularHoliday, RegularHolidayAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Terms, TermsAdmin)
 admin.site.register(Review, ReviewAdmin)
+admin.site.register(Reservation, ReservationAdmin)

@@ -2,7 +2,7 @@ from typing import Any, Dict
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView, LogoutView
@@ -15,8 +15,7 @@ from django.http import HttpResponse
 from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation
 from .forms import SignUpForm, PasswordresetForm, ReviewForm, ReservationForm
 from datetime import date
-import environ
-import os
+import os, environ
 
 env = environ.Env()
 ip_port = env('IP_PORT')
@@ -178,6 +177,7 @@ class ReviewCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
+        context["restaurant_id"] = self.request.session["restaurant_id"]
         context["restaurant_name"] = self.request.session["restaurant_name"]
         return context
 
@@ -201,7 +201,22 @@ class ReviewUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
+        context["restaurant_id"] = self.request.session["restaurant_id"]
         context["restaurant_name"] = self.request.session["restaurant_name"]
+        return context
+
+class ReviewDeleteView(DeleteView):
+    model = Review
+    template_name = "review_delete.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        context["restaurant_name"] = self.request.session["restaurant_name"]
+        context["restaurant_id"] = self.request.session["restaurant_id"]
         return context
 
 class ReservationCreateView(CreateView):
@@ -209,8 +224,17 @@ class ReservationCreateView(CreateView):
     model = Reservation
     
     def get_success_url(self):
-        restaurant_id = self.request.session["restaurant_id"]
-        return reverse_lazy('detail', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
+        return reverse_lazy('detail', kwargs=dict(pk = self.request.session['restaurant_id']))
+
+    def get(self, request, *args, **kwargs):
+        restaurant = Restaurant.objects.get(id = self.request.session['restaurant_id'])
+        request.session["seating_capacity"] = restaurant.seating_capacity
+        return super().get(request, *args, **kwargs)
+    
+    def get_form_kwargs(self):
+        kwargs = super(ReservationCreateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -228,6 +252,13 @@ class ReservationCreateView(CreateView):
         context["average_score"] = average_score
         return context
 
+    def form_valid(self, form):
+        qryset = form.save(commit=False)
+        qryset.user = self.request.user
+        qryset.restaurant = Restaurant.objects.get(id = self.request.session['restaurant_id'])
+        qryset.save()
+        return  super().form_valid(form)
+
 class ReservationListView(ListView):
     model = Reservation
     template_name = "reservation_list.html"
@@ -236,7 +267,7 @@ class ReservationListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        target_reservations = Reservation.objects.filter(user = user)
+        target_reservations = Reservation.objects.filter(user = user, reserved_date__gte = date.today()).order_by('reserved_date', 'reserved_time',)
         # 現在の日付以降の予約のみを取得したい
         # target_reviews = target_reviews.filter(reserved_datetime__range = (date.today(),)).order_by('reserved_datetime')
         context['user_id'] = self.request.user.pk

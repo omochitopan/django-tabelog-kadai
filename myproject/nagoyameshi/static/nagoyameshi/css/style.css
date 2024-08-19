@@ -4,8 +4,14 @@
 
 body {
   max-width: 1080px;
-  margin: 0 auto 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: "Source Sans Pro", "Hiragino Kaku Gothic ProN", Meiryo, Arial, sans-serif;
+}
+
+.contents {
+  flex: 1;
 }
 
 h1 {
@@ -69,18 +75,18 @@ header {
   display: flex;
 }
 
-.base .nav-link {
+header .nav-link {
   color: rgb(125, 125, 125);
   text-decoration: none;
   margin-left: 30px;
 }
 
-.base .nav-input {
+header .nav-input {
   background: none;
   border: none;
 }
 
-.nav-link:hover {
+header .nav-link:hover {
   color: rgb(0, 0, 0);
   text-decoration: underline;
 }
@@ -460,7 +466,14 @@ footer {
 
 .reviewlist .average {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
+}
+
+.reviewlist .noreview {
+  text-align: center;
+  background-color: whitesmoke;
+  margin: 30px 0;
+  padding: 5px 0;
 }
 
 .review-table {
@@ -473,7 +486,7 @@ footer {
   text-align: center;
 }
 
-.reviewlist .user-name {
+.review-table .user-name {
   font-size: 18px;
   background-color: whitesmoke;
   border-bottom: solid 1px gray;
@@ -484,7 +497,7 @@ footer {
   font-size: 14px;
 }
 
-.reviewlist .star {
+.review-table .star {
   border-bottom: solid 1px gray;
   padding: 2px 4px;
 }
@@ -498,9 +511,13 @@ footer {
   padding: 2px 4px;
 }
 
-.reviewlist .form-container {
-  justify-content: space-between;
-  width: 400px;
+.reviewlist .reviewcheck {
+  font-size: 16px;
+  text-align: center;
+}
+
+.reviewlist .review-form {
+  text-align: center;
   margin: 30px auto;
 }
 
@@ -543,8 +560,9 @@ footer {
   height: 200px;
 }
 
-.reviewcreate .btn-container {
-  text-align: center;
+.btn-container {
+  margin: 0 auto 20px auto;
+  justify-content: space-around;
 }
 
 .reviewcreate .btn {
@@ -555,9 +573,18 @@ footer {
   border: none;
 }
 
+.reviewcreate .btn-left {
+  margin-right: 40px;
+}
+
 .reviewcreate .btn:hover {
   color: white;
   background-color: orangered;
+}
+
+.reviewcreate .deletecheck {
+  color: crimson;
+  margin-top: 20px;
 }
 
 .reservationcreate .outer-container {
@@ -567,6 +594,7 @@ footer {
 
 .reservationcreate .restaurant-name, .average {
   text-align: center;
+  margin-top: 20px;
 }
 
 .reservationcreate .reservation-form {

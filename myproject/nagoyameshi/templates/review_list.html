@@ -17,6 +17,13 @@
 			</form>
 		</div>
 		<p class="average">平均：{{ average_score }}点（{{ target_reviews|length }}件）</p>
+		{% if not target_reviews %}
+		<table class="review-table">
+			<tr>
+				<td class="noreview">このレストランのレビューはまだありません。</td>
+			</tr>
+		</table>
+		{% else %}
 		{% for review in target_reviews %}
 		<table class="review-table">
 			<tr class="user-name-index">
@@ -43,20 +50,19 @@
 			</tr>
 		</table>
 		{% endfor %}
-		<div class="flex-container form-container">
-			{% if not writtenreview %}
-			<form method="get" action="{% url 'reviewcreate' restaurant_id %}" class="review-form">
-				<button type="submit" class="btn">レビューを投稿する</button>
-			</form>
-			{% else %}
-			<form method="get" action="{% url 'reviewupdate' restaurant_id writtenreview.pk %}" class="review-form">
-				<button type="submit" class="btn">レビューを編集する</button>
-			</form>
-			{% endif %}
-			<form method="get" action="{% url 'detail' restaurant_id %}">
-				<button type="submit" class="btn">レストラン情報に戻る</button>
-			</form>
+		{% endif %}
+		{% if not writtenreview %}
+		<p class="reviewcheck">あなたはこのレストランにまだレビューしていません。</p>
+		<div class="flex-container btn-container">
+			<button onclick="location.href='{% url 'reviewcreate' restaurant_id %}'" class="btn">レビューを投稿する</button>
 		</div>
+		{% else %}
+		<p class="reviewcheck">あなたはこのレストランにレビュー済みです。</p>
+		<div class="flex-container btn-container">
+			<button onclick="location.href='{% url 'reviewupdate' restaurant_id writtenreview.pk %}'" class="btn btn-left">レビューを編集する</button>
+			<button onclick="location.href='{% url 'reviewdelete' restaurant_id writtenreview.pk %}'" class="btn btn-right">レビューを削除する</button>
+		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

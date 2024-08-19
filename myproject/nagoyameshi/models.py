@@ -207,7 +207,8 @@ class Reservation(models.Model):
         db_table = 'nagoyameshi_rervation'
         verbose_name = verbose_name_plural = '予約'
     
-    reserved_datetime = models.DateTimeField(verbose_name="予約日時")
+    reserved_date = models.DateField(verbose_name="予約日")
+    reserved_time = models.TimeField(verbose_name="予約時間")
     number_of_people = models.PositiveIntegerField(verbose_name="予約人数")
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)    
