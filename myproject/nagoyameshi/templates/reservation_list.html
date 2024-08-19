@@ -15,7 +15,7 @@
 			</tr>
 			{% for reservation in target_reservations %}
 			<tr>
-				<td>{{ reservation.restaurant }}</td>
+				<td><a href="{% url 'detail' reservation.restaurant.id %}">{{ reservation.restaurant }}</a></td>
 				<td>{{ reservation.reserved_date }}</td>
 				<td>{{ reservation.reserved_time }}</td>
 				<td>{{ reservation.number_of_people }}</td>
