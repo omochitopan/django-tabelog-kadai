@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}予約キャンセル{% endblock %}
+{% block contents %}
+<div class="reservation">
+	<div class="outer-container">
+        <h6 class="deletecheck">以下の予約をキャンセルしますか？</h6>
+		<table>
+			<tr>
+				<th>レストラン名</th>
+				<th>予約日</th>
+				<th>予約時間</th>
+				<th>予約人数</th>
+			</tr>
+			<tr>
+				<td><a href="{% url 'detail' object.restaurant.id %}">{{ object.restaurant }}</a></td>
+				<td>{{ object.reserved_date }}</td>
+				<td>{{ object.reserved_time }}</td>
+				<td>{{ object.number_of_people }}</td>
+			</tr>
+		</table>
+		<form method="post">
+			{% csrf_token %}
+			<div class="flex-container btn-container">		
+				<button type="submit" class="btn">キャンセル</button>
+				<a href="{% url 'reservationlist' user_id %}" class="btn">戻る</a>
+			</div>
+		</form>	
+	</div>
+</div>
+{% endblock %}

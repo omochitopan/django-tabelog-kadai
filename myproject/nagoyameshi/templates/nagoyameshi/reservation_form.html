@@ -6,17 +6,12 @@
 	<div class="outer-container">
 		<h2 class="restaurant-name">{{ restaurant_name }}</h2>
 		<div class="flex-container ref-container">
-			<form method="get" action="{% url 'detail' restaurant_id %}" class="transition-form">
-				<button type="submit" class="btn">店舗情報</button>
-			</form>
-			<form method="get" action="{% url 'reservationcreate' restaurant_id %}" class="transition-form">
-				<button type="submit" class="btn">予約</button>
-			</form>
-			<form method="get" action="{% url 'reviewlist' restaurant_id %}" class="transition-form">
-				<button type="submit" class="btn">レビュー</button>
-			</form>
+			<a href="{% url 'detail' restaurant_id %}" class="btn restaurant-top-ref">店舗情報</a>
+			<a href="{% url 'reservationcreate' restaurant_id %}" class="btn restaurant-top-ref">予約フォーム</a>
+			<a href="{% url 'reviewlist' restaurant_id %}" class="btn restaurant-top-ref">レビュー</a>
 		</div>
 		<p class="average">平均：{{ average_score }}点（{{ target_reviews|length }}件）</p>
+		<p>予約情報を入力してください。</p>
 		<form method="post" class="reservation-form">
 			{% csrf_token %}
 			{{ form.as_p }}

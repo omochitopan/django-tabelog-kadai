@@ -3,7 +3,7 @@
 {% block contents %}
 <div class="reservation">
 	<div class="outer-container">
-		<h4>本日以降の予約一覧</h4>
+		<h4>過去の予約一覧</h4>
 		{% if not target_reservations %}
 		<p>現在の予約はありません。</p>
 		{% else %}
@@ -13,7 +13,6 @@
 				<th class="reserved-date">予約日</th>
 				<th class="reserved-time">時間</th>
 				<th class="reserved-people">人数</th>
-				<th class="reservation-cancel"></th>
 			</tr>
 			{% for reservation in target_reservations %}
 			<tr>
@@ -21,13 +20,12 @@
 				<td class="reserved-date">{{ reservation.reserved_date }}</td>
 				<td class="reserved-time">{{ reservation.reserved_time }}</td>
 				<td class="reserved-people">{{ reservation.number_of_people }}</td>
-				<td class="reserved-cancel"><a href="{% url 'reservationdelete' user_id reservation.pk %}" class="btn">キャンセル</a></td>
 			</tr>
 			{% endfor %}
 		</table>
 		{% endif %}
 		<div class="flex-container btn-container">		
-			<a href="{% url 'reservationlistall' user_id %}" class="btn">過去の予約一覧はこちら</a>
+			<a href="{% url 'reservationlist' user_id %}" class="btn">戻る</a>
 		</div>
 	</div>
 </div>

@@ -262,14 +262,39 @@ class ReservationCreateView(CreateView):
 class ReservationListView(ListView):
     model = Reservation
     template_name = "reservation_list.html"
-    paginate_by = 5
+    paginate_by = 15
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         target_reservations = Reservation.objects.filter(user = user, reserved_date__gte = date.today()).order_by('reserved_date', 'reserved_time',)
-        # 現在の日付以降の予約のみを取得したい
-        # target_reviews = target_reviews.filter(reserved_datetime__range = (date.today(),)).order_by('reserved_datetime')
-        context['user_id'] = self.request.user.pk
+        context['user_id'] = user.pk
         context["target_reservations"] = target_reservations
+        return context
+
+class ReservationListAllView(ListView):
+    model = Reservation
+    template_name = "reservation_list_all.html"
+    paginate_by = 15
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        target_reservations = Reservation.objects.filter(user = user).order_by('reserved_date', 'reserved_time',)
+        context['user_id'] = user.pk
+        context["target_reservations"] = target_reservations
+        return context
+
+class ReservationDeleteView(DeleteView):
+    model = Reservation
+    template_name = "reservation_delete.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('reservationlist', kwargs=dict(user_id = self.request.user.id))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        context["restaurant_name"] = self.request.session["restaurant_name"]
+        context["restaurant_id"] = self.request.session["restaurant_id"]
         return context

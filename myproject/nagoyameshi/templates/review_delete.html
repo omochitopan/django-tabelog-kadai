@@ -4,7 +4,7 @@
 <div class="reviewcreate">
 	<div class="outer-container">
 		<h2 class="restaurant-name">{{ restaurant_name }}</h2>
-		<h6 class="deletecheck">以下のレビューを削除してもよろしいですか？</h6>
+		<h6 class="deletecheck">以下のレビューを削除しますか？</h6>
 		<table class="review-table">
 			<tr class="user-name-index">
 				<td class="user-name">{{ object.user.name }}<span> さん</span></td>
@@ -36,7 +36,7 @@
 				<button type="submit" class="btn">削除</button>
 				<a href="{% url 'reviewlist' restaurant_id %}" class="btn">戻る</a>
 			</div>
-			</form>	
+		</form>	
 	</div>
 </div>
 {% endblock %}

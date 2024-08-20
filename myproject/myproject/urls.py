@@ -39,6 +39,8 @@ urlpatterns = [
     path('restaurant/<int:restaurant_id>/review/<int:pk>/delete/', views.ReviewDeleteView.as_view(), name="reviewdelete"),
     path('restaurant/<int:restaurant_id>/reservation/', views.ReservationCreateView.as_view(), name="reservationcreate"),
     path('restaurant/<int:user_id>/reservationlist/', views.ReservationListView.as_view(), name="reservationlist"),
+    path('restaurant/<int:user_id>/reservationlist/all/', views.ReservationListAllView.as_view(), name="reservationlistall"),
+    path('restaurant/<int:user_id>/reservationdelete/<int:pk>/', views.ReservationDeleteView.as_view(), name="reservationdelete"),   
 ]
 
 if settings.DEBUG:
