@@ -1,5 +1,6 @@
 from typing import Any, Dict
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -12,9 +13,12 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.db.models import Q, Avg
 from django.http import HttpResponse
-from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation
+from django.http.response import JsonResponse
+from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite
 from .forms import SignUpForm, PasswordresetForm, ReviewForm, ReservationForm
-from datetime import date
+from datetime import date, time, timedelta
+from dateutil.relativedelta import relativedelta
+import datetime
 import os, environ
 
 env = environ.Env()
@@ -110,8 +114,14 @@ class RestaurantDetailView(DetailView):
         return super().get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)        
-        context['user_id'] = self.request.user.pk
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        restaurant_id = self.request.session["restaurant_id"]
+        restaurant = get_object_or_404(Restaurant, pk = restaurant_id)
+        isFavorite = Favorite.objects.filter(user = user, restaurant = restaurant).exists()
+        context['user_id'] = user.pk
+        context['restaurant_id'] = restaurant_id
+        context['isFavorite'] = isFavorite
         return context    
 
 class SignupView(CreateView):
@@ -225,31 +235,59 @@ class ReservationCreateView(CreateView):
     
     def get_success_url(self):
         return reverse_lazy('detail', kwargs=dict(pk = self.request.session['restaurant_id']))
-
-    def get(self, request, *args, **kwargs):
-        restaurant = Restaurant.objects.get(id = self.request.session['restaurant_id'])
-        request.session["seating_capacity"] = restaurant.seating_capacity
-        return super().get(request, *args, **kwargs)
     
     def get_form_kwargs(self):
         kwargs = super(ReservationCreateView, self).get_form_kwargs()
+        restaurant = Restaurant.objects.get(id = self.request.session['restaurant_id'])
+        seating_capacity = restaurant.seating_capacity
+        opening_time = restaurant.opening_time
+        closing_time = restaurant.closing_time
         kwargs['request'] = self.request
+        kwargs['seating_capacity'] = seating_capacity
+        opening_time = datetime.datetime.combine(date.today(), opening_time)
+        closing_time = datetime.datetime.combine(date.today(), closing_time)
+
+        # 予約可能な開始時間:start_timeと終了時間:end_timeを設定
+        # 閉店時間が24時を過ぎる場合の対応
+        if opening_time > closing_time:
+            closing_time = closing_time + relativedelta(days = +1)
+        
+        start_time = opening_time
+        if 0 < start_time.minute < 30:
+            start_time = start_time.replace(minute = 30)
+        elif start_time.minute > 30:
+            start_time += relativedelta(hours = +1)
+            start_time = start_time.replace(minute = 0)
+        
+        end_time = closing_time + relativedelta(hours = -1)
+        if 0 < end_time.minute < 30:
+            end_time = end_time.replace(minute = 0)
+        elif end_time.minute > 30:
+            end_time = end_time.replace(minute = 30)
+        
+        reservation_candidates = []
+        while start_time <= end_time:
+            reservation_hour = start_time.hour
+            reservation_minute = start_time.minute
+            reservation_time = time(reservation_hour, reservation_minute)
+            if reservation_time.minute == 0:
+                writing_time = f"{reservation_hour}:0{reservation_minute}"
+            else:
+                writing_time = f"{reservation_hour}:{reservation_minute}"
+            reservation_candidates.append((reservation_time, writing_time))
+            start_time += relativedelta(minutes = +30)
+        reservation_candidates = tuple(reservation_candidates)
+        kwargs['reservation_candidates'] = reservation_candidates
         return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurant_id = self.request.session["restaurant_id"]
-        target_reviews = Review.objects.filter(restaurant = restaurant_id)
-        average_score = target_reviews.aggregate(Avg('score'))['score__avg']
-        if average_score == None:
-            average_score = "---"
-        else:
-            average_score = "{:.2f}".format(average_score)
         context['user_id'] = self.request.user.pk
         context["restaurant_name"] = self.request.session["restaurant_name"]
         context["restaurant_id"] = self.request.session["restaurant_id"]
-        context["target_reviews"] = target_reviews
-        context["average_score"] = average_score
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
         return context
 
     def form_valid(self, form):
@@ -297,4 +335,43 @@ class ReservationDeleteView(DeleteView):
         context['user_id'] = self.request.user.pk
         context["restaurant_name"] = self.request.session["restaurant_name"]
         context["restaurant_id"] = self.request.session["restaurant_id"]
+        return context
+
+class FavoriteCreateView(View): # LoginRequiredMixin,
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        restaurant_id = request.session["restaurant_id"]
+        restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
+        favorite, created = Favorite.objects.get_or_create(user=user, restaurant=restaurant)
+
+        if not created:
+            favorite.delete()
+            status = 'unfavorited'
+        else:
+            status = 'favorited'
+
+        return JsonResponse({'status': 'success', 'favorite_status': status})
+    
+class FavoriteDeleteView(View): # LoginRequiredMixin,
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        restaurant_id = request.POST.get("button")
+        restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
+        favorite = Favorite.objects.get(user=user, restaurant=restaurant)
+
+        favorite.delete()
+        
+        return redirect('favoritelist', user_id = user.pk)
+
+class FavoriteListView(ListView):
+    model = Favorite
+    template_name = "favorite_list.html"
+    paginate_by = 15
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        target_favorites = Favorite.objects.filter(user = user).order_by('-updated_at')
+        context['user_id'] = user.pk
+        context["target_favorites"] = target_favorites
         return context

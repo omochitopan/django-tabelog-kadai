@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
 import datetime
+from dateutil.relativedelta import relativedelta
 from .models import User, Restaurant, Category, RegularHoliday, Review, Reservation
 
 class SignUpForm(UserCreationForm):
@@ -67,12 +68,16 @@ class ReviewForm(forms.ModelForm):
         )
 
 class ReservationForm(forms.ModelForm):
-    def __init__(self, request, *args, **kwargs):
+    reserved_time = forms.ChoiceField(label="予約時間")
+    
+    def __init__(self, request, seating_capacity, reservation_candidates, *args, **kwargs):
         self.request = request
+        self.seating_capacity = seating_capacity
         super(ReservationForm, self).__init__(*args, **kwargs)
-        
+        self.fields["reserved_time"].choices = reservation_candidates
+    
     class Meta:
-        model = Reservation
+        model = Reservation                
         fields = (
             "reserved_date",
             "reserved_time",
@@ -80,13 +85,12 @@ class ReservationForm(forms.ModelForm):
         )
         widgets = {
             "reserved_date": forms.NumberInput(attrs={
-                "type": "date"
-            })
+                "type": "date",
+                "min": datetime.date.today() + relativedelta(days = 1) # 予約可能な一番早い日を翌日に設定
+            }),
         }
-    
+
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data.get('reserved_date') <= datetime.date.today():
-            raise ValidationError('明日以降の日付を選択してください')
-        if cleaned_data.get('number_of_people') > self.request.session["seating_capacity"]:
-            raise ValidationError('予約人数を減らしてください')
+        if cleaned_data.get('number_of_people') > self.seating_capacity:
+            raise ValidationError('予約人数が多過ぎます。')

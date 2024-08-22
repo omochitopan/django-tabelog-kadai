@@ -5,20 +5,22 @@
 <div class="reservationcreate">
 	<div class="outer-container">
 		<h2 class="restaurant-name">{{ restaurant_name }}</h2>
+		{{ reservation_candidates }}
 		<div class="flex-container ref-container">
 			<a href="{% url 'detail' restaurant_id %}" class="btn restaurant-top-ref">店舗情報</a>
 			<a href="{% url 'reservationcreate' restaurant_id %}" class="btn restaurant-top-ref">予約フォーム</a>
 			<a href="{% url 'reviewlist' restaurant_id %}" class="btn restaurant-top-ref">レビュー</a>
 		</div>
-		<p class="average">平均：{{ average_score }}点（{{ target_reviews|length }}件）</p>
-		<p>予約情報を入力してください。</p>
-		<form method="post" class="reservation-form">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<div class="btn-container">
-				<button type="submit" class="btn">予約する</button>
-			</div>
-		</form>
+		<div class="inner-container">
+			<p class="comment">予約情報を入力してください。</p>
+			<form method="post" class="reservation-form">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<div class="btn-container">
+					<button type="submit" class="btn">予約する</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 {% endblock %}

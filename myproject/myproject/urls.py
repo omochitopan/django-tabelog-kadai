@@ -40,7 +40,11 @@ urlpatterns = [
     path('restaurant/<int:restaurant_id>/reservation/', views.ReservationCreateView.as_view(), name="reservationcreate"),
     path('restaurant/<int:user_id>/reservationlist/', views.ReservationListView.as_view(), name="reservationlist"),
     path('restaurant/<int:user_id>/reservationlist/all/', views.ReservationListAllView.as_view(), name="reservationlistall"),
-    path('restaurant/<int:user_id>/reservationdelete/<int:pk>/', views.ReservationDeleteView.as_view(), name="reservationdelete"),   
+    path('restaurant/<int:user_id>/reservationdelete/<int:pk>/', views.ReservationDeleteView.as_view(), name="reservationdelete"),
+    path('favorite/create/<int:restaurant_id>/', views.FavoriteCreateView.as_view(), name="favoritecreate"),
+    path('favorite/list/<int:user_id>/', views.FavoriteListView.as_view(), name="favoritelist"),
+    path('favorite/delete/<int:restaurant_id>/', views.FavoriteDeleteView.as_view(), name="favoritedelete"),
+
 ]
 
 if settings.DEBUG:

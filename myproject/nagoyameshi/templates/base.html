@@ -24,7 +24,7 @@
         <p class="welcome">ようこそ、{{user.name}}さん</p>
         <ul class="link-container">
           <li><a href="{% url 'top' %}" class="nav-link">トップページ</a></li>
-          <li><a href="" class="nav-link">お気に入り一覧</a></li>
+          <li><a href="{% url 'favoritelist' user_id %}" class="nav-link">お気に入り一覧</a></li>
           <li><a href="{% url 'reservationlist' user_id %}" class="nav-link">予約一覧</a></li>
           <li><a href="" class="nav-link">会員情報</a></li>
           <form action="{% url 'logout' %}" method="post">
@@ -60,7 +60,9 @@
       </div>
     </div>
   </footer>
-  <script src="{% static 'nagoyameshi/javascript/nagoyameshi.js' %}"></script>
+  <script src="{% static 'nagoyameshi/js/nagoyameshi.js' %}"></script>
+  {% block extra_js %}
+  {% endblock %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -21,17 +21,17 @@
 		{% for review in target_reviews %}
 		<table class="review-table">
 			<tr class="user-name-index">
-				<td class="user-name">{{ review.user.name }}<span> さん</span></td>
+				<td class="user-name">{{ review.user.name }}<span class="san"> さん</span></td>
 			</tr>
 			<tr>
 				{% if review.score == 1 %}
-				<td class="star">★☆☆☆☆</td>
+				<td class="star">★<span class="notstar">★★★★</span></td>
 				{% elif review.score == 2 %}
-				<td class="star">★★☆☆☆</td>
+				<td class="star">★★<span class="notstar">★★★</span></td>
 				{% elif review.score == 3 %}
-				<td class="star">★★★☆☆</td>
+				<td class="star">★★★<span class="notstar">★★</span></td>
 				{% elif review.score == 4 %}
-				<td class="star">★★★★☆</td>
+				<td class="star">★★★★<span class="notstar">★</span></td>
 				{% elif review.score == 5 %}
 				<td class="star">★★★★★</td>
 				{% endif %}

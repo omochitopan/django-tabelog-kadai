@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-
-{% block title %}トップページ{% endblock %}
+{% load static %}
+{% block title %}店舗詳細ページ{% endblock %}
 {% block contents %}
 <div class="detail">
 	<div class="outer-container">
@@ -59,6 +59,23 @@
 				</td>
 			</tr>
 		</table>
+		<div class="flex-container btn-container">
+			<form action="">
+				{% csrf_token %}
+				<!-- 以下のbuttonをtype="button"に設定することでリロードされなくなった -->
+				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn">
+					{% if isFavorite %}
+					&hearts;　お気に入り解除
+					{% else %}
+					&#x2661;　お気に入り追加
+					{% endif %}
+				</button>
+			</form>
+		</div>
 	</div>
 </div>	
+{% endblock %}
+{% block extra_js %}
+<script> let url2 = "{% url 'favoritecreate' restaurant_id %}"; </script>
+<script src="{% static 'nagoyameshi/js/favorite.js' %}"></script>
 {% endblock %}

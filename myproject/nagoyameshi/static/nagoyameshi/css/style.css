@@ -451,6 +451,12 @@ footer {
   font-size: 15px;
 }
 
+#favorite-btn {
+  padding: 5px 15px;
+}
+
+
+
 .reviewlist {
   margin-top: 80px;
 }
@@ -489,13 +495,18 @@ footer {
   padding: 2px 4px;
 }
 
-.review-table span {
+.review-table .san {
   font-size: 14px;
 }
 
 .review-table .star {
+  color: rgb(255, 196, 0);
   border-bottom: solid 1px gray;
   padding: 2px 4px;
+}
+
+.review-table .notstar {
+  color: rgb(220, 220, 220);
 }
 
 .review-table .content {
@@ -589,9 +600,41 @@ footer {
   margin-top: 20px;
 }
 
+.reservationcreate .inner-container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.reservationcreate .comment {
+  color: crimson;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
 .reservationcreate .reservation-form {
-  text-align: center;
+  text-align: left;
   margin-top: 30px;
+}
+
+.reservationcreate label {
+  width: 80px;
+}
+
+.reservationcreate input {
+  width: 215px;
+}
+
+.reservationcreate .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px;
+  border: none;
+}
+
+.reservationcreate .btn:hover {
+  color: white;
+  background-color: orangered;
 }
 
 .reservationcreate .btn-container {
@@ -678,4 +721,62 @@ footer {
 .reservation .deletecheck {
   color: crimson;
   margin-top: 20px;
+}
+
+.favoritelist .outer-container {
+  width: 700px;
+  margin: 80px auto 40px auto;
+}
+
+.favorite-table {
+  font-size: 14px;
+}
+
+.favorite-table th {
+  border-bottom: solid gray 1px;
+  padding: 3px 0;
+}
+
+.favoritelist td {
+  border-bottom: solid gray 1px;
+  padding: 3px 0;
+}
+
+.favoritelist .restaurant-name {
+  width: 250px;
+}
+
+.favorite-table .postalcode {
+  width: 100px;
+}
+
+.favorite-table .address {
+  width: 300px;
+}
+
+.favorite-table .cancel {
+  width: 50px;
+}
+
+.favoritelist .restaurant-ref {
+  color: black;
+  text-decoration: none;
+}
+
+.favoritelist .restaurant-ref:hover {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.favoritelist .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px;
+  border: none;
+}
+
+.favoritelist .btn:hover {
+  color: white;
+  background-color: orangered;
 }

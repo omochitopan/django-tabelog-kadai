@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}お気に入り店舗一覧{% endblock %}
+{% block contents %}
+<div class="favoritelist">
+	<div class="outer-container">
+		<h5>お気に入り店舗一覧</h5>
+		{% if not target_favorites %}
+		<p>現在のお気に入りレストランはありません。</p>
+		{% else %}
+		<table class="favorite-table">
+			<tr>
+				<th class="restaurant-name">店舗名</th>
+				<th class="postalcode">郵便番号</th>
+				<th class="address">住所</th>
+				<th class="cancel"></th>
+			</tr>
+			{% for favorite in target_favorites %}
+			<tr>
+				<td class="restaurant-name"><a href="{% url 'detail' favorite.restaurant.id %}" class="restaurant-ref">{{ favorite.restaurant }}</a></td>
+				<td>{{ favorite.restaurant.postal_code }}</td>
+				<td>{{ favorite.restaurant.address }}</td>
+				<td>
+					<form method="post" action="{% url 'favoritedelete' favorite.restaurant.pk %}">
+						{% csrf_token %}
+						<button type="submit" name="button" value="{{ favorite.restaurant.pk }}" class="btn">解除</button>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}
