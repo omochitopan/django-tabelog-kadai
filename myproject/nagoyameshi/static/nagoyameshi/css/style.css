@@ -95,31 +95,115 @@ main {
   margin-top: 60px;
 }
 
-.login-container {
-  max-width: 400px;
-  padding-top: 40px;
-  padding-left: 100px;
+.login .outer-container {
+  width: 400px;
+  margin: 90px auto 30px auto;
+}
+
+.login .title {
+  text-align: center;
+}
+
+.login .login-ref {
+  margin: 20px 0;
+}
+
+.login .ref {
+  color: gray;
+  text-decoration: none;
+}
+
+.login .ref:hover {
+  color: black;
+  text-decoration: underline;
 }
 
 .login-check {
   margin-bottom: 30px;
 }
 
-.login-ref > a:hover {
-  color: rgb(180, 91, 162);
-  text-decoration: underline;
+.passwordreset .outer-container {
+  width: 450px;
+  margin: 90px auto 30px auto;
 }
 
-.passwordreset-container {
-  max-width: 600px;
-  padding-top: 40px;
-  padding-left: 100px;
+.passwordreset .title {
+  margin-bottom: 30px;
+  text-align: center;
 }
 
-.signup .container {
-  max-width: 600px;
-  padding-top: 40px;
-  padding-left: 100px;
+.passwordreset label {
+  width: 130px;
+}
+
+.passwordreset input {
+  width: 312px;
+}
+
+.passwordreset .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.passwordreset .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.passwordreset .btn-container {
+  margin-top: 30px;
+}
+
+.signup .outer-container {
+  width: 500px;
+  margin: 90px auto 30px auto;
+}
+
+.signup .title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.signup .label {
+  width: 200px;
+}
+
+.signup .must {
+  color: white;
+  background-color: crimson;
+}
+
+.signup .right {
+  width: 300px;
+  text-align: right;
+}
+
+.signup input {
+  width: 292px;
+}
+
+.signup select {
+  margin-left: 10px;
+}
+
+.signup .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.signup .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.signup .btn-container {
+  margin-top: 20px;
 }
 
 .temp-registration {
@@ -721,6 +805,7 @@ footer {
 }
 
 .favorite-table th {
+  background-color: whitesmoke;
   border-bottom: solid gray 1px;
   padding: 3px 0;
 }
@@ -767,4 +852,119 @@ footer {
 .favoritelist .btn:hover {
   color: white;
   background-color: orangered;
+}
+
+.user .outer-container {
+  width: 350px;
+  margin: 90px auto 30px auto;
+}
+
+.user .title {
+  text-align: center;
+}
+
+.user form {
+  text-align: right;
+}
+
+.user-table {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.user-table th {
+  width: 150px;
+  padding: 3px 0 3px 3px;
+  border-bottom: solid rgb(170, 170, 170) 1px;
+}
+
+.user-table td {
+  padding: 3px 0 3px 3px;
+  border-bottom: solid rgb(170, 170, 170) 1px;
+}
+
+.user .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.user .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.user-update .outer-container {
+  width: 500px;
+  margin: 90px auto 30px auto;
+}
+
+.user-update .title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.user-update .label {
+  width: 200px;
+}
+
+.user-update .must {
+  color: white;
+  background-color: crimson;
+}
+
+.user-update .right {
+  width: 300px;
+  text-align: right;
+}
+
+.user-update input {
+  width: 292px;
+}
+
+.user-update select {
+  margin-left: 10px;
+}
+
+.user-update .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.user-update .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.user-update .btn-container {
+  margin-top: 20px;
+}
+
+.company .outer-container {
+  width: 500px;
+  margin: 90px auto 30px auto;
+}
+
+.company .title {
+  text-align: center;
+}
+
+.company-table {
+  margin-top: 15px;
+}
+
+.company-table th {
+  width: 135px;
+  padding: 3px 0 3px 3px;
+  border-bottom: solid rgb(170, 170, 170) 1px;
+}
+
+.company-table td {
+  padding: 3px 0 3px 3px;
+  border-bottom: solid rgb(170, 170, 170) 1px;
 }

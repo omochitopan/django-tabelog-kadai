@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}会社概要{% endblock %}
+{% block contents %}
+<div class="company">
+	<div class="outer-container">
+		<h4 class="title">会社概要</h4>
+		<table class="company-table">
+			<tr>
+				<th>会社名</th>
+				<td>{{ company.company_name }}</td>
+			</tr>
+			<tr>
+				<th>所在地</th>
+				<td>{{ company.address }}</td>
+			</tr>
+			<tr>
+				<th>代表者</th>
+				<td>{{ company.representative }}</td>
+			</tr>
+			<tr>
+				<th>設立</th>
+				<td>{{ company.establishment }}</td>
+			</tr>
+			<tr>
+				<th>資本金</th>
+				<td>{{ company.capital }}</td>
+			</tr>
+			<tr>
+				<th>事業内容</th>
+				<td>{{ company.business }}</td>
+			</tr>
+			<tr>
+				<th>従業員数</th>
+				<td>{{ company.employee }}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+{% endblock %}

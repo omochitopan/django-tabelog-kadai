@@ -128,6 +128,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_L10N = True
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Default primary key field type
@@ -138,8 +140,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 STATIC_URL = '/static/'
+#STATIC_ROOT = '/var/www/static/'
 #STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # 画像関連の設定
 MEDIA_URL = '/media/'
@@ -160,11 +162,11 @@ STATIC_ROOT = '/var/www/static/'
 """
 
 # ログイン認証
-LOGIN_URL = 'top'
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'top'
 LOGOUT_REDIECT_URL = 'top'
 
-# メール認証 情報源: https://qiita.com/koseidaiki/items/85279375555a533c9318）
+# メール認証 情報源: https://qiita.com/koseidaiki/items/85279375555a533c9318
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # コンソールにメール内容を表示する
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # メールを送信する
 EMAIL_HOST = 'smtp.gmail.com'

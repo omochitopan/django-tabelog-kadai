@@ -1,12 +1,20 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django import forms
-from django.contrib.admin.widgets import AdminDateWidget
-import datetime
+from .models import User, Review, Reservation
 from dateutil.relativedelta import relativedelta
-from .models import User, Restaurant, Category, RegularHoliday, Review, Reservation
+import datetime
 
 class SignUpForm(UserCreationForm):
+    name = forms.CharField(label = "お名前（漢字）", widget=forms.TextInput(attrs={'placeholder': '名古屋 太郎'}))
+    kana_name = forms.CharField(label = "フリガナ", widget=forms.TextInput(attrs={'placeholder': 'ナゴヤ タロウ'}))
+    email = forms.EmailField(label = "メールアドレス", widget=forms.EmailInput(
+        attrs={'placeholder': 'tarou@nagoyameshi.com'}
+        ))
+    postal_code = forms.IntegerField(label = "郵便番号", widget=forms.TextInput(attrs={'placeholder': '1234567'}))
+    address = forms.CharField(label = "住所", widget=forms.TextInput(attrs={'placeholder': '愛知県栄区X-X-X'}))
+    tel_number = forms.IntegerField(label = "電話番号", widget=forms.TextInput(attrs={'placeholder': '09012345678'}))
+
     class Meta:
         model = User
         fields = (
@@ -17,7 +25,14 @@ class SignUpForm(UserCreationForm):
             "address",
             "tel_number",
             "birthday",
+            "occupation",
         )
+        this_year = datetime.date.today().year
+        widgets = {
+            "birthday": forms.SelectDateWidget(
+                years=range(this_year - 120, this_year),
+            ),
+        }
 
 class PasswordresetForm(UserCreationForm):
     class Meta:
@@ -85,8 +100,8 @@ class ReservationForm(forms.ModelForm):
         )
         widgets = {
             "reserved_date": forms.NumberInput(attrs={
-                "type": "date",
-                "min": datetime.date.today() + relativedelta(days = 1) # 予約可能な一番早い日を翌日に設定
+            "type": "date",
+            "min": datetime.date.today() + relativedelta(days = 1) # 予約可能な一番早い日を翌日に設定
             }),
         }
 
@@ -94,3 +109,23 @@ class ReservationForm(forms.ModelForm):
         cleaned_data = super().clean()
         if cleaned_data.get('number_of_people') > self.seating_capacity:
             raise ValidationError('予約人数が多過ぎます。')
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = (
+            "name",
+            "kana_name",
+            "postal_code",
+            "address",
+            "tel_number",
+            "birthday",
+            "occupation",
+            "email",
+        )
+        this_year = datetime.date.today().year
+        widgets = {
+            "birthday": forms.SelectDateWidget(
+                years=range(this_year - 120, this_year),
+            ),
+        }

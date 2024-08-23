@@ -130,6 +130,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(verbose_name="住所", max_length=150)
     tel_number = models.CharField(verbose_name='電話番号', validators=[tel_number_regex], max_length=15)
     birthday = models.DateField(verbose_name="誕生日", blank=True, null=True)
+    occupation = models.CharField(verbose_name='職業', max_length=20, blank=True, null=True)
     is_staff = models.BooleanField(verbose_name="スタッフ", default=False)
     is_superuser = models.BooleanField(verbose_name="スーパーユーザー", default=False)
     is_active = models.BooleanField(default=False)
@@ -222,5 +223,20 @@ class Favorite(models.Model):
     
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)    
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+
+class Company(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_company'
+        verbose_name = verbose_name_plural = '会社概要'
+    
+    company_name = models.CharField(verbose_name="会社名", max_length=50)
+    address = models.CharField(verbose_name="所在地", max_length=150)
+    representative = models.CharField(verbose_name="代表者", max_length=50)
+    establishment = models.DateField(verbose_name="設立")
+    capital = models.CharField(verbose_name="資本金", max_length=50)
+    business = models.CharField(verbose_name="事業内容", max_length=50)
+    employee = models.CharField(verbose_name="従業員数", max_length=50)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)

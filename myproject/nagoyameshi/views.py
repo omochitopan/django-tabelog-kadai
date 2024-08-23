@@ -1,25 +1,25 @@
-from typing import Any, Dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
-from django.urls import reverse_lazy, reverse
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
-from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite
-from .forms import SignUpForm, PasswordresetForm, ReviewForm, ReservationForm
-from datetime import date, time, timedelta
+from typing import Any, Dict
+from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms
+from .forms import SignUpForm, ReviewForm, ReservationForm, UserUpdateForm
+from datetime import date, time
 from dateutil.relativedelta import relativedelta
 import datetime
-import os, environ
+import environ
 
 env = environ.Env()
 ip_port = env('IP_PORT')
@@ -57,7 +57,7 @@ class TopView(TemplateView):
         context['categories'] = categories.order_by('id')
         return context
 
-class RestaurantListView(ListView):
+class RestaurantListView(LoginRequiredMixin, ListView):
     model = Restaurant
     
     def get_queryset(self):
@@ -76,7 +76,7 @@ class RestaurantListView(ListView):
         context['user_id'] = self.request.user.pk
         return context
 
-class RestaurantCategoryList(ListView):
+class RestaurantCategoryList(LoginRequiredMixin, ListView):
     model = Restaurant
     template_name = "category_list.html"
 
@@ -104,7 +104,7 @@ class RestaurantCategoryList(ListView):
         context["data"] = categoryRestaurants
         return context
     
-class RestaurantDetailView(DetailView):
+class RestaurantDetailView(LoginRequiredMixin, DetailView):
     model = Restaurant
     template_name = "restaurant_detail.html"
     
@@ -131,10 +131,33 @@ class SignupView(CreateView):
     # 登録成功時に移行
     success_url = reverse_lazy("usercreated")
     
-class PasswordresetView(CreateView):
-    form_class = PasswordresetForm
-    model = User
-    template_name = 'passwordreset.html'
+class PasswordReset(PasswordResetView):
+    # パスワード変更URL付きメールのカスタマイズ
+    subject_template_name = 'mail/subject.txt'
+    email_template_name = "mail/message.txt"
+    template_name = "password_reset.html"
+    # パスワードリセット用URLの送信ページ
+    success_url = reverse_lazy("passwordresetdone")
+
+class PasswordResetDone(PasswordResetDoneView):
+    # パスワード変更用URL送信完了ページ
+    template_name = "password_reset_done.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["domain"] = ip_port
+        #context["uuid_token"] = 
+        return context
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    # 新パスワード入力用ページ
+    success_url = reverse_lazy("passwordresetcomplete")
+    template_name = "password_reset_confirm.html"
+
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    # 新パスワード設定完了ページ
+    template_name = "password_reset_complete.html"
     
 def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
@@ -147,7 +170,7 @@ def activate_user(request, activate_token):
         message = 'エラーが発生しました'
     return HttpResponse(message)
 
-class ReviewListView(ListView):
+class ReviewListView(LoginRequiredMixin, ListView):
     model = Review
     template_name = "review_list.html"
     paginate_by = 5
@@ -176,7 +199,7 @@ class ReviewListView(ListView):
         context["writtenreview"] = writtenreview
         return context
     
-class ReviewCreateView(CreateView):
+class ReviewCreateView(LoginRequiredMixin, CreateView):
     form_class = ReviewForm
     model = Review
     
@@ -199,7 +222,7 @@ class ReviewCreateView(CreateView):
         qryset.save()
         return  super().form_valid(form)
     
-class ReviewUpdateView(UpdateView):
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ReviewForm
     model = Review
     template_name = "review_update.html"
@@ -215,7 +238,7 @@ class ReviewUpdateView(UpdateView):
         context["restaurant_name"] = self.request.session["restaurant_name"]
         return context
 
-class ReviewDeleteView(DeleteView):
+class ReviewDeleteView(LoginRequiredMixin, DeleteView):
     model = Review
     template_name = "review_delete.html"
     
@@ -229,7 +252,7 @@ class ReviewDeleteView(DeleteView):
         context["restaurant_id"] = self.request.session["restaurant_id"]
         return context
 
-class ReservationCreateView(CreateView):
+class ReservationCreateView(LoginRequiredMixin, CreateView):
     form_class = ReservationForm
     model = Reservation
     
@@ -297,7 +320,7 @@ class ReservationCreateView(CreateView):
         qryset.save()
         return  super().form_valid(form)
 
-class ReservationListView(ListView):
+class ReservationListView(LoginRequiredMixin, ListView):
     model = Reservation
     template_name = "reservation_list.html"
     paginate_by = 15
@@ -310,7 +333,7 @@ class ReservationListView(ListView):
         context["target_reservations"] = target_reservations
         return context
 
-class ReservationListAllView(ListView):
+class ReservationListAllView(LoginRequiredMixin, ListView):
     model = Reservation
     template_name = "reservation_list_all.html"
     paginate_by = 15
@@ -323,7 +346,7 @@ class ReservationListAllView(ListView):
         context["target_reservations"] = target_reservations
         return context
 
-class ReservationDeleteView(DeleteView):
+class ReservationDeleteView(LoginRequiredMixin, DeleteView):
     model = Reservation
     template_name = "reservation_delete.html"
     
@@ -337,7 +360,7 @@ class ReservationDeleteView(DeleteView):
         context["restaurant_id"] = self.request.session["restaurant_id"]
         return context
 
-class FavoriteCreateView(View): # LoginRequiredMixin,
+class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,
     def post(self, request, *args, **kwargs):
         user = request.user
         restaurant_id = request.session["restaurant_id"]
@@ -352,7 +375,7 @@ class FavoriteCreateView(View): # LoginRequiredMixin,
 
         return JsonResponse({'status': 'success', 'favorite_status': status})
     
-class FavoriteDeleteView(View): # LoginRequiredMixin,
+class FavoriteDeleteView(LoginRequiredMixin, View): # LoginRequiredMixin,
     def post(self, request, *args, **kwargs):
         user = request.user
         restaurant_id = request.POST.get("button")
@@ -363,7 +386,7 @@ class FavoriteDeleteView(View): # LoginRequiredMixin,
         
         return redirect('favoritelist', user_id = user.pk)
 
-class FavoriteListView(ListView):
+class FavoriteListView(LoginRequiredMixin, ListView):
     model = Favorite
     template_name = "favorite_list.html"
     paginate_by = 15
@@ -374,4 +397,49 @@ class FavoriteListView(ListView):
         target_favorites = Favorite.objects.filter(user = user).order_by('-updated_at')
         context['user_id'] = user.pk
         context["target_favorites"] = target_favorites
+        return context
+
+class UserView(DetailView):
+    model = User
+    template_name = "user.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user_id"] = self.request.user.pk
+        return context
+
+class UserUpdateView(UpdateView):
+    form_class = UserUpdateForm
+    model = User
+    template_name = "user_update.html"
+
+    def get_success_url(self):
+        return reverse_lazy('user', kwargs=dict(pk = self.request.user.pk))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user_id"] = self.request.user.pk
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return context
+
+class CompanyView(TemplateView):
+    template_name = "company.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company = Company.objects.get(id = 1)
+        context['user_id'] = self.request.user.pk
+        context["company"] = company
+        return context
+
+class TermsView(TemplateView):
+    template_name = "terms.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        terms = Terms.objects.get(id = 1)
+        context['user_id'] = self.request.user.pk
+        context["terms"] = terms
         return context

@@ -19,16 +19,18 @@ from django.urls import path
 from nagoyameshi import views
 from django.conf import settings
 from django.conf.urls.static import static
-from nagoyameshi.views import activate_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.TopView.as_view(), name="top"),
     path('login/', views.LoginView.as_view(), name="login"),
     path('usercreated', views.UserCreatedView.as_view(), name="usercreated"),
-    path('passwordreset/', views.PasswordresetView.as_view(), name="passwordreset"),
+    path('passwordreset/', views.PasswordResetView.as_view(), name="passwordreset"),
+    path('passwordreset/done/', views.PasswordResetDoneView.as_view(), name="passwordresetdone"),
+    path('passwordreset/confirm/<uidb64>/<token>//', views.PasswordResetConfirmView.as_view(), name="passwordresetconfirm"),
+    path('passwordreset/complete/', views.PasswordResetCompleteView.as_view(), name="passwordresetcomplete"),
     path('signup/', views.SignupView.as_view(), name="signup"),
-    path('users/<uuid:activate_token>/activation/', activate_user, name='users-activation'),
+    path('users/<uuid:activate_token>/activation/', views.activate_user, name='users-activation'),
     path('logout/', views.logout_view, name="logout"),
     path('restaurant/', views.RestaurantListView.as_view(), name='list'),
     path('restaurant/category/', views.RestaurantCategoryList.as_view(), name='category'),
@@ -44,7 +46,10 @@ urlpatterns = [
     path('favorite/create/<int:restaurant_id>/', views.FavoriteCreateView.as_view(), name="favoritecreate"),
     path('favorite/list/<int:user_id>/', views.FavoriteListView.as_view(), name="favoritelist"),
     path('favorite/delete/<int:restaurant_id>/', views.FavoriteDeleteView.as_view(), name="favoritedelete"),
-
+    path('user/<int:pk>', views.UserView.as_view(), name="user"),
+    path('user/<int:pk>/update', views.UserUpdateView.as_view(), name="userupdate"),
+    path('company/', views.CompanyView.as_view(), name="company"),
+    path('terms/', views.TermsView.as_view(), name="terms"),
 ]
 
 if settings.DEBUG:

@@ -3,20 +3,20 @@
 
 {% block title %}ログイン{% endblock %}
 {% block contents %}
-
-<div class="login-container">
-	<h1>ログイン</h1>
-	<form method="post">
-		{% csrf_token %}
-		{{ form|bootstrap }}
-		<br>
-		<input class="login-check" name="login-check" type="checkbox">
-		<label  name="login-check" for="">次回から自動的にログインする</label>
-		<br>
-		<input type="submit" class="btn btn-primary" value="ログイン">
-	</form>
-	<div class="login-ref"><a href="{% url 'passwordreset' %}">パスワードをお忘れの方はこちら</a></div>
-	<div class="login-ref"><a href="{% url 'signup' %}">新規会員登録はこちら</a></div>
+<div class="login">
+	<div class="outer-container">
+		<h3 class="title">ログイン</h3>
+		<form method="post">
+			{% csrf_token %}
+			{{ form|bootstrap }}
+			<br>
+			<input class="login-check" name="login-check" type="checkbox">
+			<label  name="login-check" for="">次回から自動的にログインする</label>
+			<br>
+			<input type="submit" class="btn btn-primary" value="ログイン">
+		</form>
+		<div class="login-ref"><a href="{% url 'passwordreset' %}" class="ref">パスワードをお忘れの方はこちら</a></div>
+		<div class="login-ref"><a href="{% url 'signup' %}" class="ref">新規会員登録はこちら</a></div>
+	</div>
 </div>
-
 {% endblock %}

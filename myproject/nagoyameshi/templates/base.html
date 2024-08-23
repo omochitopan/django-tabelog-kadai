@@ -26,7 +26,7 @@
           <li><a href="{% url 'top' %}" class="nav-link">トップページ</a></li>
           <li><a href="{% url 'favoritelist' user_id %}" class="nav-link">お気に入り一覧</a></li>
           <li><a href="{% url 'reservationlist' user_id %}" class="nav-link">予約一覧</a></li>
-          <li><a href="" class="nav-link">会員情報</a></li>
+          <li><a href="{% url 'user' user_id %}" class="nav-link">会員情報</a></li>
           <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <input class="nav-link nav-input" type="submit" value="ログアウト">
@@ -34,6 +34,7 @@
         </ul>
         {% else %}
         <ul class="link-container">
+          <li><a href="{% url 'top' %}" class="nav-link">トップページ</a></li>
           <li><a href="{% url 'login' %}" class="nav-link">ログイン</a></li>
           <li><a href="{% url 'signup' %}" class="nav-link">会員登録</a></li>
         </ul>
@@ -52,8 +53,8 @@
         <a href="{% url 'top' %}" class="footer-logo-ref">Nagoyameshi</a>
       </div>
       <div class="footer-ref">
-        <a href="">会社概要</a>
-        <a href="">利用規約</a>
+        <a href="{% url 'company' %}">会社概要</a>
+        <a href="{% url 'terms' %}">利用規約</a>
       </div>
       <div class="footer-copyright">
         <p>&copy;NAGOYAMESHI All rights reserved</p>
