@@ -1,15 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin, Group, Permission
-from django.core.validators import RegexValidator, MinLengthValidator, MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from datetime import datetime, timedelta
-import environ
-import os
-import uuid
+import environ, uuid
 
 env = environ.Env()
 ip_port = env('IP_PORT')

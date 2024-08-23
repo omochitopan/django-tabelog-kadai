@@ -2,7 +2,7 @@ import re
 from django.core.exceptions import ValidationError
 
 class PasswordValidator:
-    msg = '英大小文字、数字、または特殊文字が含まれていません'
+    msg = '英小文字/大文字、数字、または特殊文字が含まれていません'
     
     def validate(self, password, user=None):
         REX = r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*_\-+=`|(){}\[\]:;\"\'<>,.?/]).{8,64}"

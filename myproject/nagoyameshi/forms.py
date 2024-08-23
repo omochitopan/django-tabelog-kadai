@@ -1,19 +1,21 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from django import forms
 from .models import User, Review, Reservation
 from dateutil.relativedelta import relativedelta
 import datetime
 
 class SignUpForm(UserCreationForm):
-    name = forms.CharField(label = "お名前（漢字）", widget=forms.TextInput(attrs={'placeholder': '名古屋 太郎'}))
-    kana_name = forms.CharField(label = "フリガナ", widget=forms.TextInput(attrs={'placeholder': 'ナゴヤ タロウ'}))
-    email = forms.EmailField(label = "メールアドレス", widget=forms.EmailInput(
-        attrs={'placeholder': 'tarou@nagoyameshi.com'}
-        ))
-    postal_code = forms.IntegerField(label = "郵便番号", widget=forms.TextInput(attrs={'placeholder': '1234567'}))
-    address = forms.CharField(label = "住所", widget=forms.TextInput(attrs={'placeholder': '愛知県栄区X-X-X'}))
-    tel_number = forms.IntegerField(label = "電話番号", widget=forms.TextInput(attrs={'placeholder': '09012345678'}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'placeholder':'名古屋 太郎',})
+        self.fields['kana_name'].widget.attrs.update({'placeholder':'ナゴヤ タロウ',})
+        self.fields['email'].widget.attrs.update({'placeholder': 'tarou@nagoyameshi.com',})
+        self.fields['postal_code'].widget.attrs.update({'placeholder': '0123456',})
+        self.fields['address'].widget.attrs.update({'placeholder': '愛知県栄区X-X-X',})
+        self.fields['tel_number'].widget.attrs.update({'placeholder': '09012345678',})
+    
+    email = forms.EmailField(label = "メールアドレス")
 
     class Meta:
         model = User
@@ -111,17 +113,19 @@ class ReservationForm(forms.ModelForm):
             raise ValidationError('予約人数が多過ぎます。')
 
 class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(label = "メールアドレス")
+
     class Meta:
         model = User
         fields = (
             "name",
             "kana_name",
+            "email",
             "postal_code",
             "address",
             "tel_number",
             "birthday",
             "occupation",
-            "email",
         )
         this_year = datetime.date.today().year
         widgets = {

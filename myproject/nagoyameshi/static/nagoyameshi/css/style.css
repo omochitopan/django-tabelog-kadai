@@ -185,6 +185,19 @@ main {
   width: 292px;
 }
 
+.signup .error {
+  color: crimson;
+  text-align: right;
+}
+
+.signup .error li {
+  list-style: none;
+}
+
+.signup .comment {
+  color: gray;
+}
+
 .signup select {
   margin-left: 10px;
 }
@@ -855,7 +868,7 @@ footer {
 }
 
 .user .outer-container {
-  width: 350px;
+  width: 500px;
   margin: 90px auto 30px auto;
 }
 
@@ -918,6 +931,15 @@ footer {
 .user-update .right {
   width: 300px;
   text-align: right;
+}
+
+.user-update .error {
+  color: crimson;
+  text-align: right;
+}
+
+.user-update .error li {
+  list-style: none;
 }
 
 .user-update input {

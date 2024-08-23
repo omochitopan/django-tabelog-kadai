@@ -17,8 +17,15 @@
 						{% if field.field.required %}<span class="must"> 必須</span>{% endif %}
 					</p>
 					<div class="right">{{ field }}</div>
-					{{ field.errors }}
 				</div>
+        <div class="note">
+          {% if field.label == "パスワード" %}
+          <p class="comment">＊英小文字/大文字、数字、特殊文字を１つ以上含めて下さい</p>
+          {% endif %}
+        </div>
+        <div class="error">
+          {{ field.errors }}
+        </div>
         {% endfor %}
         <div class="flex-container btn-container mt-3">
 					<!-- メール認証参考URL: https://blog.narito.ninja/detail/38/ -->
