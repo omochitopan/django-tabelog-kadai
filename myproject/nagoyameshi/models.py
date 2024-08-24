@@ -39,22 +39,6 @@ class RegularHoliday(models.Model):
     def __str__(self):
         return self.holiday
     
-class Company(models.Model):
-    class Meta:
-        db_table = 'nagoyameshi_company'
-        verbose_name = verbose_name_plural = '会社概要'
-    
-    company_name = models.CharField(verbose_name="会社名", max_length=50)
-    postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
-    address = models.CharField(verbose_name="店舗住所", max_length=200)
-    representative = models.CharField(verbose_name="代表者", max_length=50)
-    establishment_date = models.DateField(verbose_name="設立年月日")
-    capital = models.CharField(verbose_name="資本金", max_length=50)
-    business = models.CharField(verbose_name="事業内容", max_length=100)
-    number_of_employees = models.CharField(verbose_name="従業員数", max_length=50)
-    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
-
 class Terms(models.Model):
     class Meta:
         db_table = "nagoyameshi_terms"

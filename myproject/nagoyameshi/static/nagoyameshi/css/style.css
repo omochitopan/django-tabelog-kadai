@@ -108,6 +108,28 @@ main {
   margin: 20px 0;
 }
 
+.login .form-section {
+  margin: 20px 0;
+}
+
+.login .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.login .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.login .ref-container {
+  text-align: center;
+  margin: 10px 0;
+}
+
 .login .ref {
   color: gray;
   text-decoration: none;

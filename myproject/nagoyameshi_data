@@ -1,0 +1,648 @@
+-- MySQL dump 10.13  Distrib 8.3.0, for macos14.2 (arm64)
+--
+-- Host: localhost    Database: NAGOYAMESHI
+-- ------------------------------------------------------
+-- Server version	8.3.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `auth_group`
+--
+
+DROP TABLE IF EXISTS `auth_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_group` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group`
+--
+
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_group_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_group_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_group_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
+  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group_permissions`
+--
+
+LOCK TABLES `auth_group_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_permission`
+--
+
+DROP TABLE IF EXISTS `auth_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_permission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `content_type_id` int NOT NULL,
+  `codename` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
+  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_permission`
+--
+
+LOCK TABLES `auth_permission` WRITE;
+/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add content type',4,'add_contenttype'),(14,'Can change content type',4,'change_contenttype'),(15,'Can delete content type',4,'delete_contenttype'),(16,'Can view content type',4,'view_contenttype'),(17,'Can add session',5,'add_session'),(18,'Can change session',5,'change_session'),(19,'Can delete session',5,'delete_session'),(20,'Can view session',5,'view_session'),(21,'Can add カテゴリ',6,'add_category'),(22,'Can change カテゴリ',6,'change_category'),(23,'Can delete カテゴリ',6,'delete_category'),(24,'Can view カテゴリ',6,'view_category'),(25,'Can add 会社概要',7,'add_company'),(26,'Can change 会社概要',7,'change_company'),(27,'Can delete 会社概要',7,'delete_company'),(28,'Can view 会社概要',7,'view_company'),(29,'Can add 定休日',8,'add_regularholiday'),(30,'Can change 定休日',8,'change_regularholiday'),(31,'Can delete 定休日',8,'delete_regularholiday'),(32,'Can view 定休日',8,'view_regularholiday'),(33,'Can add 利用規約',9,'add_terms'),(34,'Can change 利用規約',9,'change_terms'),(35,'Can delete 利用規約',9,'delete_terms'),(36,'Can view 利用規約',9,'view_terms'),(37,'Can add ユーザー',10,'add_user'),(38,'Can change ユーザー',10,'change_user'),(39,'Can delete ユーザー',10,'delete_user'),(40,'Can view ユーザー',10,'view_user'),(41,'Can add レストラン',11,'add_restaurant'),(42,'Can change レストラン',11,'change_restaurant'),(43,'Can delete レストラン',11,'delete_restaurant'),(44,'Can view レストラン',11,'view_restaurant'),(45,'Can add 予約',12,'add_reservation'),(46,'Can change 予約',12,'change_reservation'),(47,'Can delete 予約',12,'delete_reservation'),(48,'Can view 予約',12,'view_reservation'),(49,'Can add 予約',13,'add_favorite'),(50,'Can change 予約',13,'change_favorite'),(51,'Can delete 予約',13,'delete_favorite'),(52,'Can view 予約',13,'view_favorite'),(53,'Can add レビュー',14,'add_review'),(54,'Can change レビュー',14,'change_review'),(55,'Can delete レビュー',14,'delete_review'),(56,'Can view レビュー',14,'view_review'),(57,'Can add メール認証トークン',15,'add_useractivatetokens'),(58,'Can change メール認証トークン',15,'change_useractivatetokens'),(59,'Can delete メール認証トークン',15,'delete_useractivatetokens'),(60,'Can view メール認証トークン',15,'view_useractivatetokens');
+/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_admin_log`
+--
+
+DROP TABLE IF EXISTS `django_admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_admin_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action_time` datetime(6) NOT NULL,
+  `object_id` longtext,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint unsigned NOT NULL,
+  `change_message` longtext NOT NULL,
+  `content_type_id` int DEFAULT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
+  KEY `django_admin_log_user_id_c564eba6_fk_nagoyameshi_user_id` (`user_id`),
+  CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_nagoyameshi_user_id` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`),
+  CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_admin_log`
+--
+
+LOCK TABLES `django_admin_log` WRITE;
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+INSERT INTO `django_admin_log` VALUES (1,'2024-08-22 02:14:08.720724','None','NAGOYA BURGER 名駅店',1,'new through import_export',11,1),(2,'2024-08-22 02:14:08.722147','None','Shanties',1,'new through import_export',11,1),(3,'2024-08-22 02:14:08.722878','None','割烹 柏木',1,'new through import_export',11,1),(4,'2024-08-22 02:14:08.723563','None','油そば専門店ブラブラ 半田店',1,'new through import_export',11,1),(5,'2024-08-22 02:14:08.724280','None','にく屋 浄心店',1,'new through import_export',11,1),(6,'2024-08-22 02:14:08.725327','None','TRED',1,'new through import_export',11,1),(7,'2024-08-22 02:14:08.726239','None','きんやま',1,'new through import_export',11,1),(8,'2024-08-22 02:14:08.727243','None','NAGOYA BURGER 名古屋店',1,'new through import_export',11,1),(9,'2024-08-22 02:14:08.728021','None','焼肉小山',1,'new through import_export',11,1),(10,'2024-08-22 02:14:08.728837','None','焼き鳥七輪 栄住吉店',1,'new through import_export',11,1),(11,'2024-08-22 02:14:08.729675','None','肉の庭',1,'new through import_export',11,1),(12,'2024-08-22 02:14:08.730581','None','CRAFT BEER NAGOYA2',1,'new through import_export',11,1),(13,'2024-08-22 02:14:08.731603','None','麺屋やしろ',1,'new through import_export',11,1),(14,'2024-08-22 02:14:08.732517','None','ハワイアンバーベキュー 名古屋店',1,'new through import_export',11,1),(15,'2024-08-22 02:14:08.733554','None','日本酒処 花雅',1,'new through import_export',11,1),(16,'2024-08-22 02:14:08.734493','None','なわ',1,'new through import_export',11,1),(17,'2024-08-22 02:14:08.735279','None','お酒とご飯',1,'new through import_export',11,1),(18,'2024-08-22 02:14:08.735980','None','焼肉SUKI 名古屋新幹線口店',1,'new through import_export',11,1),(19,'2024-08-22 02:14:08.736613','None','焼き鳥 はなれ',1,'new through import_export',11,1),(20,'2024-08-22 02:14:08.737237','None','割烹旬菜花',1,'new through import_export',11,1),(21,'2024-08-22 02:14:08.737845','None','ちゃんこ屋 あかね',1,'new through import_export',11,1),(22,'2024-08-22 02:14:08.738452','None','肉の庭半田店',1,'new through import_export',11,1),(23,'2024-08-22 02:14:08.739194','None','オーガニック食堂Sngi',1,'new through import_export',11,1),(24,'2024-08-22 02:14:08.739868','None','寿司 やなや',1,'new through import_export',11,1),(25,'2024-08-22 02:14:08.740523','None','ハワイアンバーベキュー 太田川店',1,'new through import_export',11,1),(26,'2024-08-22 02:14:08.741206','None','中華一番',1,'new through import_export',11,1),(27,'2024-08-22 02:14:08.742006','None','厚切りステーキとハンバーグ たはらや',1,'new through import_export',11,1),(28,'2024-08-22 02:14:08.742834','None','名古屋ラーメン 半田店',1,'new through import_export',11,1),(29,'2024-08-22 02:14:08.743603','None','炭火やきとり オマメ',1,'new through import_export',11,1),(30,'2024-08-22 02:14:08.744549','None','ラーメン 餃子 ひびき',1,'new through import_export',11,1),(31,'2024-08-22 02:14:08.745324','None','つけ麺MENMARU',1,'new through import_export',11,1),(32,'2024-08-22 02:14:08.746156','None','でろ助 金山店',1,'new through import_export',11,1),(33,'2024-08-22 02:14:08.746910','None','はらみ専門店 七輪屋',1,'new through import_export',11,1),(34,'2024-08-22 02:14:08.747681','None','かどや本店 JR名古屋駅店',1,'new through import_export',11,1),(35,'2024-08-22 02:14:08.748429','None','手打ちそば 子石',1,'new through import_export',11,1),(36,'2024-08-22 02:14:08.749450','None','焼肉 カウカウ',1,'new through import_export',11,1),(37,'2024-08-22 02:14:08.750495','None','すし徳',1,'new through import_export',11,1),(38,'2024-08-22 02:14:08.751667','None','手打ちそば 中石',1,'new through import_export',11,1),(39,'2024-08-22 02:14:08.752420','None','麺屋しろ',1,'new through import_export',11,1),(40,'2024-08-22 02:14:08.753087','None','焼肉SUKI 阿久比店',1,'new through import_export',11,1),(41,'2024-08-22 02:14:08.753739','None','炭火串焼コケッコ屋 大須店',1,'new through import_export',11,1),(42,'2024-08-22 02:14:08.754373','None','晴々久',1,'new through import_export',11,1),(43,'2024-08-22 02:14:08.755048','None','おはんざい',1,'new through import_export',11,1),(44,'2024-08-22 02:14:08.755789','None','名古屋お好み焼き',1,'new through import_export',11,1),(45,'2024-08-22 02:14:08.756463','None','油そば専門店ブラブラ 名古屋駅前店',1,'new through import_export',11,1),(46,'2024-08-22 02:14:08.757131','None','まるまる飯',1,'new through import_export',11,1),(47,'2024-08-22 02:14:08.757805','None','焼き鳥七輪 太田川店',1,'new through import_export',11,1),(48,'2024-08-22 02:14:08.758899','None','新みくじ',1,'new through import_export',11,1),(49,'2024-08-22 02:14:08.759739','None','溝口',1,'new through import_export',11,1),(50,'2024-08-22 02:14:08.760574','None','KOTABUKI',1,'new through import_export',11,1),(51,'2024-08-22 02:14:08.761381','None','カジュアルてっぱん焼き',1,'new through import_export',11,1),(52,'2024-08-22 02:14:08.762255','None','ひこぞう',1,'new through import_export',11,1),(53,'2024-08-22 02:14:08.762990','None','キッチンマルポワ',1,'new through import_export',11,1),(54,'2024-08-22 02:14:08.763776','None','魚と野菜と酒',1,'new through import_export',11,1),(55,'2024-08-22 02:14:08.764577','None','麺屋名古屋 名古屋金山店',1,'new through import_export',11,1),(56,'2024-08-22 02:14:08.766754','None','やきにく 加藤',1,'new through import_export',11,1),(57,'2024-08-22 02:14:08.768059','None','すし処みか',1,'new through import_export',11,1),(58,'2024-08-22 02:14:08.768986','None','炭火やきとり マメ',1,'new through import_export',11,1),(59,'2024-08-22 02:14:08.769820','None','上下月',1,'new through import_export',11,1),(60,'2024-08-22 02:14:08.770476','None','名古屋ラーメン 栄本店',1,'new through import_export',11,1),(61,'2024-08-22 02:14:08.771185','None','肉とホルモンの店 YAMI',1,'new through import_export',11,1),(62,'2024-08-22 02:14:08.771846','None','焼肉とホルモン焼き 新瑞橋店',1,'new through import_export',11,1),(63,'2024-08-22 02:14:08.772481','None','ニクサカバ',1,'new through import_export',11,1),(64,'2024-08-22 02:14:08.773147','None','よはく',1,'new through import_export',11,1),(65,'2024-08-22 02:14:08.773960','None','お酒とお肉',1,'new through import_export',11,1),(66,'2024-08-22 02:14:08.774984','None','和牛焼肉Wocca',1,'new through import_export',11,1),(67,'2024-08-22 02:14:08.776041','None','なかみどり',1,'new through import_export',11,1),(68,'2024-08-22 02:14:08.776928','None','けろ助 金山店',1,'new through import_export',11,1),(69,'2024-08-22 02:14:08.777786','None','魚と野菜と酒 じゃばらむ',1,'new through import_export',11,1),(70,'2024-08-22 02:14:08.778319','None','大衆焼肉酒場 ホルモン屋 栄店',1,'new through import_export',11,1),(71,'2024-08-22 02:14:08.778877','None','麺屋名古屋 半田店',1,'new through import_export',11,1),(72,'2024-08-22 02:14:08.779363','None','かつおか',1,'new through import_export',11,1),(73,'2024-08-22 02:14:08.780249','None','CRAFT BEER NAGOYA',1,'new through import_export',11,1),(74,'2024-08-22 02:14:08.781003','None','TRED2',1,'new through import_export',11,1),(75,'2024-08-22 02:14:08.781763','None','どんどん 名駅南一丁目',1,'new through import_export',11,1),(76,'2024-08-22 02:14:08.782585','None','二代目 康',1,'new through import_export',11,1),(77,'2024-08-22 02:14:08.783719','None','天ぷらとワインの大島',1,'new through import_export',11,1),(78,'2024-08-22 02:14:08.784777','None','すし処ゆか',1,'new through import_export',11,1),(79,'2024-08-22 02:14:08.785713','None','焼肉ボンバー',1,'new through import_export',11,1),(80,'2024-08-22 02:14:08.786431','None','やきにく 佐藤',1,'new through import_export',11,1),(81,'2024-08-22 02:14:08.787224','None','串カツ 今池店',1,'new through import_export',11,1),(82,'2024-08-22 02:14:08.787897','None','まつおか',1,'new through import_export',11,1),(83,'2024-08-22 02:14:08.788581','None','大衆焼肉酒場 ホルモン屋 半田店',1,'new through import_export',11,1),(84,'2024-08-22 02:14:08.789246','None','萬新軒',1,'new through import_export',11,1),(85,'2024-08-22 02:14:08.790082','None','ハワイアンバーベキュー ささしま太田川店',1,'new through import_export',11,1),(86,'2024-08-22 02:14:08.790935','None','焼き鳥 はな',1,'new through import_export',11,1),(87,'2024-08-22 02:14:08.791817','None','口々',1,'new through import_export',11,1),(88,'2024-08-22 02:14:08.793001','None','焼肉とホルモン 新瑞橋店',1,'new through import_export',11,1),(89,'2024-08-22 02:14:08.793851','None','上月',1,'new through import_export',11,1),(90,'2024-08-22 02:14:08.794771','None','オーガニック食堂Angi',1,'new through import_export',11,1),(91,'2024-08-22 02:14:08.795674','None','焼き鳥 せぶん',1,'new through import_export',11,1),(92,'2024-08-22 02:14:08.796495','None','キッチンマルポー',1,'new through import_export',11,1),(93,'2024-08-22 02:14:08.797309','None','ニクサカバ半田店',1,'new through import_export',11,1),(94,'2024-08-22 02:14:08.798145','None','ちょもらんま',1,'new through import_export',11,1),(95,'2024-08-22 02:14:08.799106','None','やきにく 山崎',1,'new through import_export',11,1),(96,'2024-08-22 02:14:08.800106','None','台湾ラーメン 田中 守山本店',1,'new through import_export',11,1),(97,'2024-08-22 02:14:08.801267','None','割烹 加藤',1,'new through import_export',11,1),(98,'2024-08-22 02:14:08.802162','None','ちょもちょもらんま',1,'new through import_export',11,1),(99,'2024-08-22 02:14:08.802935','None','炭火串焼コケッコ屋 半田店',1,'new through import_export',11,1),(100,'2024-08-22 02:14:08.803648','None','割烹旬菜',1,'new through import_export',11,1),(101,'2024-08-22 02:14:21.354271','None','居酒屋',1,'new through import_export',6,1),(102,'2024-08-22 02:14:21.355575','None','焼肉',1,'new through import_export',6,1),(103,'2024-08-22 02:14:21.356535','None','寿司',1,'new through import_export',6,1),(104,'2024-08-22 02:14:21.357690','None','ラーメン',1,'new through import_export',6,1),(105,'2024-08-22 02:14:21.359030','None','定食',1,'new through import_export',6,1),(106,'2024-08-22 02:14:21.360163','None','カレー',1,'new through import_export',6,1),(107,'2024-08-22 02:14:21.361559','None','喫茶店',1,'new through import_export',6,1),(108,'2024-08-22 02:14:21.362566','None','中華料理',1,'new through import_export',6,1),(109,'2024-08-22 02:14:21.363509','None','イタリア料理',1,'new through import_export',6,1),(110,'2024-08-22 02:14:21.364486','None','フランス料理',1,'new through import_export',6,1),(111,'2024-08-22 02:14:21.365733','None','スペイン料理',1,'new through import_export',6,1),(112,'2024-08-22 02:14:21.366801','None','韓国料理',1,'new through import_export',6,1),(113,'2024-08-22 02:14:21.367762','None','タイ料理',1,'new through import_export',6,1),(114,'2024-08-22 02:14:21.369440','None','海鮮料理',1,'new through import_export',6,1),(115,'2024-08-22 02:14:21.370302','None','ステーキ',1,'new through import_export',6,1),(116,'2024-08-22 02:14:21.371159','None','ハンバーグ',1,'new through import_export',6,1),(117,'2024-08-22 02:14:21.371994','None','ハンバーガー',1,'new through import_export',6,1),(118,'2024-08-22 02:14:21.372845','None','そば',1,'new through import_export',6,1),(119,'2024-08-22 02:14:21.373955','None','うどん',1,'new through import_export',6,1),(120,'2024-08-22 02:14:21.375243','None','お好み焼き',1,'new through import_export',6,1),(121,'2024-08-22 02:14:21.376638','None','たこ焼き',1,'new through import_export',6,1),(122,'2024-08-22 02:14:21.377696','None','鍋料理',1,'new through import_export',6,1),(123,'2024-08-22 02:14:21.378666','None','バー',1,'new through import_export',6,1),(124,'2024-08-22 02:14:21.379625','None','パン',1,'new through import_export',6,1),(125,'2024-08-22 02:14:21.380550','None','スイーツ',1,'new through import_export',6,1),(126,'2024-08-22 02:14:21.381542','None','和食',1,'new through import_export',6,1),(127,'2024-08-22 02:14:21.382441','None','おでん',1,'new through import_export',6,1),(128,'2024-08-22 02:14:21.383364','None','焼き鳥',1,'new through import_export',6,1),(129,'2024-08-22 02:14:21.384529','None','すき焼き',1,'new through import_export',6,1),(130,'2024-08-22 02:14:21.385551','None','しゃぶしゃぶ',1,'new through import_export',6,1),(131,'2024-08-22 02:14:21.386381','None','天ぷら',1,'new through import_export',6,1),(132,'2024-08-22 02:14:21.387220','None','揚げ物',1,'new through import_export',6,1),(133,'2024-08-22 02:14:21.388336','None','丼物',1,'new through import_export',6,1),(134,'2024-08-22 02:14:21.389497','None','鉄板焼き',1,'new through import_export',6,1),(135,'2024-08-22 02:14:38.483074','1','月',1,'[{\"added\": {}}]',8,1),(136,'2024-08-22 02:14:44.234616','2','火',1,'[{\"added\": {}}]',8,1),(137,'2024-08-22 02:14:49.263103','3','水',1,'[{\"added\": {}}]',8,1),(138,'2024-08-22 02:14:53.606090','4','木',1,'[{\"added\": {}}]',8,1),(139,'2024-08-22 02:14:58.021840','5','金',1,'[{\"added\": {}}]',8,1),(140,'2024-08-22 02:15:02.991903','6','土',1,'[{\"added\": {}}]',8,1),(141,'2024-08-22 02:15:11.022978','7','日',1,'[{\"added\": {}}]',8,1),(142,'2024-08-22 02:15:20.962128','8','不定休',1,'[{\"added\": {}}]',8,1),(143,'2024-08-22 02:15:28.250567','9','なし',1,'[{\"added\": {}}]',8,1),(144,'2024-08-22 02:17:44.098758','101','NAGOYA BURGER 名駅店',2,'[{\"changed\": {\"fields\": [\"\\u30ab\\u30c6\\u30b4\\u30ea\\uff083\\u3064\\u307e\\u3067\\u9078\\u629e\\u53ef\\uff09\"]}}]',11,1),(145,'2024-08-22 02:17:52.579278','102','Shanties',2,'[{\"changed\": {\"fields\": [\"\\u30ab\\u30c6\\u30b4\\u30ea\\uff083\\u3064\\u307e\\u3067\\u9078\\u629e\\u53ef\\uff09\"]}}]',11,1),(146,'2024-08-22 02:18:03.142761','103','割烹 柏木',2,'[{\"changed\": {\"fields\": [\"\\u30ab\\u30c6\\u30b4\\u30ea\\uff083\\u3064\\u307e\\u3067\\u9078\\u629e\\u53ef\\uff09\"]}}]',11,1),(147,'2024-08-22 02:18:14.649399','104','油そば専門店ブラブラ 半田店',2,'[{\"changed\": {\"fields\": [\"\\u30ab\\u30c6\\u30b4\\u30ea\\uff083\\u3064\\u307e\\u3067\\u9078\\u629e\\u53ef\\uff09\"]}}]',11,1),(148,'2024-08-22 02:18:28.469874','105','にく屋 浄心店',2,'[{\"changed\": {\"fields\": [\"\\u30ab\\u30c6\\u30b4\\u30ea\\uff083\\u3064\\u307e\\u3067\\u9078\\u629e\\u53ef\\uff09\"]}}]',11,1),(149,'2024-08-22 02:18:50.873319','106','TRED',2,'[{\"changed\": {\"fields\": [\"\\u30ab\\u30c6\\u30b4\\u30ea\\uff083\\u3064\\u307e\\u3067\\u9078\\u629e\\u53ef\\uff09\"]}}]',11,1),(150,'2024-08-23 02:36:54.133591','1','Company object (1)',1,'[{\"added\": {}}]',7,1),(151,'2024-08-23 03:21:04.074017','1','Terms object (1)',1,'[{\"added\": {}}]',9,1),(152,'2024-08-23 15:18:13.433140','4','satosisty@msn.com',1,'[{\"added\": {}}]',10,1),(153,'2024-08-23 15:18:28.049005','2','satoshimorinagahaomochi@gamil.com',3,'',10,1),(154,'2024-08-23 15:18:54.345916','4','satosisty@msn.com',3,'',10,1),(155,'2024-08-23 15:27:36.708517','3','satoshimorinagahaomochi@gmail.com',3,'',10,1),(156,'2024-08-23 15:30:36.616629','5','satoshimorinagahaomochi@gmail.com',3,'',10,1),(157,'2024-08-23 15:55:09.395233','6','satoshimorinagahaomochi@gmail.com',3,'',10,1),(158,'2024-08-23 16:04:53.587530','7','satoshimorinagahaomochi@gmail.com',3,'',10,1);
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_content_type`
+--
+
+DROP TABLE IF EXISTS `django_content_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_content_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_content_type`
+--
+
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'contenttypes','contenttype'),(6,'nagoyameshi','category'),(7,'nagoyameshi','company'),(13,'nagoyameshi','favorite'),(8,'nagoyameshi','regularholiday'),(12,'nagoyameshi','reservation'),(11,'nagoyameshi','restaurant'),(14,'nagoyameshi','review'),(9,'nagoyameshi','terms'),(10,'nagoyameshi','user'),(15,'nagoyameshi','useractivatetokens'),(5,'sessions','session');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_migrations`
+--
+
+DROP TABLE IF EXISTS `django_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_migrations` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `app` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `applied` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_migrations`
+--
+
+LOCK TABLES `django_migrations` WRITE;
+/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2024-08-22 02:12:28.953476'),(2,'contenttypes','0002_remove_content_type_name','2024-08-22 02:12:28.983055'),(3,'auth','0001_initial','2024-08-22 02:12:29.074252'),(4,'auth','0002_alter_permission_name_max_length','2024-08-22 02:12:29.093911'),(5,'auth','0003_alter_user_email_max_length','2024-08-22 02:12:29.097333'),(6,'auth','0004_alter_user_username_opts','2024-08-22 02:12:29.100827'),(7,'auth','0005_alter_user_last_login_null','2024-08-22 02:12:29.103736'),(8,'auth','0006_require_contenttypes_0002','2024-08-22 02:12:29.104424'),(9,'auth','0007_alter_validators_add_error_messages','2024-08-22 02:12:29.107247'),(10,'auth','0008_alter_user_username_max_length','2024-08-22 02:12:29.110098'),(11,'auth','0009_alter_user_last_name_max_length','2024-08-22 02:12:29.113248'),(12,'auth','0010_alter_group_name_max_length','2024-08-22 02:12:29.119983'),(13,'auth','0011_update_proxy_permissions','2024-08-22 02:12:29.124653'),(14,'auth','0012_alter_user_first_name_max_length','2024-08-22 02:12:29.127958'),(15,'nagoyameshi','0001_initial','2024-08-22 02:12:29.473232'),(16,'admin','0001_initial','2024-08-22 02:12:29.514223'),(17,'admin','0002_logentry_remove_auto_add','2024-08-22 02:12:29.518307'),(18,'admin','0003_logentry_add_action_flag_choices','2024-08-22 02:12:29.522035'),(19,'sessions','0001_initial','2024-08-22 02:12:29.530630'),(20,'nagoyameshi','0002_user_occupation','2024-08-23 03:45:10.542156');
+/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_session`
+--
+
+DROP TABLE IF EXISTS `django_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime(6) NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_expire_date_a5c62663` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_session`
+--
+
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_category`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_category` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_category`
+--
+
+LOCK TABLES `nagoyameshi_category` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_category` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_category` VALUES (35,'居酒屋','2024-08-22 02:14:21.348139','2024-08-22 02:14:21.348188'),(36,'焼肉','2024-08-22 02:14:21.348221','2024-08-22 02:14:21.348238'),(37,'寿司','2024-08-22 02:14:21.348267','2024-08-22 02:14:21.348283'),(38,'ラーメン','2024-08-22 02:14:21.348312','2024-08-22 02:14:21.348330'),(39,'定食','2024-08-22 02:14:21.348378','2024-08-22 02:14:21.348396'),(40,'カレー','2024-08-22 02:14:21.348427','2024-08-22 02:14:21.348451'),(41,'喫茶店','2024-08-22 02:14:21.348478','2024-08-22 02:14:21.348495'),(42,'中華料理','2024-08-22 02:14:21.348523','2024-08-22 02:14:21.348540'),(43,'イタリア料理','2024-08-22 02:14:21.348568','2024-08-22 02:14:21.348583'),(44,'フランス料理','2024-08-22 02:14:21.348612','2024-08-22 02:14:21.348628'),(45,'スペイン料理','2024-08-22 02:14:21.348658','2024-08-22 02:14:21.348674'),(46,'韓国料理','2024-08-22 02:14:21.348703','2024-08-22 02:14:21.348719'),(47,'タイ料理','2024-08-22 02:14:21.348748','2024-08-22 02:14:21.348764'),(48,'海鮮料理','2024-08-22 02:14:21.348791','2024-08-22 02:14:21.348807'),(49,'ステーキ','2024-08-22 02:14:21.348835','2024-08-22 02:14:21.348851'),(50,'ハンバーグ','2024-08-22 02:14:21.348878','2024-08-22 02:14:21.348894'),(51,'ハンバーガー','2024-08-22 02:14:21.348922','2024-08-22 02:14:21.348938'),(52,'そば','2024-08-22 02:14:21.348966','2024-08-22 02:14:21.348982'),(53,'うどん','2024-08-22 02:14:21.349013','2024-08-22 02:14:21.349029'),(54,'お好み焼き','2024-08-22 02:14:21.349057','2024-08-22 02:14:21.349073'),(55,'たこ焼き','2024-08-22 02:14:21.349101','2024-08-22 02:14:21.349118'),(56,'鍋料理','2024-08-22 02:14:21.349146','2024-08-22 02:14:21.349162'),(57,'バー','2024-08-22 02:14:21.349190','2024-08-22 02:14:21.349206'),(58,'パン','2024-08-22 02:14:21.349234','2024-08-22 02:14:21.349250'),(59,'スイーツ','2024-08-22 02:14:21.349278','2024-08-22 02:14:21.349294'),(60,'和食','2024-08-22 02:14:21.349323','2024-08-22 02:14:21.349339'),(61,'おでん','2024-08-22 02:14:21.349367','2024-08-22 02:14:21.349382'),(62,'焼き鳥','2024-08-22 02:14:21.349411','2024-08-22 02:14:21.349427'),(63,'すき焼き','2024-08-22 02:14:21.349456','2024-08-22 02:14:21.349472'),(64,'しゃぶしゃぶ','2024-08-22 02:14:21.349500','2024-08-22 02:14:21.349516'),(65,'天ぷら','2024-08-22 02:14:21.349544','2024-08-22 02:14:21.349560'),(66,'揚げ物','2024-08-22 02:14:21.349587','2024-08-22 02:14:21.349603'),(67,'丼物','2024-08-22 02:14:21.349631','2024-08-22 02:14:21.349647'),(68,'鉄板焼き','2024-08-22 02:14:21.349686','2024-08-22 02:14:21.349724');
+/*!40000 ALTER TABLE `nagoyameshi_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_company`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_company`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_company` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(50) NOT NULL,
+  `address` varchar(150) NOT NULL,
+  `representative` varchar(50) NOT NULL,
+  `establishment` date NOT NULL,
+  `capital` varchar(50) NOT NULL,
+  `business` varchar(50) NOT NULL,
+  `employee` varchar(50) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_company`
+--
+
+LOCK TABLES `nagoyameshi_company` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_company` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_company` VALUES (1,'NAGOYAMESHI株式会社','〒101-0022 東京都千代田区神田練塀町300番地 住友不動産秋葉原駅前ビル5F','侍 太郎','2015-03-19','110,000千円','飲食店の情報提供サービス','83名','2024-08-23 02:36:54.129840','2024-08-23 02:36:54.129900');
+/*!40000 ALTER TABLE `nagoyameshi_company` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_favorite`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_favorite` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `user_id` bigint NOT NULL,
+  `restaurant_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nagoyameshi_favorite_user_id_8820efa5_fk_nagoyameshi_user_id` (`user_id`),
+  KEY `nagoyameshi_favorite_restaurant_id_26c943e5_fk_nagoyames` (`restaurant_id`),
+  CONSTRAINT `nagoyameshi_favorite_restaurant_id_26c943e5_fk_nagoyames` FOREIGN KEY (`restaurant_id`) REFERENCES `nagoyameshi_restaurant` (`id`),
+  CONSTRAINT `nagoyameshi_favorite_user_id_8820efa5_fk_nagoyameshi_user_id` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_favorite`
+--
+
+LOCK TABLES `nagoyameshi_favorite` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_favorite` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_favorite` VALUES (58,'2024-08-22 16:24:39.479294','2024-08-22 16:24:39.479333',1,101),(59,'2024-08-22 16:24:44.048550','2024-08-22 16:24:44.048611',1,102),(61,'2024-08-22 16:24:58.575041','2024-08-22 16:24:58.575081',1,104),(62,'2024-08-22 16:25:02.358655','2024-08-22 16:25:02.358691',1,106),(63,'2024-08-22 16:25:06.388976','2024-08-22 16:25:06.389013',1,105),(64,'2024-08-22 16:25:10.862567','2024-08-22 16:25:10.862632',1,107),(65,'2024-08-22 16:25:15.331674','2024-08-22 16:25:15.331733',1,108),(66,'2024-08-22 16:25:19.676510','2024-08-22 16:25:19.676577',1,109),(67,'2024-08-22 16:25:23.828024','2024-08-22 16:25:23.828104',1,112),(68,'2024-08-22 16:25:27.279575','2024-08-22 16:25:27.279656',1,114),(69,'2024-08-22 16:25:31.771653','2024-08-22 16:25:31.771675',1,113),(70,'2024-08-22 16:25:36.050449','2024-08-22 16:25:36.050483',1,116),(71,'2024-08-22 16:25:40.285602','2024-08-22 16:25:40.285669',1,118),(76,'2024-08-23 02:03:24.247453','2024-08-23 02:03:24.247489',1,103);
+/*!40000 ALTER TABLE `nagoyameshi_favorite` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_regularholiday`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_regularholiday`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_regularholiday` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `holiday` varchar(3) NOT NULL,
+  `holiday_index` int unsigned DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `nagoyameshi_regularholiday_chk_1` CHECK ((`holiday_index` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_regularholiday`
+--
+
+LOCK TABLES `nagoyameshi_regularholiday` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_regularholiday` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_regularholiday` VALUES (1,'月',1,'2024-08-22 02:14:38.481930','2024-08-22 02:14:38.481968'),(2,'火',2,'2024-08-22 02:14:44.233661','2024-08-22 02:14:44.233690'),(3,'水',3,'2024-08-22 02:14:49.262195','2024-08-22 02:14:49.262218'),(4,'木',4,'2024-08-22 02:14:53.593435','2024-08-22 02:14:53.593478'),(5,'金',5,'2024-08-22 02:14:58.020726','2024-08-22 02:14:58.020763'),(6,'土',6,'2024-08-22 02:15:02.990773','2024-08-22 02:15:02.990811'),(7,'日',7,'2024-08-22 02:15:11.010556','2024-08-22 02:15:11.010593'),(8,'不定休',8,'2024-08-22 02:15:20.960819','2024-08-22 02:15:20.960859'),(9,'なし',9,'2024-08-22 02:15:28.249757','2024-08-22 02:15:28.249794');
+/*!40000 ALTER TABLE `nagoyameshi_regularholiday` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_rervation`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_rervation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_rervation` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `reserved_date` date NOT NULL,
+  `reserved_time` time(6) NOT NULL,
+  `number_of_people` int unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `user_id` bigint NOT NULL,
+  `restaurant_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nagoyameshi_rervation_user_id_9bb074fa_fk_nagoyameshi_user_id` (`user_id`),
+  KEY `nagoyameshi_rervatio_restaurant_id_9212839b_fk_nagoyames` (`restaurant_id`),
+  CONSTRAINT `nagoyameshi_rervatio_restaurant_id_9212839b_fk_nagoyames` FOREIGN KEY (`restaurant_id`) REFERENCES `nagoyameshi_restaurant` (`id`),
+  CONSTRAINT `nagoyameshi_rervation_user_id_9bb074fa_fk_nagoyameshi_user_id` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`),
+  CONSTRAINT `nagoyameshi_rervation_chk_1` CHECK ((`number_of_people` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_rervation`
+--
+
+LOCK TABLES `nagoyameshi_rervation` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_rervation` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_rervation` VALUES (2,'2024-09-04','18:30:00.000000',6,'2024-08-22 17:16:07.346837','2024-08-22 17:16:07.348743',1,102),(3,'2024-08-26','11:00:00.000000',2,'2024-08-22 17:16:23.016099','2024-08-22 17:16:23.019454',1,199);
+/*!40000 ALTER TABLE `nagoyameshi_rervation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_restaurant`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_restaurant`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_restaurant` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `restaurant_name` varchar(50) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `description` longtext NOT NULL,
+  `lowest_price` int unsigned DEFAULT NULL,
+  `highest_price` int unsigned DEFAULT NULL,
+  `postal_code` varchar(7) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `opening_time` time(6) NOT NULL,
+  `closing_time` time(6) NOT NULL,
+  `seating_capacity` int unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `nagoyameshi_restaurant_chk_1` CHECK ((`lowest_price` >= 0)),
+  CONSTRAINT `nagoyameshi_restaurant_chk_2` CHECK ((`highest_price` >= 0)),
+  CONSTRAINT `nagoyameshi_restaurant_chk_3` CHECK ((`seating_capacity` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_restaurant`
+--
+
+LOCK TABLES `nagoyameshi_restaurant` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_restaurant` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_restaurant` VALUES (101,'NAGOYA BURGER 名駅店','fried.jpg','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',50,'2024-08-22 02:14:08.704968','2024-08-22 02:17:44.091064'),(102,'Shanties','oden.jpg','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',60,'2024-08-22 02:14:08.705026','2024-08-22 02:17:52.570869'),(103,'割烹 柏木','washoku.jpg','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',70,'2024-08-22 02:14:08.705073','2024-08-22 02:18:03.137020'),(104,'油そば専門店ブラブラ 半田店','ramen.jpg','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',80,'2024-08-22 02:14:08.705120','2024-08-22 02:18:14.643218'),(105,'にく屋 浄心店','fried.jpg','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',90,'2024-08-22 02:14:08.705165','2024-08-22 02:18:28.465281'),(106,'TRED','udon.jpg','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',100,'2024-08-22 02:14:08.705209','2024-08-22 02:18:50.866851'),(107,'きんやま','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',110,'2024-08-22 02:14:08.705255','2024-08-22 02:14:08.705260'),(108,'NAGOYA BURGER 名古屋店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',120,'2024-08-22 02:14:08.705299','2024-08-22 02:14:08.705304'),(109,'焼肉小山','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',130,'2024-08-22 02:14:08.705344','2024-08-22 02:14:08.705349'),(110,'焼き鳥七輪 栄住吉店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',140,'2024-08-22 02:14:08.705389','2024-08-22 02:14:08.705394'),(111,'肉の庭','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',150,'2024-08-22 02:14:08.705433','2024-08-22 02:14:08.705438'),(112,'CRAFT BEER NAGOYA2','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',50,'2024-08-22 02:14:08.705478','2024-08-22 02:14:08.705482'),(113,'麺屋やしろ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',60,'2024-08-22 02:14:08.705524','2024-08-22 02:14:08.705530'),(114,'ハワイアンバーベキュー 名古屋店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',70,'2024-08-22 02:14:08.705570','2024-08-22 02:14:08.705575'),(115,'日本酒処 花雅','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',80,'2024-08-22 02:14:08.705615','2024-08-22 02:14:08.705621'),(116,'なわ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',90,'2024-08-22 02:14:08.705662','2024-08-22 02:14:08.705667'),(117,'お酒とご飯','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',100,'2024-08-22 02:14:08.705707','2024-08-22 02:14:08.705712'),(118,'焼肉SUKI 名古屋新幹線口店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',110,'2024-08-22 02:14:08.705753','2024-08-22 02:14:08.705758'),(119,'焼き鳥 はなれ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',120,'2024-08-22 02:14:08.705798','2024-08-22 02:14:08.705803'),(120,'割烹旬菜花','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',130,'2024-08-22 02:14:08.705843','2024-08-22 02:14:08.705848'),(121,'ちゃんこ屋 あかね','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',140,'2024-08-22 02:14:08.705887','2024-08-22 02:14:08.705892'),(122,'肉の庭半田店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',150,'2024-08-22 02:14:08.705932','2024-08-22 02:14:08.705937'),(123,'オーガニック食堂Sngi','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',50,'2024-08-22 02:14:08.705976','2024-08-22 02:14:08.705982'),(124,'寿司 やなや','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',60,'2024-08-22 02:14:08.706021','2024-08-22 02:14:08.706026'),(125,'ハワイアンバーベキュー 太田川店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',70,'2024-08-22 02:14:08.706066','2024-08-22 02:14:08.706071'),(126,'中華一番','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',80,'2024-08-22 02:14:08.706111','2024-08-22 02:14:08.706116'),(127,'厚切りステーキとハンバーグ たはらや','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',90,'2024-08-22 02:14:08.706170','2024-08-22 02:14:08.706175'),(128,'名古屋ラーメン 半田店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',100,'2024-08-22 02:14:08.706214','2024-08-22 02:14:08.706219'),(129,'炭火やきとり オマメ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',110,'2024-08-22 02:14:08.706259','2024-08-22 02:14:08.706264'),(130,'ラーメン 餃子 ひびき','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',120,'2024-08-22 02:14:08.706304','2024-08-22 02:14:08.706309'),(131,'つけ麺MENMARU','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',130,'2024-08-22 02:14:08.706350','2024-08-22 02:14:08.706355'),(132,'でろ助 金山店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',140,'2024-08-22 02:14:08.706395','2024-08-22 02:14:08.706400'),(133,'はらみ専門店 七輪屋','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',150,'2024-08-22 02:14:08.706440','2024-08-22 02:14:08.706445'),(134,'かどや本店 JR名古屋駅店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',50,'2024-08-22 02:14:08.706484','2024-08-22 02:14:08.706489'),(135,'手打ちそば 子石','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',60,'2024-08-22 02:14:08.706530','2024-08-22 02:14:08.706535'),(136,'焼肉 カウカウ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',70,'2024-08-22 02:14:08.706575','2024-08-22 02:14:08.706580'),(137,'すし徳','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',80,'2024-08-22 02:14:08.706620','2024-08-22 02:14:08.706625'),(138,'手打ちそば 中石','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',90,'2024-08-22 02:14:08.706665','2024-08-22 02:14:08.706670'),(139,'麺屋しろ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',100,'2024-08-22 02:14:08.706710','2024-08-22 02:14:08.706715'),(140,'焼肉SUKI 阿久比店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',110,'2024-08-22 02:14:08.706754','2024-08-22 02:14:08.706759'),(141,'炭火串焼コケッコ屋 大須店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',120,'2024-08-22 02:14:08.706799','2024-08-22 02:14:08.706804'),(142,'晴々久','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',130,'2024-08-22 02:14:08.706843','2024-08-22 02:14:08.706848'),(143,'おはんざい','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',140,'2024-08-22 02:14:08.706888','2024-08-22 02:14:08.706893'),(144,'名古屋お好み焼き','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',150,'2024-08-22 02:14:08.706932','2024-08-22 02:14:08.706937'),(145,'油そば専門店ブラブラ 名古屋駅前店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',50,'2024-08-22 02:14:08.706977','2024-08-22 02:14:08.706982'),(146,'まるまる飯','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',60,'2024-08-22 02:14:08.707022','2024-08-22 02:14:08.707027'),(147,'焼き鳥七輪 太田川店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',70,'2024-08-22 02:14:08.707068','2024-08-22 02:14:08.707073'),(148,'新みくじ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',80,'2024-08-22 02:14:08.707112','2024-08-22 02:14:08.707118'),(149,'溝口','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',90,'2024-08-22 02:14:08.707157','2024-08-22 02:14:08.707162'),(150,'KOTABUKI','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',100,'2024-08-22 02:14:08.707202','2024-08-22 02:14:08.707207'),(151,'カジュアルてっぱん焼き','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',110,'2024-08-22 02:14:08.707246','2024-08-22 02:14:08.707251'),(152,'ひこぞう','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',120,'2024-08-22 02:14:08.707291','2024-08-22 02:14:08.707296'),(153,'キッチンマルポワ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',130,'2024-08-22 02:14:08.707335','2024-08-22 02:14:08.707340'),(154,'魚と野菜と酒','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',140,'2024-08-22 02:14:08.707380','2024-08-22 02:14:08.707385'),(155,'麺屋名古屋 名古屋金山店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',150,'2024-08-22 02:14:08.707425','2024-08-22 02:14:08.707430'),(156,'やきにく 加藤','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',50,'2024-08-22 02:14:08.707470','2024-08-22 02:14:08.707475'),(157,'すし処みか','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',60,'2024-08-22 02:14:08.707515','2024-08-22 02:14:08.707520'),(158,'炭火やきとり マメ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',70,'2024-08-22 02:14:08.707560','2024-08-22 02:14:08.707565'),(159,'上下月','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',80,'2024-08-22 02:14:08.707605','2024-08-22 02:14:08.707610'),(160,'名古屋ラーメン 栄本店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',90,'2024-08-22 02:14:08.707651','2024-08-22 02:14:08.707656'),(161,'肉とホルモンの店 YAMI','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',100,'2024-08-22 02:14:08.707697','2024-08-22 02:14:08.707702'),(162,'焼肉とホルモン焼き 新瑞橋店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',110,'2024-08-22 02:14:08.707742','2024-08-22 02:14:08.707747'),(163,'ニクサカバ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',120,'2024-08-22 02:14:08.707787','2024-08-22 02:14:08.707792'),(164,'よはく','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',130,'2024-08-22 02:14:08.707831','2024-08-22 02:14:08.707836'),(165,'お酒とお肉','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',140,'2024-08-22 02:14:08.707876','2024-08-22 02:14:08.707881'),(166,'和牛焼肉Wocca','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',150,'2024-08-22 02:14:08.707921','2024-08-22 02:14:08.707925'),(167,'なかみどり','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',50,'2024-08-22 02:14:08.707965','2024-08-22 02:14:08.707970'),(168,'けろ助 金山店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',60,'2024-08-22 02:14:08.708009','2024-08-22 02:14:08.708014'),(169,'魚と野菜と酒 じゃばらむ','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',70,'2024-08-22 02:14:08.708053','2024-08-22 02:14:08.708058'),(170,'大衆焼肉酒場 ホルモン屋 栄店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',80,'2024-08-22 02:14:08.708097','2024-08-22 02:14:08.708102'),(171,'麺屋名古屋 半田店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',90,'2024-08-22 02:14:08.708145','2024-08-22 02:14:08.708150'),(172,'かつおか','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',100,'2024-08-22 02:14:08.708189','2024-08-22 02:14:08.708194'),(173,'CRAFT BEER NAGOYA','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',110,'2024-08-22 02:14:08.708233','2024-08-22 02:14:08.708252'),(174,'TRED2','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',120,'2024-08-22 02:14:08.708292','2024-08-22 02:14:08.708297'),(175,'どんどん 名駅南一丁目','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',130,'2024-08-22 02:14:08.708336','2024-08-22 02:14:08.708341'),(176,'二代目 康','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',140,'2024-08-22 02:14:08.708381','2024-08-22 02:14:08.708386'),(177,'天ぷらとワインの大島','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',150,'2024-08-22 02:14:08.708427','2024-08-22 02:14:08.708432'),(178,'すし処ゆか','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',50,'2024-08-22 02:14:08.708473','2024-08-22 02:14:08.708478'),(179,'焼肉ボンバー','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',60,'2024-08-22 02:14:08.708519','2024-08-22 02:14:08.708531'),(180,'やきにく 佐藤','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',70,'2024-08-22 02:14:08.708571','2024-08-22 02:14:08.708576'),(181,'串カツ 今池店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',80,'2024-08-22 02:14:08.708615','2024-08-22 02:14:08.708621'),(182,'まつおか','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',90,'2024-08-22 02:14:08.708660','2024-08-22 02:14:08.708665'),(183,'大衆焼肉酒場 ホルモン屋 半田店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',100,'2024-08-22 02:14:08.708704','2024-08-22 02:14:08.708709'),(184,'萬新軒','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',110,'2024-08-22 02:14:08.708748','2024-08-22 02:14:08.708753'),(185,'ハワイアンバーベキュー ささしま太田川店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',120,'2024-08-22 02:14:08.708792','2024-08-22 02:14:08.708797'),(186,'焼き鳥 はな','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',130,'2024-08-22 02:14:08.708836','2024-08-22 02:14:08.708841'),(187,'口々','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',140,'2024-08-22 02:14:08.708881','2024-08-22 02:14:08.708886'),(188,'焼肉とホルモン 新瑞橋店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',150,'2024-08-22 02:14:08.708925','2024-08-22 02:14:08.708930'),(189,'上月','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',50,'2024-08-22 02:14:08.708969','2024-08-22 02:14:08.708974'),(190,'オーガニック食堂Angi','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',60,'2024-08-22 02:14:08.709014','2024-08-22 02:14:08.709019'),(191,'焼き鳥 せぶん','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',70,'2024-08-22 02:14:08.709058','2024-08-22 02:14:08.709063'),(192,'キッチンマルポー','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',80,'2024-08-22 02:14:08.709103','2024-08-22 02:14:08.709108'),(193,'ニクサカバ半田店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',90,'2024-08-22 02:14:08.709147','2024-08-22 02:14:08.709152'),(194,'ちょもらんま','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',100,'2024-08-22 02:14:08.709192','2024-08-22 02:14:08.709197'),(195,'やきにく 山崎','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',110,'2024-08-22 02:14:08.709236','2024-08-22 02:14:08.709241'),(196,'台湾ラーメン 田中 守山本店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','13:00:00.000000','23:00:00.000000',120,'2024-08-22 02:14:08.709281','2024-08-22 02:14:08.709286'),(197,'割烹 加藤','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',3000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',130,'2024-08-22 02:14:08.709326','2024-08-22 02:14:08.709331'),(198,'ちょもちょもらんま','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',4000,5000,'4500000','愛知県名古屋市中区栄X-XX-XX','11:00:00.000000','20:30:00.000000',140,'2024-08-22 02:14:08.709371','2024-08-22 02:14:08.709376'),(199,'炭火串焼コケッコ屋 半田店','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',2000,4000,'4500000','愛知県名古屋市中区栄X-XX-XX','10:00:00.000000','20:00:00.000000',150,'2024-08-22 02:14:08.709415','2024-08-22 02:14:08.709421'),(200,'割烹旬菜','noImage.png','名古屋老舗のお店。老舗の味をご堪能ください。',5000,6000,'4500000','愛知県名古屋市中区栄X-XX-XX','09:30:00.000000','22:00:00.000000',50,'2024-08-22 02:14:08.709461','2024-08-22 02:14:08.709466');
+/*!40000 ALTER TABLE `nagoyameshi_restaurant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_restaurant_category_name`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_restaurant_category_name`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_restaurant_category_name` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `restaurant_id` bigint NOT NULL,
+  `category_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nagoyameshi_restaurant_c_restaurant_id_category_i_71d25770_uniq` (`restaurant_id`,`category_id`),
+  KEY `nagoyameshi_restaura_category_id_642f4039_fk_nagoyames` (`category_id`),
+  CONSTRAINT `nagoyameshi_restaura_category_id_642f4039_fk_nagoyames` FOREIGN KEY (`category_id`) REFERENCES `nagoyameshi_category` (`id`),
+  CONSTRAINT `nagoyameshi_restaura_restaurant_id_e6639c60_fk_nagoyames` FOREIGN KEY (`restaurant_id`) REFERENCES `nagoyameshi_restaurant` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_restaurant_category_name`
+--
+
+LOCK TABLES `nagoyameshi_restaurant_category_name` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_restaurant_category_name` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_restaurant_category_name` VALUES (1,101,51),(2,102,36),(3,103,60),(4,104,38),(5,105,36),(6,105,39),(7,106,41);
+/*!40000 ALTER TABLE `nagoyameshi_restaurant_category_name` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_restaurant_holiday`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_restaurant_holiday`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_restaurant_holiday` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `restaurant_id` bigint NOT NULL,
+  `regularholiday_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nagoyameshi_restaurant_h_restaurant_id_regularhol_b1cf0be1_uniq` (`restaurant_id`,`regularholiday_id`),
+  KEY `nagoyameshi_restaura_regularholiday_id_26d3f6b2_fk_nagoyames` (`regularholiday_id`),
+  CONSTRAINT `nagoyameshi_restaura_regularholiday_id_26d3f6b2_fk_nagoyames` FOREIGN KEY (`regularholiday_id`) REFERENCES `nagoyameshi_regularholiday` (`id`),
+  CONSTRAINT `nagoyameshi_restaura_restaurant_id_95534768_fk_nagoyames` FOREIGN KEY (`restaurant_id`) REFERENCES `nagoyameshi_restaurant` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_restaurant_holiday`
+--
+
+LOCK TABLES `nagoyameshi_restaurant_holiday` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_restaurant_holiday` DISABLE KEYS */;
+/*!40000 ALTER TABLE `nagoyameshi_restaurant_holiday` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_review`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_review` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `content` longtext NOT NULL,
+  `score` int unsigned NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `restaurant_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nagoyameshi_review_restaurant_id_0c247083_fk_nagoyames` (`restaurant_id`),
+  KEY `nagoyameshi_review_user_id_64c3ed3e_fk_nagoyameshi_user_id` (`user_id`),
+  CONSTRAINT `nagoyameshi_review_restaurant_id_0c247083_fk_nagoyames` FOREIGN KEY (`restaurant_id`) REFERENCES `nagoyameshi_restaurant` (`id`),
+  CONSTRAINT `nagoyameshi_review_user_id_64c3ed3e_fk_nagoyameshi_user_id` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`),
+  CONSTRAINT `nagoyameshi_review_chk_1` CHECK ((`score` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_review`
+--
+
+LOCK TABLES `nagoyameshi_review` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_review` DISABLE KEYS */;
+/*!40000 ALTER TABLE `nagoyameshi_review` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_terms`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_terms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_terms` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `content` longtext NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_terms`
+--
+
+LOCK TABLES `nagoyameshi_terms` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_terms` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_terms` VALUES (1,'この利用規約（以下、「本規約」といいます。）は、NAGOYAMESHI株式会社（以下、「当社」といいます。）がこのウェブサイト上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。\r\n\r\n第1条（適用）\r\n本規約は、ユーザーと当社との間の本サービスの利用に関わる一切の関係に適用されるものとします。\r\n当社は本サービスに関し、本規約のほか、ご利用にあたってのルール等、各種の定め（以下、「個別規定」といいます。）をすることがあります。これら個別規定はその名称のいかんに関わらず、本規約の一部を構成するものとします。\r\n本規約の規定が前条の個別規定の規定と矛盾する場合には、個別規定において特段の定めなき限り、個別規定の規定が優先されるものとします。\r\n第2条（利用登録）\r\n本サービスにおいては、登録希望者が本規約に同意の上、当社の定める方法によって利用登録を申請し、当社がこれを承認することによって、利用登録が完了するものとします。\r\n当社は、利用登録の申請者に以下の事由があると判断した場合、利用登録の申請を承認しないことがあり、その理由については一切の開示義務を負わないものとします。\r\n利用登録の申請に際して虚偽の事項を届け出た場合\r\n本規約に違反したことがある者からの申請である場合\r\nその他、当社が利用登録を相当でないと判断した場合\r\n第3条（ユーザーIDおよびパスワードの管理）\r\nユーザーは、自己の責任において、本サービスのユーザーIDおよびパスワードを適切に管理するものとします。\r\nユーザーは、いかなる場合にも、ユーザーIDおよびパスワードを第三者に譲渡または貸与し、もしくは第三者と共用することはできません。当社は、ユーザーIDとパスワードの組み合わせが登録情報と一致してログインされた場合には、そのユーザーIDを登録しているユーザー自身による利用とみなします。\r\nユーザーID及びパスワードが第三者によって使用されたことによって生じた損害は、当社に故意又は重大な過失がある場合を除き、当社は一切の責任を負わないものとします。\r\n第4条（利用料金および支払方法）\r\nユーザーは、本サービスの有料部分の対価として、当社が別途定め、本ウェブサイトに表示する利用料金を、当社が指定する方法により支払うものとします。\r\nユーザーが利用料金の支払を遅滞した場合には、ユーザーは年14．6％の割合による遅延損害金を支払うものとします。\r\n第5条（禁止事項）\r\nユーザーは、本サービスの利用にあたり、以下の行為をしてはなりません。\r\n\r\n法令または公序良俗に違反する行為\r\n犯罪行為に関連する行為\r\n本サービスの内容等、本サービスに含まれる著作権、商標権ほか知的財産権を侵害する行為\r\n当社、ほかのユーザー、またはその他第三者のサーバーまたはネットワークの機能を破壊したり、妨害したりする行為\r\n本サービスによって得られた情報を商業的に利用する行為\r\n当社のサービスの運営を妨害するおそれのある行為\r\n不正アクセスをし、またはこれを試みる行為\r\n他のユーザーに関する個人情報等を収集または蓄積する行為\r\n不正な目的を持って本サービスを利用する行為\r\n本サービスの他のユーザーまたはその他の第三者に不利益、損害、不快感を与える行為\r\n他のユーザーに成りすます行為\r\n当社が許諾しない本サービス上での宣伝、広告、勧誘、または営業行為\r\n面識のない異性との出会いを目的とした行為\r\n当社のサービスに関連して、反社会的勢力に対して直接または間接に利益を供与する行為\r\nその他、当社が不適切と判断する行為\r\n第6条（本サービスの提供の停止等）\r\n当社は、以下のいずれかの事由があると判断した場合、ユーザーに事前に通知することなく本サービスの全部または一部の提供を停止または中断することができるものとします。\r\n本サービスにかかるコンピュータシステムの保守点検または更新を行う場合\r\n地震、落雷、火災、停電または天災などの不可抗力により、本サービスの提供が困難となった場合\r\nコンピュータまたは通信回線等が事故により停止した場合\r\nその他、当社が本サービスの提供が困難と判断した場合\r\n当社は、本サービスの提供の停止または中断により、ユーザーまたは第三者が被ったいかなる不利益または損害についても、一切の責任を負わないものとします。\r\n第7条（利用制限および登録抹消）\r\n当社は、ユーザーが以下のいずれかに該当する場合には、事前の通知なく、ユーザーに対して、本サービスの全部もしくは一部の利用を制限し、またはユーザーとしての登録を抹消することができるものとします。\r\n本規約のいずれかの条項に違反した場合\r\n登録事項に虚偽の事実があることが判明した場合\r\n料金等の支払債務の不履行があった場合\r\n当社からの連絡に対し、一定期間返答がない場合\r\n本サービスについて、最終の利用から一定期間利用がない場合\r\nその他、当社が本サービスの利用を適当でないと判断した場合\r\n当社は、本条に基づき当社が行った行為によりユーザーに生じた損害について、一切の責任を負いません。\r\n第8条（退会）\r\nユーザーは、当社の定める退会手続により、本サービスから退会できるものとします。\r\n\r\n第9条（保証の否認および免責事項）\r\n当社は、本サービスに事実上または法律上の瑕疵（安全性、信頼性、正確性、完全性、有効性、特定の目的への適合性、セキュリティなどに関する欠陥、エラーやバグ、権利侵害などを含みます。）がないことを明示的にも黙示的にも保証しておりません。\r\n当社は、本サービスに起因してユーザーに生じたあらゆる損害について、当社の故意又は重過失による場合を除き、一切の責任を負いません。ただし、本サービスに関する当社とユーザーとの間の契約（本規約を含みます。）が消費者契約法に定める消費者契約となる場合、この免責規定は適用されません。\r\n前項ただし書に定める場合であっても、当社は、当社の過失（重過失を除きます。）による債務不履行または不法行為によりユーザーに生じた損害のうち特別な事情から生じた損害（当社またはユーザーが損害発生につき予見し、または予見し得た場合を含みます。）について一切の責任を負いません。また、当社の過失（重過失を除きます。）による債務不履行または不法行為によりユーザーに生じた損害の賠償は、ユーザーから当該損害が発生した月に受領した利用料の額を上限とします。\r\n当社は、本サービスに関して、ユーザーと他のユーザーまたは第三者との間において生じた取引、連絡または紛争等について一切責任を負いません。\r\n第10条（サービス内容の変更等）\r\n当社は、ユーザーへの事前の告知をもって、本サービスの内容を変更、追加または廃止することがあり、ユーザーはこれを承諾するものとします。\r\n\r\n第11条（利用規約の変更）\r\n当社は以下の場合には、ユーザーの個別の同意を要せず、本規約を変更することができるものとします。\r\n本規約の変更がユーザーの一般の利益に適合するとき。\r\n本規約の変更が本サービス利用契約の目的に反せず、かつ、変更の必要性、変更後の内容の相当性その他の変更に係る事情に照らして合理的なものであるとき。\r\n当社はユーザーに対し、前項による本規約の変更にあたり、事前に、本規約を変更する旨及び変更後の本規約の内容並びにその効力発生時期を通知します。\r\n第12条（個人情報の取扱い）\r\n当社は、本サービスの利用によって取得する個人情報については、当社「プライバシーポリシー」に従い適切に取り扱うものとします。\r\n\r\n第13条（通知または連絡）\r\nユーザーと当社との間の通知または連絡は、当社の定める方法によって行うものとします。当社は、ユーザーから、当社が別途定める方式に従った変更届け出がない限り、現在登録されている連絡先が有効なものとみなして当該連絡先へ通知または連絡を行い、これらは、発信時にユーザーへ到達したものとみなします。\r\n\r\n第14条（権利義務の譲渡の禁止）\r\nユーザーは、当社の書面による事前の承諾なく、利用契約上の地位または本規約に基づく権利もしくは義務を第三者に譲渡し、または担保に供することはできません。\r\n\r\n第15条（準拠法・裁判管轄）\r\n本規約の解釈にあたっては、日本法を準拠法とします。\r\n本サービスに関して紛争が生じた場合には、当社の本店所在地を管轄する裁判所を専属的合意管轄とします。','2024-08-23 03:21:04.061166','2024-08-23 03:21:04.061194');
+/*!40000 ALTER TABLE `nagoyameshi_terms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_user`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_user` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) NOT NULL,
+  `last_login` datetime(6) DEFAULT NULL,
+  `name` varchar(50) NOT NULL,
+  `kana_name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `postal_code` varchar(7) NOT NULL,
+  `address` varchar(150) NOT NULL,
+  `tel_number` varchar(15) NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `occupation` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_user`
+--
+
+LOCK TABLES `nagoyameshi_user` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_user` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_user` VALUES (1,'pbkdf2_sha256$720000$WUKQ8YyOSVJVjnofksBKbc$MfnIA/HZd99IIm5gFXwRqkrrEUyG/7PJ8Nx3Xk+xcFc=','2024-08-23 16:56:32.583710','chart','チャート','stsmorinaga@gmail.com','1111111','知多半島','09012345678','2000-02-28',1,1,1,'2024-08-22 02:13:01.492148','2024-08-23 08:30:18.967137',NULL),(8,'pbkdf2_sha256$720000$OOlcTt4Ryxtn6jCeMbYtiW$IqGltkgMobKz7Qa+/HceOovlfqqbHZ4zWV8EcRAiYiY=','2024-08-23 16:58:51.792973','太郎','タロウ','satoshimorinagahaomochi@gmail.com','1111111','荒川区東日暮里','1',NULL,0,0,1,'2024-08-23 16:05:50.657880','2024-08-23 17:25:04.902413',NULL);
+/*!40000 ALTER TABLE `nagoyameshi_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_user_groups`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_user_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_user_groups` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nagoyameshi_user_groups_user_id_group_id_68dc8786_uniq` (`user_id`,`group_id`),
+  KEY `nagoyameshi_user_groups_group_id_b5e3ec20_fk_auth_group_id` (`group_id`),
+  CONSTRAINT `nagoyameshi_user_groups_group_id_b5e3ec20_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `nagoyameshi_user_groups_user_id_c24da0dc_fk_nagoyameshi_user_id` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_user_groups`
+--
+
+LOCK TABLES `nagoyameshi_user_groups` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `nagoyameshi_user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_user_user_permissions`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_user_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_user_user_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nagoyameshi_user_user_pe_user_id_permission_id_ef775d35_uniq` (`user_id`,`permission_id`),
+  KEY `nagoyameshi_user_use_permission_id_e6fabbbd_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `nagoyameshi_user_use_permission_id_e6fabbbd_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `nagoyameshi_user_use_user_id_7b36b26e_fk_nagoyames` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_user_user_permissions`
+--
+
+LOCK TABLES `nagoyameshi_user_user_permissions` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `nagoyameshi_user_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nagoyameshi_useractivatetokens`
+--
+
+DROP TABLE IF EXISTS `nagoyameshi_useractivatetokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nagoyameshi_useractivatetokens` (
+  `token_id` char(32) NOT NULL,
+  `activate_token` char(32) NOT NULL,
+  `expired_at` datetime(6) NOT NULL,
+  `user_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`token_id`),
+  KEY `nagoyameshi_useracti_user_id_e7c4d728_fk_nagoyames` (`user_id`),
+  CONSTRAINT `nagoyameshi_useracti_user_id_e7c4d728_fk_nagoyames` FOREIGN KEY (`user_id`) REFERENCES `nagoyameshi_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nagoyameshi_useractivatetokens`
+--
+
+LOCK TABLES `nagoyameshi_useractivatetokens` WRITE;
+/*!40000 ALTER TABLE `nagoyameshi_useractivatetokens` DISABLE KEYS */;
+INSERT INTO `nagoyameshi_useractivatetokens` VALUES ('800133b55d5c4d5587a1651e8a43d615','f9c2f04987444a2897ac8ed37c6320d0','2024-08-24 16:05:50.661376',8),('f1c8b4c4024343278e578e3a13d62007','5f3ca71fb1414b16a83bbed44569a84f','2024-08-23 02:13:01.499759',1);
+/*!40000 ALTER TABLE `nagoyameshi_useractivatetokens` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-08-24 13:35:47
