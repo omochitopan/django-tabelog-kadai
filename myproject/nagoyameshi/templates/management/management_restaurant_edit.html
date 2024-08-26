@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}店舗情報編集ページ{% endblock %}
+{% block contents %}
+<div class="management-restaurant-edit">
+	<div class="outer-container">
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="flex-container btn-container">
+                <button type="submit" class="btn">更新</button>
+                <a href="{% url 'managementrestaurantdetail' object.pk %}" class="btn">戻る</a>
+            </div>
+        </form>
+	</div>
+</div>	
+{% endblock %}

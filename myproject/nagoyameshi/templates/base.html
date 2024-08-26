@@ -23,6 +23,10 @@
         {% if user.is_authenticated %}
         <p class="welcome">ようこそ、{{user.name}}さん</p>
         <ul class="link-container">
+          {% if user.role %}
+          {% csrf_token %}
+          <li><a href="{% url 'management' user_id %}" class="nav-link">管理ページ</a></li>
+          {% endif %}
           <li><a href="{% url 'top' %}" class="nav-link">トップページ</a></li>
           <li><a href="{% url 'favoritelist' user_id %}" class="nav-link">お気に入り一覧</a></li>
           <li><a href="{% url 'reservationlist' user_id %}" class="nav-link">予約一覧</a></li>

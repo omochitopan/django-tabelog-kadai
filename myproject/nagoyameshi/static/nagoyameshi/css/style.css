@@ -95,6 +95,32 @@ main {
   margin-top: 60px;
 }
 
+.center {
+  text-align: center;
+}
+
+.serviceguide .outer-container {
+  width: 600px;
+  margin: 90px auto 30px auto;
+}
+
+.serviceguide .ref-container {
+  margin-top: 30px;
+}
+
+.serviceguide .ref-list {
+  list-style: none;
+  text-align: center;
+}
+
+.serviceguide .btn {
+  color: gray;
+}
+
+.serviceguide .btn:hover {
+  color: black;
+}
+
 .login .outer-container {
   width: 400px;
   margin: 90px auto 30px auto;
@@ -1011,4 +1037,227 @@ footer {
 .company-table td {
   padding: 3px 0 3px 3px;
   border-bottom: solid rgb(170, 170, 170) 1px;
+}
+
+.management .outer-container {
+  width: 600px;
+  margin: 90px auto 30px auto;
+}
+
+.management .ref-container {
+  margin: 30px 0;
+}
+
+.management .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-restaurant .outer-container {
+  width: 900px;
+  margin: 90px auto 30px auto;
+}
+
+.management-restaurant .title {
+  text-align: center;
+}
+
+.management-restaurant .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-restaurant .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-restaurant-table {
+  margin: 30px auto;
+}
+
+.management-restaurant-table th {
+  border-bottom: solid gray 1px;
+  padding: 3px 0;
+}
+
+.management-restaurant-table td {
+  border-bottom: solid gray 1px;
+  padding: 3px 0;
+}
+
+.management-restaurant-table .ref {
+  color: black;
+  text-decoration: none;
+}
+
+.management-restaurant-table .ref:hover {
+  font-weight: bold;
+}
+
+.management-restaurant-table .click {
+  font-weight: normal;
+}
+
+.management-restaurant-table .restaurant-name {
+  width: 250px;
+}
+
+.management-restaurant-table .postal-code {
+  width: 90px;
+}
+.management-restaurant-table .address {
+  width: 300px;
+}
+
+.management-restaurant-table .manager {
+  width: 210px;
+}
+
+.management-restaurant-table .sales {
+  width: 50px;
+}
+
+.management-restaurant-create .outer-container {
+  width: 600px;
+  margin: 90px auto 30px auto;
+}
+
+.management-restaurant-create label {
+  width: 230px;
+}
+
+.management-restaurant-create input {
+  width: 362px;
+}
+
+.management-restaurant-create .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-restaurant-create .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-restaurant-edit .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-restaurant-edit .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-restaurant-delete .outer-container {
+  width: 700px;
+  margin: 90px auto 30px auto;
+}
+
+.management-restaurant-delete .delete-check {
+  color: crimson;
+}
+
+.management-restaurant-delete .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-restaurant-delete .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.managementreservation .outer-container {
+  width: 800px;
+  margin: 90px auto 30px auto;
+}
+
+.management-restaurant-table .date {
+  width: 130px;
+}
+
+.management-restaurant-table .time {
+  width: 60px;
+}
+
+.management-restaurant-table .people {
+  width: 50px;
+}
+
+.management-restaurant-table .user {
+  width: 100px;
+}
+
+.management-restaurant-table .edit {
+  width: 65px;
+}
+
+.management-restaurant-table .delete {
+  width: 65px;
+}
+
+.managementreservation .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.managementreservation .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.managementuser .outer-container {
+  width: 800px;
+  margin: 90px auto 30px auto;
+}
+
+.managementuser .user-table {
+  margin: 30px auto;
+}
+
+.managementuser .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.managementuser .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.user-table th {
+  border-bottom: solid gray 1px;
+}
+
+.user-table td {
+  border-bottom: solid gray 1px;
 }

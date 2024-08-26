@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.TopView.as_view(), name="top"),
+    path('serviceguide/', views.ServiceGuideView.as_view(), name="serviceguide"),
     path('login/', views.LoginView.as_view(), name="login"),
     path('usercreated', views.UserCreatedView.as_view(), name="usercreated"),
     path('passwordreset/', views.PasswordResetView.as_view(), name="password_reset"),
@@ -50,6 +51,18 @@ urlpatterns = [
     path('user/<int:pk>/update', views.UserUpdateView.as_view(), name="userupdate"),
     path('company/', views.CompanyView.as_view(), name="company"),
     path('terms/', views.TermsView.as_view(), name="terms"),
+    path('terms/', views.TermsView.as_view(), name="terms"),
+    path('management/<int:user_id>/', views.ManagementTopView.as_view(), name="management"),
+    path('management/<int:user_id>/restaurant/', views.ManagementRestaurantView.as_view(), name="managementrestaurant"),
+    path('management/<int:user_id>/restaurant/create/', views.ManagementRestaurantCreateView.as_view(), name="managementrestaurantcreate"),
+    path('management/restaurant/<int:pk>/', views.ManagementRestaurantDetailView.as_view(), name="managementrestaurantdetail"),
+    path('management/restaurant/<int:pk>/edit/', views.ManagementRestaurantEditView.as_view(), name="managementrestaurantedit"),
+    path('management/restaurant/<int:pk>/delete/', views.ManagementRestaurantDeleteView.as_view(), name="managementrestaurantdelete"),
+    path('management/<int:user_id>/reservation/', views.ManagementReservationView.as_view(), name="managementreservation"),
+    path('management/reservation/<int:pk>/edit/', views.ManagementReservationEditView.as_view(), name="managementreservationedit"),
+    path('management/reservation/<int:pk>/delete/', views.ManagementReservationDeleteView.as_view(), name="managementreservationdelete"),
+    path('management/<int:user_id>/user_information/', views.ManagementUserView.as_view(), name="managementuser"),
+    path('management/user_information/<int:pk>/', views.ManagementUserDetailView.as_view(), name="managementuserdetail"),
 ]
 
 if settings.DEBUG:

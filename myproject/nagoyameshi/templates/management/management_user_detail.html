@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}会員情報詳細ページ{% endblock %}
+{% block contents %}
+<div class="managementuserdetail">
+	<div class="outer-container">
+		<h4>会員情報詳細</h4>
+		{{ object.name }}
+		{{ object.kana_name }}
+		{{ object.email }}
+		{{ objcet.postal_code }}
+		{{ objcet.address }}
+		{{ object.tel_number }}
+		{{ object.birthday }}
+		{{ object.occupation }}
+		<div class="flex-container btn-container">
+	        <a href="{% url 'managementuser' user_id %}">会員情報一覧に戻る</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

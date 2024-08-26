@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}店舗情報削除ページ{% endblock %}
+{% block contents %}
+<div class="management-restaurant-delete">
+	<div class="outer-container">
+        <p class="delete-check">本当に削除してもよろしいですか？</p>
+        <div class="outer-container">
+            <img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
+            <table class="restaurant-table">
+                <tr>
+                    <th class="tableheader">店舗名</th>
+                    <td class="cell">{{ object.restaurant_name }}</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">説明</th>
+                    <td class="cell">{{ object.description }}</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">価格帯</th>
+                    <td class="cell">{{ object.lowest_price }}~{{ object.highest_price }}円</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">郵便番号</th>
+                    <td class="cell">{{ object.postal_code}}</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">住所</th>
+                    <td class="cell">{{ object.address }}</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">営業時間</th>
+                    <td class="cell">{{ object.opening_time }}~{{ object.closing_time }}</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">定休日</th>
+                    <td class="cell">
+                        {% for holiday in object.holiday.all %}
+                        <span>{{ holiday }} </span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th class="tableheader">座席数</th>
+                    <td class="cell">{{ object.seating_capacity }}</td>
+                </tr>
+                <tr>
+                    <th class="tableheader">カテゴリ</th>
+                    <td class="cell">
+                        {% for category in object.category_name.all %}
+                        <span>{{ category }}　</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+            <form action="">
+            <div class="flex-container btn-container">
+                <button type="submit" class="btn">削除</button>
+                <a href="{% url 'managementrestaurantdetail' object.pk %}" class="btn">戻る</a>
+            </div>
+        </form>
+	</div>
+</div>
+{% endblock %}

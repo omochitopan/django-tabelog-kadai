@@ -13,64 +13,7 @@ ip_port = env('IP_PORT')
 
 postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号は半角数字7文字で入力してください"))
 tel_number_regex = RegexValidator(regex=r'^[0-9]+$', message = ("電話番号は半角数字15文字以内で入力してください"))
-
-class Category(models.Model):
-    class Meta:
-        db_table = 'nagoyameshi_category'
-        verbose_name = verbose_name_plural = 'カテゴリ'
     
-    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
-    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
-    
-    def __str__(self):
-        return self.category_name
-
-class RegularHoliday(models.Model):
-    class Meta:
-        db_table = 'nagoyameshi_regularholiday'
-        verbose_name = verbose_name_plural = '定休日'
-    
-    holiday = models.CharField(verbose_name="定休日", max_length=3)
-    holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
-    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
-    
-    def __str__(self):
-        return self.holiday
-    
-class Terms(models.Model):
-    class Meta:
-        db_table = "nagoyameshi_terms"
-        verbose_name = verbose_name_plural = '利用規約'
-    
-    content = models.TextField(verbose_name="利用規約の本文")
-    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
-
-class Restaurant(models.Model):
-    class Meta:
-        db_table = 'nagoyameshi_restaurant'
-        verbose_name = verbose_name_plural = 'レストラン'
-
-    restaurant_name = models.CharField(verbose_name="店舗名", max_length=50)
-    image = models.ImageField(verbose_name='店舗画像', default='noImage.png')
-    description = models.TextField(verbose_name="説明", max_length=1000)
-    lowest_price = models.PositiveIntegerField(verbose_name="最低価格", blank=True, null=True)
-    highest_price = models.PositiveIntegerField(verbose_name="最高価格", blank=True, null=True)
-    postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
-    address = models.CharField(verbose_name="店舗住所", max_length=200)
-    opening_time = models.TimeField(verbose_name='開店時間')
-    closing_time = models.TimeField(verbose_name='閉店時間')
-    holiday = models.ManyToManyField(RegularHoliday, verbose_name='定休日', blank=True)    
-    seating_capacity = models.PositiveIntegerField(verbose_name='予約可能な座席数')
-    category_name = models.ManyToManyField(Category, verbose_name='カテゴリ（3つまで選択可）', blank=True)
-    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
-    
-    def __str__(self):
-        return self.restaurant_name
-
 class UserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
@@ -82,6 +25,17 @@ class UserManager(BaseUserManager):
         return user
     
     def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('role', 0)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        if extra_fields.get('is_staff') is not False:
+            raise ValueError('User must have is_staff=False.')
+        if extra_fields.get('is_superuser') is not False:
+            raise ValueError('User must have is_superuser=False.')
+        return self._create_user(email, password, **extra_fields)
+
+    def management_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('role', 1)
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         if extra_fields.get('is_staff') is not False:
@@ -91,6 +45,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('role', 1)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         if extra_fields.get('is_staff') is not True:
@@ -100,6 +55,10 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
+    class Role(models.IntegerChoices):
+        GENERAL = 0
+        MANAGEMENT = 1
+
     class Meta:
         db_table = 'nagoyameshi_user'
         verbose_name = verbose_name_plural = 'ユーザー'
@@ -112,6 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     tel_number = models.CharField(verbose_name='電話番号', validators=[tel_number_regex], max_length=15)
     birthday = models.DateField(verbose_name="誕生日", blank=True, null=True)
     occupation = models.CharField(verbose_name='職業', max_length=20, blank=True, null=True)
+    role = models.PositiveIntegerField(choices=Role.choices, default=Role.GENERAL)
     is_staff = models.BooleanField(verbose_name="スタッフ", default=False)
     is_superuser = models.BooleanField(verbose_name="スーパーユーザー", default=False)
     is_active = models.BooleanField(default=False)
@@ -172,6 +132,55 @@ def publish_activate_token(sender, instance, **kwargs):
         ]
         send_mail(subject, message, from_email, recipient_list)
 
+class RegularHoliday(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_regularholiday'
+        verbose_name = verbose_name_plural = '定休日'
+    
+    holiday = models.CharField(verbose_name="定休日", max_length=3)
+    holiday_index = models.PositiveIntegerField(verbose_name="定休日の番号", null=True)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+    
+    def __str__(self):
+        return self.holiday
+
+class Category(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_category'
+        verbose_name = verbose_name_plural = 'カテゴリ'
+    
+    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+    
+    def __str__(self):
+        return self.category_name
+
+class Restaurant(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_restaurant'
+        verbose_name = verbose_name_plural = 'レストラン'
+
+    restaurant_name = models.CharField(verbose_name="店舗名", max_length=50)
+    image = models.ImageField(verbose_name='店舗画像', default='noImage.png')
+    description = models.TextField(verbose_name="説明", max_length=1000)
+    lowest_price = models.PositiveIntegerField(verbose_name="最低価格", blank=True, null=True)
+    highest_price = models.PositiveIntegerField(verbose_name="最高価格", blank=True, null=True)
+    postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
+    address = models.CharField(verbose_name="店舗住所", max_length=200)
+    opening_time = models.TimeField(verbose_name='開店時間')
+    closing_time = models.TimeField(verbose_name='閉店時間')
+    holiday = models.ManyToManyField(RegularHoliday, verbose_name='定休日', blank=True)    
+    seating_capacity = models.PositiveIntegerField(verbose_name='予約可能な座席数')
+    category_name = models.ManyToManyField(Category, verbose_name='カテゴリ（3つまで選択可）', blank=True)
+    managers = models.ManyToManyField(User, verbose_name="店舗管理ユーザー", blank=False)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+    
+    def __str__(self):
+        return self.restaurant_name
+
 class Review(models.Model):
     class Meta:
         db_table = 'nagoyameshi_review'
@@ -219,5 +228,14 @@ class Company(models.Model):
     capital = models.CharField(verbose_name="資本金", max_length=50)
     business = models.CharField(verbose_name="事業内容", max_length=50)
     employee = models.CharField(verbose_name="従業員数", max_length=50)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+
+class Terms(models.Model):
+    class Meta:
+        db_table = "nagoyameshi_terms"
+        verbose_name = verbose_name_plural = '利用規約'
+    
+    content = models.TextField(verbose_name="利用規約の本文")
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)

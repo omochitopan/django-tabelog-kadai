@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}店舗運営者用管理ページ{% endblock %}
+{% block contents %}
+<div class="management">
+	<div class="outer-container">
+		<h4 class="center">店舗運営者用管理ページ</h4>
+		<p class="center">以下のリンクからあなたの管理する店舗の店舗情報、予約情報の閲覧と編集、<br>および店舗を予約したことのある会員の情報を閲覧できます。</p>
+		<div class="center">
+			<div class="ref-container">
+				<a href="{% url 'managementrestaurant' user_id %}" class="btn">店舗管理ページ</a>
+			</div>
+			<div class="ref-container">
+				<a href="{% url 'managementreservation' user_id %}" class="btn">予約管理ページ</a>
+			</div>
+			<div class="ref-container">
+				<a href="{% url 'managementuser' user_id %}" class="btn">会員情報ページ</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

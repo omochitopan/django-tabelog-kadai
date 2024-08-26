@@ -18,7 +18,7 @@ class RestaurantAdmin(ImportExportModelAdmin):
     search_fields = ('restaurant_name',)
     list_per_page = 25
     form = RestaurantAdminForm
-    filter_horizontal = ('holiday', 'category_name',)
+    filter_horizontal = ('holiday', 'category_name', 'managers',)
     resource_class = RestaurantResource
 
 class UserResource(resources.ModelResource):

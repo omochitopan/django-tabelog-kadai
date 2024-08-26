@@ -122,7 +122,10 @@ class RestaurantDetailView(LoginRequiredMixin, DetailView):
         context['user_id'] = user.pk
         context['restaurant_id'] = restaurant_id
         context['isFavorite'] = isFavorite
-        return context    
+        return context
+
+class ServiceGuideView(TemplateView):
+    template_name = 'service_guide.html'
 
 class SignupView(CreateView):
     form_class = SignUpForm
@@ -442,4 +445,159 @@ class TermsView(TemplateView):
         terms = Terms.objects.get(id = 1)
         context['user_id'] = self.request.user.pk
         context["terms"] = terms
+        return context
+
+class ManagementTopView(TemplateView):
+    template_name = "management/management_top.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
+
+class ManagementRestaurantView(ListView):
+    model = Restaurant
+    template_name = "management/management_restaurant.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurants = Restaurant.objects.all()
+        target_restaurants = []
+        for restaurant in restaurants:
+            for manager in restaurant.managers.all():
+                if self.request.user == manager:
+                    target_restaurants.append(restaurant)
+                    break
+        context['user_id'] = self.request.user.pk
+        context['target_rastaurants'] = target_restaurants
+        return context
+
+class ManagementRestaurantCreateView(CreateView):
+    model = Restaurant
+    template_name = "management/management_restaurant_form.html"
+    fields = "__all__"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return context
+
+class ManagementRestaurantDetailView(DetailView):
+    model = Restaurant
+    template_name = "management/management_restaurant_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
+
+class ManagementRestaurantEditView(UpdateView):
+    model = Restaurant
+    template_name = "management/management_restaurant_edit.html"
+    fields = "__all__"
+    
+    def get_success_url(self):
+        restaurant_id = self.get_object.pk
+        return reverse_lazy('managementrestaurantdetail', kwargs=dict(pk = restaurant_id))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return context
+
+class ManagementRestaurantDeleteView(LoginRequiredMixin, DeleteView):
+    model = Restaurant
+    template_name = "management/management_restaurant_delete.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('managementrestaurant', kwargs=dict(user_id = self.request.user.pk))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
+
+class ManagementReservationView(ListView):
+    model = Reservation
+    template_name = "management/management_reservation.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurants = Restaurant.objects.all()
+        target_restaurant = []
+        for restaurant in restaurants:
+            for manager in restaurant.managers.all():
+                if self.request.user == manager:
+                    target_restaurant.append(restaurant)
+                    break
+        target_reservations = Reservation.objects.filter(restaurant__in=target_restaurant).order_by("reserved_date", "reserved_time")
+        context['user_id'] = self.request.user.pk
+        context['target_reservations'] = target_reservations
+        return context
+    
+class ManagementReservationEditView(UpdateView):
+    model = Reservation
+    template_name = "management/management_reservation_edit.html"
+    fields = ("reserved_date", "reserved_time", "number_of_people",)
+    
+    def get_success_url(self):
+        return reverse_lazy('managementreservation', kwargs=dict(user_id = self.request.user.pk))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return context
+
+class ManagementReservationDeleteView(LoginRequiredMixin, DeleteView):
+    model = Reservation
+    template_name = "management/management_reservation_delete.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('managementreservation', kwargs=dict(user_id = self.request.user.pk))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
+
+
+class ManagementUserView(ListView):
+    model = User
+    template_name = "management/management_user.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurants = Restaurant.objects.all()
+        target_restaurant = []
+        for restaurant in restaurants:
+            for manager in restaurant.managers.all():
+                if self.request.user == manager:
+                    target_restaurant.append(restaurant)
+                    break
+        target_reservations = Reservation.objects.filter(restaurant__in=target_restaurant)
+        target_user_id = []
+        for reservation in target_reservations:
+            target_user_id.append(reservation.user.pk)
+        target_user_id = list(set(target_user_id))
+        target_users = User.objects.filter(pk__in=target_user_id).order_by("pk")
+        context['user_id'] = self.request.user.pk
+        context['target_users'] = target_users
+        return context
+
+class ManagementUserDetailView(DetailView):
+    model = User
+    template_name = "management/management_user_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
         return context
