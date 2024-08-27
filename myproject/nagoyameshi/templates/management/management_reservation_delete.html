@@ -4,26 +4,28 @@
 <div class="managementreservationdelete">
 	<div class="outer-container">
         <p class="delete-check">本当に削除してもよろしいですか？</p>
-        <table class="restaurant-table">
+        <table class="restaurant-table-delete">
             <tr>
-                <th>店舗名</th>
-                <th>予約日</th>
-                <th>予約時間</th>
-                <th>予約人数</th>
-                <th>予約者名</th>
+                <th class="restaurant-name">店舗名</th>
+                <th class="date">予約年月日</th>
+                <th class="time">時間</th>
+                <th class="people">人数</th>
+                <th class="user">予約者</th>
             </tr>
             <tr>
-                <td><a href="{% url 'managementrestaurantdetail' object.restaurant.pk %}">{{ object.restaurant.restaurant_name }}</a></td>
+                <td><a href="{% url 'managementrestaurantdetail' user_id object.restaurant.pk %}" class="ref">{{ object.restaurant.restaurant_name }}</a></td>
                 <td>{{ object.reserved_date }}</td>
                 <td>{{ object.reserved_time }}</td>
                 <td>{{ object.number_of_people }}</td>
-                <td><a href="">{{ object.user.name }}</a></td>
+                <td><a href="{% url 'managementuserdetail' user_id reservation.user.pk %}" class="ref">{{ object.user.name }}</a></td>
             </tr>
         </table>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn">削除</button>
-            <a href="{% url 'managementreservation' user_id %}" class="btn">戻る</a>
+            <div class="flex-container btn-container">
+                <button type="submit" class="btn">削除</button>
+                <a href="{% url 'managementreservation' user_id %}" class="btn">戻る</a>
+            </div>
         </form>
     </div>
 </div>

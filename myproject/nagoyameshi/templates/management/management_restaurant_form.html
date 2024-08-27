@@ -5,11 +5,67 @@
 {% block contents %}
 <div class="management-restaurant-create">
 	<div class="outer-container">
-        {{ form.as_p }}
-        <div class="flex-container btn-container">
-            <button type="submit" class="btn">作成する</button>
-            <a href="{% url 'managementrestaurant' user_id %}" class="btn">戻る</a>
-        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="cluster">
+                <label>{{ form.restaurant_name.label }}</label>
+                {{ form.restaurant_name }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.image.label }}</label>
+                {{ form.image }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.description.label }}</label>
+                {{ form.description }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.lowest_price.label }}</label>
+                {{ form.lowest_price }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.highest_price.label }}</label>
+                {{ form.highest_price }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.postal_code.label }}</label>
+                {{ form.postal_code }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.address.label }}</label>
+                {{ form.address }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.opening_time.label }}</label>
+                {{ form.opening_time }}
+            </div>
+            <div class="cluster">
+                <label>{{ form.closing_time.label }}</label>
+                {{ form.closing_time }}
+            </div>
+            <div class="cluster flex-container">
+                <label>{{ form.holiday.label }}</label>
+                <div>
+                    {% for day in form.holiday %}
+                    <div class="checkbox">
+                        {{ day }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="cluster">
+                <label>{{ form.seating_capacity.label }}</label>
+                {{ form.seating_capacity }}
+            </div>
+            <div class="cluster flex-container">
+                <label>{{ form.category_name.label }}</label>
+                {{ form.category_name }}
+            </div>
+            <div class="flex-container btn-container">
+                <button type="submit" class="btn">作成する</button>
+                <a href="{% url 'managementrestaurant' user_id %}" class="btn">戻る</a>
+            </div>
+        </form>
 	</div>
 </div>
 {% endblock %}

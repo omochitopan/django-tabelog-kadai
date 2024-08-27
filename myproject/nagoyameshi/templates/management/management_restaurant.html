@@ -8,22 +8,24 @@
         <h3 class="title">管理店舗一覧</h3>
         <table class="management-restaurant-table">
             <tr>
-                <th class="restaurant-name">店舗名<span class="click">（クリックで詳細画面）</span></th>
+                <th class="restaurant-name">店舗名</th>
                 <th class="postal-code">郵便番号</th>
                 <th class="address">住所</th>
                 <th class="manager">店舗管理者</th>
+                <th class="reservationlist"></th>
                 <th class="sales"></th>
             </tr>
             {% for restaurant in target_rastaurants %}
             <tr>
-                <td><a href="{% url 'managementrestaurantdetail' restaurant.pk %}" class="ref">{{ restaurant.restaurant_name }}</a></td>
+                <td><a href="{% url 'managementrestaurantdetail' user_id restaurant.pk %}" class="ref">{{ restaurant.restaurant_name }}</a></td>
                 <td>{{ restaurant.postal_code }}</td>
                 <td>{{ restaurant.address }}</td>
                 <td>
                     {% for manager in restaurant.managers.all %}
-                    {{ manager.name }}&nbsp;&nbsp;
+                    <span><a href="{% url 'managementuserdetail' user_id manager.pk %}" class="ref">{{ manager.name }}</a>　</span>
                     {% endfor %}
                 </td>
+                <td><a href="{% url 'managementreservationlist' user_id restaurant.pk %}" class="btn">予約一覧</a></td>
                 <td><a href="" class="btn">売上</a></td>
             </tr>
             {% endfor %}

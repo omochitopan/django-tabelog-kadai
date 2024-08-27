@@ -1062,7 +1062,6 @@ footer {
 }
 
 .management-restaurant .outer-container {
-  width: 900px;
   margin: 90px auto 30px auto;
 }
 
@@ -1099,15 +1098,10 @@ footer {
 
 .management-restaurant-table .ref {
   color: black;
-  text-decoration: none;
 }
 
 .management-restaurant-table .ref:hover {
   font-weight: bold;
-}
-
-.management-restaurant-table .click {
-  font-weight: normal;
 }
 
 .management-restaurant-table .restaurant-name {
@@ -1118,11 +1112,15 @@ footer {
   width: 90px;
 }
 .management-restaurant-table .address {
-  width: 300px;
+  width: 280px;
 }
 
 .management-restaurant-table .manager {
   width: 210px;
+}
+
+.management-restaurant-table .reservationlist {
+  width: 90px;
 }
 
 .management-restaurant-table .sales {
@@ -1136,6 +1134,10 @@ footer {
 
 .management-restaurant-create label {
   width: 230px;
+}
+
+.management-restaurant-create .cluster {
+  margin: 20px 0;
 }
 
 .management-restaurant-create input {
@@ -1232,16 +1234,56 @@ footer {
   background-color: orangered;
 }
 
-.managementuser .outer-container {
-  width: 800px;
+.management-reservation-list .outer-container {
   margin: 90px auto 30px auto;
 }
 
-.managementuser .user-table {
+.management-reservation-list-table {
   margin: 30px auto;
 }
 
-.managementuser .btn {
+.management-reservation-list-table th {
+  border-bottom: solid gray 1px;
+}
+
+.management-reservation-list-table td {
+  padding: 3px 0;
+  border-bottom: solid gray 1px;
+}
+
+.management-reservation-list-table .date {
+  width: 150px;
+}
+
+.management-reservation-list-table .time {
+  width: 60px;
+}
+
+.management-reservation-list-table .people {
+  width: 50px;
+}
+
+.management-reservation-list-table .user {
+  width: 130px;
+}
+
+.management-reservation-list-table .edit {
+  width: 60px;
+}
+
+.management-reservation-list-table .delete {
+  width: 60px;
+}
+
+.management-reservation-list-table .ref {
+  color: black;
+}
+
+.management-reservation-list-table .ref:hover {
+  font-weight: bold;
+}
+
+.management-reservation-list .btn {
   color: black;
   font-size: 14px;
   background-color: rgb(255, 210, 197);
@@ -1249,15 +1291,183 @@ footer {
   border: none;
 }
 
-.managementuser .btn:hover {
+.management-reservation-list .btn:hover {
   color: white;
   background-color: orangered;
 }
 
-.user-table th {
+.management-reservation-edit .outer-container {
+  width: 500px;
+  margin: 90px auto 30px auto;
+}
+
+.management-reservation-edit .form-container {
+  width: 350px;
+  margin: 30px auto 0 auto;
+}
+
+.management-reservation-edit .btn-container {
+  margin-top: 30px;
+}
+
+.management-reservation-edit label {
+  width: 142px;
+}
+
+.management-reservation-edit input {
+  width: 200px;
+}
+
+.management-reservation-edit .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-reservation-edit .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.managementreservationdelete .outer-container {
+  width: 650px;
+  margin: 90px auto 30px auto;
+}
+
+.managementreservationdelete .delete-check {
+  color: crimson;
+}
+
+.restaurant-table-delete {
+  margin: 30px 0;
+}
+
+.restaurant-table-delete th {
   border-bottom: solid gray 1px;
 }
 
-.user-table td {
+.restaurant-table-delete td {
+  padding: 5px 0;
   border-bottom: solid gray 1px;
+}
+
+.restaurant-table-delete .ref {
+  color: black;
+}
+
+.restaurant-table-delete .restaurant-name {
+  width: 300px;
+}
+
+.restaurant-table-delete .date {
+  width: 140px;
+}
+
+.restaurant-table-delete .time {
+  width: 60px;
+}
+
+.restaurant-table-delete .people {
+  width: 50px;
+}
+
+.restaurant-table-delete .user {
+  width: 100px;
+}
+
+.managementreservationdelete .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.managementreservationdelete .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-user .outer-container {
+  margin: 90px auto 30px auto;
+}
+
+.management-user-table {
+  margin: 30px auto;
+}
+
+.management-user-table .name {
+  width: 120px;
+}
+
+.management-user-table .kana-name {
+  width: 150px;
+}
+
+.management-user-table .email {
+  width: 300px;
+}
+
+.management-user-table .member {
+  width: 120px;
+}
+
+.management-user-table .detail {
+  width: 60px;
+}
+
+.management-user .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-user .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-user-table th {
+  border-bottom: solid gray 1px;
+}
+
+.management-user-table td {
+  padding: 3px 0;
+  border-bottom: solid gray 1px;
+}
+
+.management-user-detail .outer-container {
+  margin: 90px auto 30px auto;
+}
+
+.management-user-detail-table {
+  margin: 20px auto;
+}
+
+.management-user-detail-table th {
+  width: 150px;
+  padding: 3px 0;
+  border-bottom: solid gray 1px;
+}
+
+.management-user-detail-table td {
+  width: 300px;
+  border-bottom: solid gray 1px;
+}
+
+.management-user-detail .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.management-user-detail .btn:hover {
+  color: white;
+  background-color: orangered;
 }

@@ -52,8 +52,8 @@
 			</tr>
 		</table>
 		<div class="flex-container btn-container">
-			<a href="{% url 'managementrestaurantedit' object.pk %}" class= "btn">店舗情報を編集する</a>
-			<a href="{% url 'managementrestaurantdelete' object.pk %}" class= "btn">店舗情報を削除する</a>
+			<a href="{% url 'managementrestaurantedit' user_id object.pk %}" class= "btn">店舗情報を編集する</a>
+			<a href="{% url 'managementrestaurantdelete' user_id object.pk %}" class= "btn">店舗情報を削除する</a>
 		</div>
 		<div class="flex-container btn-container">
 			<a href="{% url 'managementrestaurant' user_id %}" class= "btn">管理店舗一覧へ戻る</a>

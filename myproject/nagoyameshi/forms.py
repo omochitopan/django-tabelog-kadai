@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from .models import User, Review, Reservation
+from .models import User, Review, Reservation, Restaurant, RegularHoliday, Category
 from dateutil.relativedelta import relativedelta
 import datetime
 
@@ -133,3 +133,40 @@ class UserUpdateForm(forms.ModelForm):
                 years=range(this_year - 120, this_year),
             ),
         }
+
+class RestaurantForm(forms.ModelForm):
+    holiday = forms.MultipleChoiceField(
+        label="定休日",
+        widget=forms.CheckboxSelectMultiple,
+        choices = [(day.pk, day.holiday) for day in RegularHoliday.objects.all()]
+    )
+    
+    category_name = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices = [(category.pk, category.category_name) for category in Category.objects.all()]
+    )
+     
+    class Meta:
+        model = Restaurant
+        fields = (
+            "restaurant_name",
+            "image",
+            "description",
+            "lowest_price",
+            "highest_price",
+            "postal_code",
+            "address",
+            "opening_time",
+            "closing_time",
+            "holiday",
+            "seating_capacity",
+            "category_name",
+        )
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('category_name') == None:
+            cleaned_data.get('category_name') == []
+        elif len(cleaned_data.get('category_name')) > 3:
+            raise ValidationError('カテゴリは3つまで選択可能です')
+

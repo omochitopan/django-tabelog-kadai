@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block title %}会員情報ページ{% endblock %}
 {% block contents %}
-<div class="managementuser">
+<div class="management-user">
 	<div class="outer-container">
 		<h4 class="center">会員情報一覧</h4>
-		<table class="user-table">
+		<table class="management-user-table">
 			<tr>
 				<th class="name">氏名</th>
-				<th class="kana_name">フリガナ</th>
+				<th class="kana-name">フリガナ</th>
 				<th class="email">メールアドレス</th>
+				<th class="member">会員区分</th>
 				<th class="detail"></th>
 			</tr>
 			{% for user in target_users %}
@@ -16,7 +17,14 @@
 				<td>{{ user.name }}</td>
 				<td>{{ user.kana_name }}</td>
 				<td>{{ user.email }}</td>
-				<td><a href="{% url 'managementuserdetail' user.pk %}" class="btn">詳細</a></td>
+				<td>
+					{% if not user.role %}
+					一般ユーザー
+					{% else %}
+					管理ユーザー
+					{% endif %}
+				</td>
+				<td><a href="{% url 'managementuserdetail' user_id user.pk %}" class="btn">詳細</a></td>
 			</tr>
 			{% endfor %}
 		</table>
