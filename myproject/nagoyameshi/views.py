@@ -4,9 +4,9 @@ from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from django.http.response import JsonResponse
 from typing import Any, Dict
 from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms
-from .forms import SignUpForm, ReviewForm, ReservationForm, UserUpdateForm, RestaurantForm
+from .forms import SignUpForm, ReviewForm, ReservationForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
 from .mixins import OnlyManagementUserMixin
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
@@ -162,7 +162,30 @@ class PasswordResetConfirm(PasswordResetConfirmView):
 class PasswordResetComplete(PasswordResetCompleteView):
     # 新パスワード設定完了ページ
     template_name = "password_reset_complete.html"
+
+class PasswordChange(PasswordChangeView):
+    # パスワード変更ページ
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('password_change_done')
+    template_name = 'password_change.html'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return context
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    # パスワード変更完了ページ
+    template_name = 'password_change_done.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
+
 def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
     if hasattr(activated_user, 'is_active'):
@@ -346,8 +369,10 @@ class ReservationListAllView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         target_reservations = Reservation.objects.filter(user = user).order_by('reserved_date', 'reserved_time',)
-        context['user_id'] = user.pk
+        today = datetime.date.today()
+        context["user_id"] = user.pk
         context["target_reservations"] = target_reservations
+        context["today"] = today
         return context
 
 class ReservationDeleteView(LoginRequiredMixin, DeleteView):
@@ -474,7 +499,7 @@ class ManagementRestaurantView(OnlyManagementUserMixin, ListView):
         return context
 
 class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
-    form_class = RestaurantForm
+    form_class = RestaurantCreateForm
     model = Restaurant
     template_name = "management/management_restaurant_form.html"
 
@@ -505,13 +530,23 @@ class ManagementRestaurantDetailView(OnlyManagementUserMixin, DetailView):
         return context
 
 class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
+    form_class = RestaurantEditForm
     model = Restaurant
     template_name = "management/management_restaurant_edit.html"
-    fields = "__all__"
     
     def get_success_url(self):
-        restaurant_id = self.get_object.pk
-        return reverse_lazy('managementrestaurantdetail', kwargs=dict(pk = restaurant_id))
+        restaurant_id = self.kwargs["pk"]
+        return reverse_lazy('managementrestaurantdetail', kwargs=dict(user_id = self.request.user.pk, pk = restaurant_id))
+
+    #forms.pyに値を渡す
+    def get_form_kwargs(self): 
+        kwargs = super(ManagementRestaurantEditView, self).get_form_kwargs()
+        restaurant = Restaurant.objects.get(pk = self.kwargs.get("pk"))
+        holidays = [holiday["id"] for holiday in restaurant.holiday.values()]
+        categories = [category["id"] for category in restaurant.category_name.values()]
+        kwargs['holidays'] = holidays
+        kwargs['categories'] = categories
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -533,45 +568,95 @@ class ManagementRestaurantDeleteView(OnlyManagementUserMixin, DeleteView):
         context['user_id'] = self.request.user.pk
         return context
 
-class ManagementReservationView(OnlyManagementUserMixin, ListView):
+class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
     model = Reservation
-    template_name = "management/management_reservation.html"
+    template_name = "management/management_reservation_restaurant.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurants = Restaurant.objects.all()
-        target_restaurant = []
-        for restaurant in restaurants:
-            for manager in restaurant.managers.all():
-                if self.request.user == manager:
-                    target_restaurant.append(restaurant)
-                    break
-        target_reservations = Reservation.objects.filter(restaurant__in=target_restaurant).order_by("reserved_date", "reserved_time")
+        restaurant_id = self.kwargs.get("restaurant_id")
+        target_restaurant = Restaurant.objects.get(pk = restaurant_id)
+        target_reservations = Reservation.objects.filter(restaurant = target_restaurant, reserved_date__gte = date.today()).order_by("reserved_date", "reserved_time")
         context['user_id'] = self.request.user.pk
+        context["restaurant_id"] = restaurant_id
+        context['target_restaurant'] = target_restaurant
         context['target_reservations'] = target_reservations
         return context
     
-class ManagementReservationListView(OnlyManagementUserMixin, ListView):
+class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
     model = Reservation
-    template_name = "management/management_reservation_list.html"
+    template_name = "management/management_reservation_restaurant_all.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant_id = self.kwargs.get("restaurant_id")
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
         target_reservations = Reservation.objects.filter(restaurant = target_restaurant).order_by("reserved_date", "reserved_time")
+        today = date.today()
         context['user_id'] = self.request.user.pk
+        context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
         context['target_reservations'] = target_reservations
+        context["today"] = today
         return context
 
 class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
+    form_class = ReservationForm
     model = Reservation
     template_name = "management/management_reservation_edit.html"
-    fields = ("reserved_date", "reserved_time", "number_of_people",)
     
     def get_success_url(self):
-        return reverse_lazy('managementreservation', kwargs=dict(user_id = self.request.user.pk))
+        referer = self.request.session['HTTP_REFERER']
+        return referer
+    
+    def get(self, request, *args, **kwargs):
+        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    def get_form_kwargs(self):
+        kwargs = super(ManagementReservationEditView, self).get_form_kwargs()
+        reservation_id = self.kwargs.get('pk')
+        restaurant = Reservation.objects.get(pk = reservation_id).restaurant
+        seating_capacity = restaurant.seating_capacity
+        opening_time = restaurant.opening_time
+        closing_time = restaurant.closing_time
+        kwargs['request'] = self.request
+        kwargs['seating_capacity'] = seating_capacity
+        opening_time = datetime.datetime.combine(date.today(), opening_time)
+        closing_time = datetime.datetime.combine(date.today(), closing_time)
+
+        # 予約可能な開始時間:start_timeと終了時間:end_timeを設定
+        # 閉店時間が24時を過ぎる場合の対応
+        if opening_time > closing_time:
+            closing_time = closing_time + relativedelta(days = +1)
+        
+        start_time = opening_time
+        if 0 < start_time.minute < 30:
+            start_time = start_time.replace(minute = 30)
+        elif start_time.minute > 30:
+            start_time += relativedelta(hours = +1)
+            start_time = start_time.replace(minute = 0)
+        
+        end_time = closing_time + relativedelta(hours = -1)
+        if 0 < end_time.minute < 30:
+            end_time = end_time.replace(minute = 0)
+        elif end_time.minute > 30:
+            end_time = end_time.replace(minute = 30)
+        
+        reservation_candidates = []
+        while start_time <= end_time:
+            reservation_hour = start_time.hour
+            reservation_minute = start_time.minute
+            reservation_time = time(reservation_hour, reservation_minute)
+            if reservation_time.minute == 0:
+                writing_time = f"{reservation_hour}:0{reservation_minute}"
+            else:
+                writing_time = f"{reservation_hour}:{reservation_minute}"
+            reservation_candidates.append((reservation_time, writing_time))
+            start_time += relativedelta(minutes = +30)
+        reservation_candidates = tuple(reservation_candidates)
+        kwargs['reservation_candidates'] = reservation_candidates
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -586,13 +671,17 @@ class ManagementReservationDeleteView(OnlyManagementUserMixin, DeleteView):
     template_name = "management/management_reservation_delete.html"
     
     def get_success_url(self):
-        return reverse_lazy('managementreservation', kwargs=dict(user_id = self.request.user.pk))
-
+        referer = self.request.session['HTTP_REFERER']
+        return referer
+    
+    def get(self, request, *args, **kwargs):
+        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
         return context
-
 
 class ManagementUserView(OnlyManagementUserMixin, ListView):
     model = User
@@ -625,4 +714,24 @@ class ManagementUserDetailView(OnlyManagementUserMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
+        return context
+
+class ManagementCompanyView(TemplateView):
+    template_name = "management/management_company.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company = Company.objects.get(id = 1)
+        context['user_id'] = self.request.user.pk
+        context["company"] = company
+        return context
+
+class ManagementTermsView(TemplateView):
+    template_name = "management/management_terms.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        terms = Terms.objects.get(id = 1)
+        context['user_id'] = self.request.user.pk
+        context["terms"] = terms
         return context

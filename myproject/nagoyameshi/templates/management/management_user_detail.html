@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_management.html" %}
 {% block title %}会員情報詳細ページ{% endblock %}
 {% block contents %}
 <div class="management-user-detail">
@@ -46,9 +46,6 @@
 				{% endif %}
 			</tr>
 		</table>
-		<div class="flex-container btn-container">
-	        <a href="{% url 'managementuser' user_id %}" class="btn">会員情報一覧に戻る</a>
-		</div>
 	</div>
 </div>
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}お気に入り店舗一覧{% endblock %}
+{% block title %}お気に入り一覧{% endblock %}
 {% block contents %}
 <div class="favoritelist">
 	<div class="outer-container">
-		<h5>お気に入り店舗一覧</h5>
+		<h4 class="center">お気に入り一覧</h4>
 		{% if not target_favorites %}
 		<p>現在のお気に入りレストランはありません。</p>
 		{% else %}

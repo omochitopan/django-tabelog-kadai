@@ -1,11 +1,9 @@
-{% extends "base.html" %}
-
-{% block title %}予約ページ{% endblock %}
+{% extends "base_management.html" %}
+{% block title %}予約作成ページ{% endblock %}
 {% block contents %}
-<div class="reservationcreate">
+<div class="management-reservation-create">
 	<div class="outer-container">
-		<h2 class="restaurant-name">{{ restaurant_name }}</h2>
-		{{ reservation_candidates }}
+		<h4 class="restaurant-name">{{ restaurant_name }}</h4>
 		<div class="flex-container ref-container">
 			<a href="{% url 'detail' restaurant_id %}" class="btn non-focus left-align">店舗情報</a>
 			<a href="" class="btn focus left-align">予約フォーム</a>
@@ -21,6 +19,6 @@
 				</div>
 			</form>
 		</div>
-	</div>
+    </div>
 </div>
 {% endblock %}

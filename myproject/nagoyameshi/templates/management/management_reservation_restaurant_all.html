@@ -1,0 +1,52 @@
+{% extends "base_management.html" %}
+{% block title %}{{ target_restaurant.restaurant_name }} 予約一覧ページ{% endblock %}
+{% block contents %}
+<div class="management-reservation-list">
+	<div class="outer-container">
+		<h4 class="center">{{ target_restaurant.restaurant_name }} 予約一覧</h4>
+		<div class="flex-container">
+			<a href="{% url 'managementreservationrestaurant' user_id restaurant_id %}" class="btn non-focus left-align">本日以降</a>
+			<a href="" class="btn focus left-align">全て</a>
+		</div>
+		<table class="management-reservation-list-table">
+			<tr>
+				<th class="date">予約年月日</th>
+				<th class="time">時間</th>
+				<th class="people">人数</th>
+				<th class="user">予約者</th>
+				<th class="edit"></th>
+				<th class="delete"></th>
+			</tr>
+			{% if target_reservations %}
+			{% for reservation in target_reservations %}	
+			<tr>
+				<td>{{ reservation.reserved_date }}</td>
+				<td>{{ reservation.reserved_time }}</td>
+				<td>{{ reservation.number_of_people }}</td>
+				<td><a href="{% url 'managementuserdetail' user_id reservation.user.pk %}" class="ref">{{ reservation.user.name }}</a></td>
+				{% if reservation.reserved_date < today %}
+				<td></td>
+				<td></td>
+				{% else %}
+				<td><a href="{% url 'managementreservationedit' user_id reservation.pk %}" class="btn submit">編集</a></td>
+				<td><a href="{% url 'managementreservationdelete' user_id reservation.pk %}" class="btn submit">削除</a></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+			{% else %}
+			<tr>
+				<td>予約はありません</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			{% endif %}		
+		</table>
+		<div class="flex-container btn-container">
+        	<a href="{% url 'managementrestaurant' user_id %}" class="btn submit">管理店舗一覧に戻る</a>
+		</div>
+		</div>
+</div>
+{% endblock %}

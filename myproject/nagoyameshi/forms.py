@@ -1,9 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from .models import User, Review, Reservation, Restaurant, RegularHoliday, Category
 from dateutil.relativedelta import relativedelta
 import datetime
+
+postal_code_regex = RegexValidator(regex=r'^[0-9]{7}$', message = ("郵便番号は半角数字7文字で入力してください"))
 
 class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -92,7 +95,9 @@ class ReservationForm(forms.ModelForm):
         self.seating_capacity = seating_capacity
         super(ReservationForm, self).__init__(*args, **kwargs)
         self.fields["reserved_time"].choices = reservation_candidates
-    
+        self.fields['number_of_people'].widget.attrs['min'] = 1
+        self.fields['number_of_people'].widget.attrs['max'] = seating_capacity
+            
     class Meta:
         model = Reservation                
         fields = (
@@ -106,11 +111,6 @@ class ReservationForm(forms.ModelForm):
             "min": datetime.date.today() + relativedelta(days = 1) # 予約可能な一番早い日を翌日に設定
             }),
         }
-
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get('number_of_people') > self.seating_capacity:
-            raise ValidationError('予約人数が多過ぎます。')
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField(label = "メールアドレス")
@@ -134,18 +134,28 @@ class UserUpdateForm(forms.ModelForm):
             ),
         }
 
-class RestaurantForm(forms.ModelForm):
+class RestaurantCreateForm(forms.ModelForm):
     holiday = forms.MultipleChoiceField(
         label="定休日",
         widget=forms.CheckboxSelectMultiple,
-        choices = [(day.pk, day.holiday) for day in RegularHoliday.objects.all()]
+        choices = [(day.pk, day.holiday) for day in RegularHoliday.objects.all()],
+        required = True,
     )
     
     category_name = forms.MultipleChoiceField(
+        label="カテゴリ（3つまで選択可）",
         widget=forms.CheckboxSelectMultiple,
-        choices = [(category.pk, category.category_name) for category in Category.objects.all()]
+        choices = [(category.pk, category.category_name) for category in Category.objects.all()],
+        required = True,
     )
-     
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['postal_code'].widget.attrs.update({'placeholder': '0123456',})
+        self.fields['opening_time'].widget.attrs.update({'placeholder': '11:00',})
+        self.fields['closing_time'].widget.attrs.update({'placeholder': '23:00',})
+        self.fields['seating_capacity'].widget.attrs['min'] = 1
+    
     class Meta:
         model = Restaurant
         fields = (
@@ -162,11 +172,94 @@ class RestaurantForm(forms.ModelForm):
             "seating_capacity",
             "category_name",
         )
+        
+    def clean_holiday(self):
+        holiday = self.cleaned_data["holiday"]
+        if "8" in holiday or "9" in holiday:
+            if len(holiday) > 1:
+                raise ValidationError("「不定休」または「なし」と他の項目を同時に選択しないでください")
+        elif "1" in holiday and "2" in holiday and "3" in holiday and "4" in holiday and "5" in holiday and "6" in holiday and "7" in holiday:
+            raise ValidationError("定休日を正しく設定してください")
+        return holiday
+    
+    def clean_category_name(self):
+        category_name = self.cleaned_data["category_name"]
+        if category_name == None:
+            pass
+        elif len(category_name) > 3:
+            raise forms.ValidationError('カテゴリは3つまで選択可能です')
+        return category_name
+
+    def clean(self):
+        cleaned_data = super().clean()
+        lowest_price = cleaned_data.get("lowest_price")
+        highest_price = cleaned_data.get("highest_price")
+        if lowest_price >= highest_price:
+            raise forms.ValidationError("最高価格は最低価格以上に設定してください")
+        return cleaned_data
+
+class RestaurantEditForm(forms.ModelForm):
+    holiday = forms.MultipleChoiceField(
+        label="定休日",
+        widget=forms.CheckboxSelectMultiple,
+        choices = [(day.pk, day.holiday) for day in RegularHoliday.objects.all()],
+        required = True,
+    )
+    
+    category_name = forms.MultipleChoiceField(
+        label="カテゴリ（3つまで選択可）",
+        widget=forms.CheckboxSelectMultiple,
+        choices = [(category.pk, category.category_name) for category in Category.objects.all()],
+        required = True,
+    )
+    
+    def __init__(self, holidays, categories, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['postal_code'].widget.attrs.update({'placeholder': '0123456',})
+        self.fields['opening_time'].widget.attrs.update({'placeholder': '11:00',})
+        self.fields['closing_time'].widget.attrs.update({'placeholder': '23:00',})
+        self.initial['holiday'] = holidays #forms.pyで設定したholidayの初期値を代入
+        self.initial['category_name'] = categories
+        self.fields['seating_capacity'].widget.attrs['min'] = 1
+    
+    class Meta:
+        model = Restaurant
+        fields = (
+            "restaurant_name",
+            "image",
+            "description",
+            "lowest_price",
+            "highest_price",
+            "postal_code",
+            "address",
+            "opening_time",
+            "closing_time",
+            "holiday",
+            "seating_capacity",
+            "category_name",
+        )
+        
+    def clean_holiday(self):
+        holiday = self.cleaned_data["holiday"]
+        if "8" in holiday or "9" in holiday:
+            if len(holiday) > 1:
+                raise ValidationError("「不定休」または「なし」と他の項目を同時に選択しないでください")
+        elif "1" in holiday and "2" in holiday and "3" in holiday and "4" in holiday and "5" in holiday and "6" in holiday and "7" in holiday:
+            raise ValidationError("定休日を正しく設定してください")
+        return holiday
+    
+    def clean_category_name(self):
+        category_name = self.cleaned_data["category_name"]
+        if category_name == None:
+            pass
+        elif len(category_name) > 3:
+            raise forms.ValidationError('カテゴリは3つまで選択可能です')
+        return category_name
     
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data.get('category_name') == None:
-            cleaned_data.get('category_name') == []
-        elif len(cleaned_data.get('category_name')) > 3:
-            raise ValidationError('カテゴリは3つまで選択可能です')
-
+        lowest_price = cleaned_data.get("lowest_price")
+        highest_price = cleaned_data.get("highest_price")
+        if lowest_price >= highest_price:
+            raise forms.ValidationError("最高価格は最低価格以上に設定してください")
+        return cleaned_data

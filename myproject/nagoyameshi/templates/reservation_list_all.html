@@ -3,16 +3,21 @@
 {% block contents %}
 <div class="reservation">
 	<div class="outer-container">
-		<h5>全ての予約一覧</h5>
+		<h4 class="center">予約一覧</h4>
 		{% if not target_reservations %}
 		<p>現在の予約はありません。</p>
 		{% else %}
+		<div class="flex-container">		
+			<a href="{% url 'reservationlist' user_id %}" class="btn non-focus left-align">本日以降</a>
+			<a href="{% url 'reservationlistall' user_id %}" class="btn focus left-align">全て</a>
+		</div>
 		<table class="reservation-table">
 			<tr>
 				<th class="restaurant-name">店舗名</th>
 				<th class="reserved-date">予約日</th>
 				<th class="reserved-time">時間</th>
 				<th class="reserved-people">人数</th>
+				<th class="reservation-cancel"></th>
 			</tr>
 			{% for reservation in target_reservations %}
 			<tr>
@@ -20,13 +25,15 @@
 				<td class="reserved-date">{{ reservation.reserved_date }}</td>
 				<td class="reserved-time">{{ reservation.reserved_time }}</td>
 				<td class="reserved-people">{{ reservation.number_of_people }}</td>
+				<td>
+					{% if reservation.reserved_date >= today %}
+					<a href="{% url 'reservationdelete' user_id reservation.pk %}" class="btn cancel">キャンセル</a></td>
+					{% endif %}
+				</td>
 			</tr>
 			{% endfor %}
 		</table>
 		{% endif %}
-		<div class="flex-container btn-container">		
-			<a href="{% url 'reservationlist' user_id %}" class="btn">戻る</a>
-		</div>
 	</div>
 </div>
 {% endblock %}

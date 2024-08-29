@@ -1,68 +1,84 @@
-{% extends "base.html" %}
+{% extends "base_management.html" %}
 {% load bootstrap %}
 
 {% block title %}店舗情報作成ページ{% endblock %}
 {% block contents %}
 <div class="management-restaurant-create">
 	<div class="outer-container">
+        <p class="bold">登録する店舗の情報を入力してください</p>
         <form method="post">
             {% csrf_token %}
-            <div class="cluster">
-                <label>{{ form.restaurant_name.label }}</label>
+            {% for error in form.non_field_errors %}
+            <p class="crimson">＊{{ error }}</p>
+            {% endfor %}
+            <div class="cluster const">
+                <label class="label">{{ form.restaurant_name.label }}</label>
                 {{ form.restaurant_name }}
             </div>
-            <div class="cluster">
-                <label>{{ form.image.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.image.label }}</label>
                 {{ form.image }}
             </div>
-            <div class="cluster">
-                <label>{{ form.description.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.description.label }}</label>
                 {{ form.description }}
             </div>
-            <div class="cluster">
-                <label>{{ form.lowest_price.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.lowest_price.label }}</label>
                 {{ form.lowest_price }}
             </div>
-            <div class="cluster">
-                <label>{{ form.highest_price.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.highest_price.label }}</label>
                 {{ form.highest_price }}
             </div>
-            <div class="cluster">
-                <label>{{ form.postal_code.label }}</label>
+            <div class="cluster const">
+                {% for error in form.postal_code.errors %}
+                <p class="crimson">＊{{ error }}</p>
+                {% endfor %}
+                <label class="label">{{ form.postal_code.label }}</label>
                 {{ form.postal_code }}
             </div>
-            <div class="cluster">
-                <label>{{ form.address.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.address.label }}</label>
                 {{ form.address }}
             </div>
-            <div class="cluster">
-                <label>{{ form.opening_time.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.opening_time.label }}</label>
                 {{ form.opening_time }}
             </div>
-            <div class="cluster">
-                <label>{{ form.closing_time.label }}</label>
+            <div class="cluster const">
+                <label class="label">{{ form.closing_time.label }}</label>
                 {{ form.closing_time }}
             </div>
-            <div class="cluster flex-container">
-                <label>{{ form.holiday.label }}</label>
+            <div class="cluster">
                 <div>
-                    {% for day in form.holiday %}
-                    <div class="checkbox">
-                        {{ day }}
-                    </div>
+                    {% for error in form.holiday.errors %}
+                    <p class="crimson">＊{{ error }}</p>
                     {% endfor %}
                 </div>
+                <div class="flex-container">
+                    <label class="label">{{ form.holiday.label_tag }}</label>
+                    {{ form.holiday }}
+                </div>
+            </div>
+            <div class="cluster const">
+                <label class="label">{{ form.seating_capacity.label }}</label>
+                {{ form.seating_capacity }}
+                {{ form.seating_capacity.errors }}
             </div>
             <div class="cluster">
-                <label>{{ form.seating_capacity.label }}</label>
-                {{ form.seating_capacity }}
-            </div>
-            <div class="cluster flex-container">
-                <label>{{ form.category_name.label }}</label>
-                {{ form.category_name }}
+                <div>
+                    {% for error in form.category_name.errors %}
+                    <p class="crimson">＊{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="flex-container">
+                    <label class="label">{{ form.category_name.label }}</label>
+                    {{ form.category_name }}
+                </div>
             </div>
             <div class="flex-container btn-container">
-                <button type="submit" class="btn">作成する</button>
+                <button type="submit" class="btn">作成</button>
                 <a href="{% url 'managementrestaurant' user_id %}" class="btn">戻る</a>
             </div>
         </form>

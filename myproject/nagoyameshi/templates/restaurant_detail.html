@@ -8,9 +8,9 @@
 			<h2>{{ object.restaurant_name }}</h2>
 		</div>
 		<div class="flex-container ref-container">
-			<a href="{% url 'detail' object.pk %}" class="btn restaurant-top-ref">店舗情報</a>
-			<a href="{% url 'reservationcreate' object.pk %}" class="btn restaurant-top-ref">予約フォーム</a>
-			<a href="{% url 'reviewlist' object.pk %}" class="btn restaurant-top-ref">レビュー</a>
+			<a href="" class="btn focus left-align">店舗情報</a>
+			<a href="{% url 'reservationcreate' object.pk %}" class="btn non-focus left-align">予約フォーム</a>
+			<a href="{% url 'reviewlist' object.pk %}" class="btn non-focus left-align">レビュー</a>
 		</div>
 		<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
 		<table class="restaurant-table">
@@ -63,7 +63,7 @@
 			<form action="">
 				{% csrf_token %}
 				<!-- 以下のbuttonをtype="button"に設定することでリロードされなくなった -->
-				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn">
+				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn favorite">
 					{% if isFavorite %}
 					&hearts;　お気に入り解除
 					{% else %}

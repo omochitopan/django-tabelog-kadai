@@ -3,10 +3,7 @@
 {% block contents %}
 <div class="user">
 	<div class="outer-container">
-		<h4 class="title">会員情報</h4>
-        <form action="{% url 'userupdate' user_id %}">
-            <button type="submit" class="btn">編集</button>
-        </form>
+		<h4 class="center">会員情報</h4>
         <table class="user-table">
 			<tr>
 				<th>氏名</th>
@@ -51,6 +48,10 @@
                 </td>
 			</tr>
 		</table>
+        <div class="flex-container btn-container">
+			<a href="{% url 'userupdate' user_id %}" class="btn">編集</a>
+			<a href="{% url 'password_change' %}" class="btn">パスワード変更</a>
+		</div>
 	</div>
 </div>
 {% endblock %}

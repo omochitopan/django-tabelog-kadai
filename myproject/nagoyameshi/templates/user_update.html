@@ -11,8 +11,8 @@
 				{% for field in form %}
 				<div class="flex-container">
 					<p class="label">
-						{{ field.label }}
-						{% if field.field.required %}<span class="must"> 必須</span>{% endif %}
+						<span>{{ field.label }}　</span>
+						{% if field.field.required %}<span class="must">必須</span>{% endif %}
 					</p>
 					<div class="right">{{ field }}</div>
 				</div>

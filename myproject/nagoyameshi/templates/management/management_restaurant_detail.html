@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_management.html" %}
 {% load static %}
 {% block title %}店舗詳細ページ{% endblock %}
 {% block contents %}
@@ -52,11 +52,9 @@
 			</tr>
 		</table>
 		<div class="flex-container btn-container">
-			<a href="{% url 'managementrestaurantedit' user_id object.pk %}" class= "btn">店舗情報を編集する</a>
-			<a href="{% url 'managementrestaurantdelete' user_id object.pk %}" class= "btn">店舗情報を削除する</a>
-		</div>
-		<div class="flex-container btn-container">
-			<a href="{% url 'managementrestaurant' user_id %}" class= "btn">管理店舗一覧へ戻る</a>
+			<a href="{% url 'managementrestaurantedit' user_id object.pk %}" class= "btn submit">店舗情報を編集</a>
+			<a href="{% url 'managementrestaurantdelete' user_id object.pk %}" class= "btn submit">店舗情報を削除</a>
+			<a href="{% url 'managementrestaurant' user_id %}" class= "btn submit">店舗一覧に戻る</a>
 		</div>
 	</div>
 </div>	
