@@ -582,6 +582,18 @@ footer {
   background-color: rgb(253, 225, 217);
 }
 
+.detail .non-active {
+  color: black;
+  font-size: 13px;
+  background-color: rgb(190, 190, 190);
+  padding: 2px 4px;
+  border: none;
+}
+
+.detail .non-active:hover {
+  background-color: rgb(190, 190, 190);
+}
+
 .detail .favorite {
   color: black;
   font-size: 14px;
@@ -747,6 +759,26 @@ footer {
   background-color: rgb(253, 225, 217);
 }
 
+.reviewlist .non-active {
+  color: black;
+  font-size: 13px;
+  background-color: rgb(190, 190, 190);
+  padding: 2px 4px;
+  border: none;
+}
+
+.reviewlist .non-active:hover {
+  background-color: rgb(190, 190, 190);
+}
+
+.detail .favorite {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px;
+  border: none;
+}
+
 .reviewlist .average {
   text-align: center;
   margin-top: 20px;
@@ -900,6 +932,18 @@ footer {
 .reservationcreate .non-focus:hover {
   font-weight: bold;
   background-color: rgb(253, 225, 217);
+}
+
+.reservationcreate .non-active {
+  color: black;
+  font-size: 13px;
+  background-color: rgb(190, 190, 190);
+  padding: 2px 4px;
+  border: none;
+}
+
+.reservationcreate .non-active:hover {
+  background-color: rgb(190, 190, 190);
 }
 
 .reservationcreate .restaurant-name, .average {

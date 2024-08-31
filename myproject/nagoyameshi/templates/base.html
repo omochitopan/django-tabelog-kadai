@@ -23,16 +23,16 @@
         {% if user.is_authenticated %}
         <div>
           <div class="flex-container upper">
-            <p class="welcome left">ようこそ、{{user.name}}さん</p>
+            <p class="welcome left">ようこそ、{{user.nick_name}}さん</p>
             {% if user.role %}
-            <a href="{% url 'management' user_id %}" class="nav-link">＊店舗運営者用ページ＊</a>
+            <a href="{% url 'management' user.pk %}" class="nav-link">＊店舗運営者用ページ＊</a>
             {% endif %}
           </div>
           <div class="flex-container lower">
             <a href="{% url 'top' %}" class="nav-link">トップページ</a>
             <a href="{% url 'favoritelist' %}" class="nav-link">お気に入り一覧</a>
             <a href="{% url 'reservationlist' %}" class="nav-link">予約一覧</a>
-            <a href="{% url 'user' user_id %}" class="nav-link">会員情報</a>
+            <a href="{% url 'user' user.pk %}" class="nav-link">会員情報</a>
             <form action="{% url 'logout' %}" method="post">
               {% csrf_token %}
               <input class="nav-link nav-input" type="submit" value="ログアウト">

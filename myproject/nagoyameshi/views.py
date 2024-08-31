@@ -203,7 +203,7 @@ class ReviewListView(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurant_id = self.request.session["restaurant_id"]
+        restaurant_id = self.kwargs.get("restaurant_id")
         reviews = Review.objects
         target_reviews = reviews.filter(restaurant = restaurant_id)
         target_reviews = target_reviews.order_by('-updated_at')
@@ -217,9 +217,8 @@ class ReviewListView(LoginRequiredMixin, ListView):
             if review.user == self.request.user:
                 writtenreview = review
                 break
-        context['user_id'] = self.request.user.pk
-        context["restaurant_id"] = restaurant_id
-        context["restaurant_name"] = self.request.session["restaurant_name"]
+        context['user'] = self.request.user
+        context["restaurant"] = Restaurant.objects.get(pk = restaurant_id)
         context["target_reviews"] = target_reviews
         context["average_score"] = average_score
         context["writtenreview"] = writtenreview
@@ -283,11 +282,11 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
     model = Reservation
     
     def get_success_url(self):
-        return reverse_lazy('detail', kwargs=dict(pk = self.request.session['restaurant_id']))
+        return reverse_lazy('detail', kwargs=dict(pk = self.kwargs.get('restaurant_id')))
     
     def get_form_kwargs(self):
         kwargs = super(ReservationCreateView, self).get_form_kwargs()
-        restaurant = Restaurant.objects.get(id = self.request.session['restaurant_id'])
+        restaurant = Restaurant.objects.get(pk = self.kwargs.get('restaurant_id'))
         seating_capacity = restaurant.seating_capacity
         opening_time = restaurant.opening_time
         closing_time = restaurant.closing_time
@@ -331,9 +330,8 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
-        context["restaurant_name"] = self.request.session["restaurant_name"]
-        context["restaurant_id"] = self.request.session["restaurant_id"]
+        context['user'] = self.request.user
+        context["restaurant"] = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""

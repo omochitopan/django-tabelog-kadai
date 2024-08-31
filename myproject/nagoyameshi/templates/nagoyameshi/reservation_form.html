@@ -4,14 +4,19 @@
 {% block contents %}
 <div class="reservationcreate">
 	<div class="outer-container">
-		<h2 class="restaurant-name">{{ restaurant_name }}</h2>
+		<h2 class="restaurant-name">{% if not restaurant.is_active %}[閉店] {% endif %}{{ restaurant.restaurant_name }}</h2>
 		{{ reservation_candidates }}
 		<div class="flex-container ref-container">
-			<a href="{% url 'detail' restaurant_id %}" class="btn non-focus left-align">店舗情報</a>
-			<a href="" class="btn focus left-align">予約フォーム</a>
-			<a href="{% url 'reviewlist' restaurant_id %}" class="btn non-focus left-align">レビュー</a>
+			<a href="{% url 'detail' restaurant.pk %}" class="btn non-focus left-align">店舗情報</a>
+			{% if restaurant.is_active %}
+			<div class="btn focus left-align">予約フォーム</div>
+			{% else %}
+			<div class="btn non-active left-align">予約フォーム</div>
+			{% endif %}
+			<a href="{% url 'reviewlist' restaurant.pk %}" class="btn non-focus left-align">レビュー</a>
 		</div>
 		<div class="inner-container">
+			{% if restaurant.is_active %}		
 			<p class="crimson">予約情報を入力してください。</p>
 			<form method="post" class="reservation-form">
 				{% csrf_token %}
@@ -20,6 +25,9 @@
 					<button type="submit" class="btn submit">予約する</button>
 				</div>
 			</form>
+			{% else %}
+			<p class="center">閉店しています。</p>
+			{% endif %}
 		</div>
 	</div>
 </div>
