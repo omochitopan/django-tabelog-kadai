@@ -3,7 +3,7 @@
 {% block contents %}
 <div class="management-user">
 	<div class="outer-container">
-		<h4 class="center">予約履歴のある会員情報一覧</h4>
+		<h4 class="center">管理店舗に予約履歴のある会員一覧</h4>
 		<table class="management-user-table">
 			<tr>
 				<th class="name">氏名</th>
@@ -17,13 +17,13 @@
 				<td>{{ user.name }}</td>
 				<td>{{ user.kana_name }}</td>
 				<td>{{ user.email }}</td>
-				<td>
-					{% if not user.role %}
-					一般ユーザー
-					{% else %}
-					管理ユーザー
-					{% endif %}
-				</td>
+				{% if not user.is_active %}
+				<td>退会済</td>
+				{% elif not user.role %}
+				<td>一般ユーザー</td>
+				{% else %}
+				<td>管理ユーザー</td>
+				{% endif %}
 				<td><a href="{% url 'managementuserdetail' user_id user.pk %}" class="btn">詳細</a></td>
 			</tr>
 			{% endfor %}

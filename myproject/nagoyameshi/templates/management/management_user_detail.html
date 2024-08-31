@@ -3,7 +3,13 @@
 {% block contents %}
 <div class="management-user-detail">
 	<div class="outer-container">
-		<h4 class="center">会員情報詳細</h4>
+		<h4 class="center">
+			{% if not object.role %}
+			会員情報詳細
+			{% else %}
+			管理者情報詳細
+			{% endif %}
+		</h4>
 		<table class="management-user-detail-table">
 			<tr>
 				<th>氏名</th>
@@ -12,6 +18,10 @@
 			<tr>
 				<th>フリガナ</th>
 				<td>{{ object.kana_name }}</td>
+			</tr>
+			<tr>
+				<th>ニックネーム</th>
+				<td>{{ object.nick_name }}</td>
 			</tr>
 			<tr>
 				<th>メールアドレス</th>
@@ -38,11 +48,13 @@
 				<td>{{ object.occupation }}</td>
 			</tr>
 			<tr>
-				<th>会員区分</th>
-				{% if not object.role %}
-				<td>一般ユーザー</td>
+				<th>状態</th>
+				{% if not object.is_active %}
+				<td>退会済</td>
+				{% elif not object.role %}
+				<td>会員継続中</td>
 				{% else %}
-				<td>管理ユーザー</td>
+				<td>管理者</td>
 				{% endif %}
 			</tr>
 		</table>

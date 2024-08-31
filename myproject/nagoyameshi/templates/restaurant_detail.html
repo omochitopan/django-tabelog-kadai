@@ -5,12 +5,14 @@
 <div class="detail">
 	<div class="outer-container">
 		<div class="restaurant-name">
-			<h2>{{ object.restaurant_name }}</h2>
+			<h2>{% if not object.is_active %}[閉店] {% endif %}{{ object.restaurant_name }}</h2>
 		</div>
 		<div class="flex-container ref-container">
 			<a href="" class="btn focus left-align">店舗情報</a>
+			{% if object.is_active %}
 			<a href="{% url 'reservationcreate' object.pk %}" class="btn non-focus left-align">予約フォーム</a>
 			<a href="{% url 'reviewlist' object.pk %}" class="btn non-focus left-align">レビュー</a>
+			{% endif %}
 		</div>
 		<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
 		<table class="restaurant-table">

@@ -9,14 +9,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout
 from django.urls import reverse_lazy, reverse
-from django.contrib import messages
 from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from typing import Any, Dict
 from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms
 from .forms import SignUpForm, ReviewForm, ReservationForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
-from .mixins import OnlyManagementUserMixin
+from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
 import datetime
@@ -50,7 +49,7 @@ class TopView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurants = Restaurant.objects.all()
+        restaurants = Restaurant.objects.filter(is_active = True)
         categories = Category.objects.all()
         context['user_id'] = self.request.user.pk
         context['evaluated_restaurants'] = restaurants.order_by('id')[:6]
@@ -65,8 +64,8 @@ class RestaurantListView(LoginRequiredMixin, ListView):
         query = self.request.GET.get('query')
 
         if query:
-            restaurants = Restaurant.objects.filter(
-            Q(restaurant_name__icontains=query) | Q(address__icontains=query) #| Q(category_name__in=query)
+            restaurants = Restaurant.objects.filter(is_active = True).filter(
+            Q(restaurant_name__icontains=query) | Q(address__icontains=query)
             )
         else:
             restaurants = Restaurant.objects.none()
@@ -83,7 +82,7 @@ class RestaurantCategoryList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('query')
-        restaurants = Restaurant.objects.all()
+        restaurants = Restaurant.objects.filter(is_active = True)
         categoryRestaurants = []
         for restaurant in restaurants:
             for category in restaurant.category_name.all():
@@ -94,7 +93,7 @@ class RestaurantCategoryList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('query')
-        restaurants = Restaurant.objects.all()
+        restaurants = Restaurant.objects.filter(is_active = True)
         categoryRestaurants = []
         for restaurant in restaurants:
             for category in restaurant.category_name.all():
@@ -249,7 +248,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         qryset.save()
         return  super().form_valid(form)
     
-class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+class ReviewUpdateView(OnlyMyReviewMixin, LoginRequiredMixin, UpdateView):
     form_class = ReviewForm
     model = Review
     template_name = "review_update.html"
@@ -265,7 +264,7 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
         context["restaurant_name"] = self.request.session["restaurant_name"]
         return context
 
-class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+class ReviewDeleteView(OnlyMyReviewMixin, LoginRequiredMixin, DeleteView):
     model = Review
     template_name = "review_delete.html"
     
@@ -375,7 +374,7 @@ class ReservationListAllView(LoginRequiredMixin, ListView):
         context["today"] = today
         return context
 
-class ReservationDeleteView(LoginRequiredMixin, DeleteView):
+class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteView):
     model = Reservation
     template_name = "reservation_delete.html"
     
@@ -428,7 +427,7 @@ class FavoriteListView(LoginRequiredMixin, ListView):
         context["target_favorites"] = target_favorites
         return context
 
-class UserView(DetailView):
+class UserView(OnlyMyUserInformationMixin, LoginRequiredMixin, DetailView):
     model = User
     template_name = "user.html"
     
@@ -437,7 +436,7 @@ class UserView(DetailView):
         context["user_id"] = self.request.user.pk
         return context
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(OnlyMyUserInformationMixin, UpdateView):
     form_class = UserUpdateForm
     model = User
     template_name = "user_update.html"
@@ -452,6 +451,35 @@ class UserUpdateView(UpdateView):
         for v in form.fields.values():
             v.label_suffix = ""
         return context
+
+class ResignView(OnlyMyUserInformationMixin, UpdateView):
+    model = User
+    template_name = "resign.html"
+    success_url = reverse_lazy("resigndone")
+    fields = ("is_active",)
+    
+    def update(request, pk):
+        user = User.objects.get(pk = request.user.pk)
+        user.is_active = False
+        user.save()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
+
+"""
+def resign(request):
+    if request.method == "post":
+        user = User.objects.get(pk = request.user.pk)
+        user.is_active = False
+        user.save()
+        return redirect("resigndone")
+"""
+
+class ResignDoneView(TemplateView):
+    model = User
+    template_name = "resign_done.html"
 
 class CompanyView(TemplateView):
     template_name = "company.html"
@@ -478,16 +506,18 @@ class ManagementTopView(OnlyManagementUserMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        user = self.request.user
+        context["user"] = user
+        context['user_id'] = user.pk
         return context
 
-class ManagementRestaurantView(OnlyManagementUserMixin, ListView):
+class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
     model = Restaurant
-    template_name = "management/management_restaurant.html"
+    template_name = "management/management_open_restaurant.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurants = Restaurant.objects.all()
+        restaurants = Restaurant.objects.filter(is_active = True)
         target_restaurants = []
         for restaurant in restaurants:
             for manager in restaurant.managers.all():
@@ -495,7 +525,24 @@ class ManagementRestaurantView(OnlyManagementUserMixin, ListView):
                     target_restaurants.append(restaurant)
                     break
         context['user_id'] = self.request.user.pk
-        context['target_rastaurants'] = target_restaurants
+        context['target_restaurants'] = target_restaurants
+        return context
+
+class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
+    model = Restaurant
+    template_name = "management/management_closed_restaurant.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurants = Restaurant.objects.filter(is_active = False)
+        target_restaurants = []
+        for restaurant in restaurants:
+            for manager in restaurant.managers.all():
+                if self.request.user == manager:
+                    target_restaurants.append(restaurant)
+                    break
+        context['user_id'] = self.request.user.pk
+        context['target_restaurants'] = target_restaurants
         return context
 
 class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
@@ -556,12 +603,18 @@ class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
             v.label_suffix = ""
         return context
 
-class ManagementRestaurantDeleteView(OnlyManagementUserMixin, DeleteView):
+class ManagementRestaurantDeleteView(OnlyManagementUserMixin, UpdateView):
     model = Restaurant
     template_name = "management/management_restaurant_delete.html"
+    fields = ("is_active",)
     
     def get_success_url(self):
         return reverse_lazy('managementrestaurant', kwargs=dict(user_id = self.request.user.pk))
+    
+    def update(request, pk):
+        restaurant = Restaurant.objects.get(pk = request.kwargs["pk"])
+        restaurant.is_active = False
+        restaurant.save()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -707,7 +760,7 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
         context['target_users'] = target_users
         return context
 
-class ManagementUserDetailView(OnlyManagementUserMixin, DetailView):
+class ManagementUserDetailView(OnlyManagedUserInformationMixin, DetailView):
     model = User
     template_name = "management/management_user_detail.html"
 

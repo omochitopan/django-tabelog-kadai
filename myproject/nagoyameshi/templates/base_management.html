@@ -22,12 +22,12 @@
       <nav class="nav-pc">
         <div>
           <div class="flex-container upper">
-            <p class="welcome left">店舗運営者用ページ</p>
-            <a href="{% url 'top' %}" class="nav-link">＊一般ユーザー用ページへ移行＊</a>
+            <p class="welcome left">店舗運営者ページ（ログイン：{{ user.name }}）</p>
+            <a href="{% url 'top' %}" class="nav-link">＊一般ユーザーページ＊</a>
           </div>
           <div class="flex-container lower">
             <a href="{% url 'management' user_id %}" class="nav-link">管理トップ</a>
-            <a href="{% url 'managementrestaurant' user_id %}" class="nav-link">店舗・予約管理</a>
+            <a href="{% url 'managementopenrestaurant' user_id %}" class="nav-link">店舗・予約管理</a>
             <a href="{% url 'managementuser' user_id %}" class="nav-link">会員情報</a>
             <form action="{% url 'logout' %}" method="post">
               {% csrf_token %}

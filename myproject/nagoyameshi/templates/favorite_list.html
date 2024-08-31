@@ -17,7 +17,7 @@
 			</tr>
 			{% for favorite in target_favorites %}
 			<tr>
-				<td class="restaurant-name"><a href="{% url 'detail' favorite.restaurant.id %}" class="restaurant-ref">{{ favorite.restaurant }}</a></td>
+				<td class="restaurant-name">{% if not favorite.restaurant.is_active %}[閉店] {% endif %}<a href="{% url 'detail' favorite.restaurant.id %}" class="restaurant-ref">{{ favorite.restaurant }}</a></td>
 				<td>{{ favorite.restaurant.postal_code }}</td>
 				<td>{{ favorite.restaurant.address }}</td>
 				<td>

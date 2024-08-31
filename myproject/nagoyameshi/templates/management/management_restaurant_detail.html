@@ -5,6 +5,7 @@
 <div class="detail">
 	<div class="outer-container">
 		<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
+		{% if not object.is_active %}<h5>[閉店]</h5>{% endif %}
 		<table class="restaurant-table">
 			<tr>
 				<th class="tableheader">店舗名</th>
@@ -52,9 +53,13 @@
 			</tr>
 		</table>
 		<div class="flex-container btn-container">
+			{% if object.is_active %}
 			<a href="{% url 'managementrestaurantedit' user_id object.pk %}" class= "btn submit">店舗情報を編集</a>
 			<a href="{% url 'managementrestaurantdelete' user_id object.pk %}" class= "btn submit">店舗情報を削除</a>
-			<a href="{% url 'managementrestaurant' user_id %}" class= "btn submit">店舗一覧に戻る</a>
+			<a href="{% url 'managementopenrestaurant' user_id %}" class= "btn submit">店舗一覧に戻る</a>
+			{% else %}
+			<a href="{% url 'managementclosedrestaurant' user_id %}" class= "btn submit">店舗一覧に戻る</a>
+			{% endif %}
 		</div>
 	</div>
 </div>	

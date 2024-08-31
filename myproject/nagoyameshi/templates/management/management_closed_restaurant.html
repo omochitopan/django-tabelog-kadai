@@ -1,0 +1,47 @@
+{% extends "base_management.html" %}
+{% load bootstrap %}
+
+{% block title %}店舗情報管理ページ{% endblock %}
+{% block contents %}
+<div class="management-restaurant">
+	<div class="outer-container">
+        <h4 class="center">管理店舗一覧</h4>
+		<div class="flex-container upper">
+            <div>
+                <a href="{% url 'managementopenrestaurant' user_id %}" class="btn non-focus">営業中</a>
+                <a href="" class="btn focus">閉店済</a>
+            </div>
+            <div>
+                <a href="{% url 'managementrestaurantcreate' user_id %}" class="btn new">+新規店舗追加</a>
+            </div>
+        </div>
+        <table class="management-restaurant-table">
+            <tr>
+                <th class="restaurant-name">店舗名</th>
+                <th class="postal-code">郵便番号</th>
+                <th class="address">住所</th>
+                <th class="manager">店舗管理者</th>
+                <th class="reservationlist"></th>
+                <th class="sales"></th>
+            </tr>
+            {% for restaurant in target_restaurants %}
+            <tr>
+                <td><a href="{% url 'managementrestaurantdetail' user_id restaurant.pk %}" class="ref">{{ restaurant.restaurant_name }}</a></td>
+                <td>{{ restaurant.postal_code }}</td>
+                <td>{{ restaurant.address }}</td>
+                <td>
+                    {% for manager in restaurant.managers.all %}
+                    <span><a href="{% url 'managementuserdetail' user_id manager.pk %}" class="ref">{{ manager.name }}</a>　</span>
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'managementreservationrestaurant' user_id restaurant.pk %}" class="btn submit">予約一覧</a></td>
+                <td><a href="" class="btn submit">売上</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+		<div class="flex-container btn-container">
+            <a href="{% url 'management' user_id %}" class="btn submit">管理ページトップに戻る</a>
+        </div>
+	</div>
+</div>
+{% endblock %}

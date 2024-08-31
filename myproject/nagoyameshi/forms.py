@@ -120,6 +120,7 @@ class UserUpdateForm(forms.ModelForm):
         fields = (
             "name",
             "kana_name",
+            "nick_name",
             "email",
             "postal_code",
             "address",

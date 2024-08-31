@@ -8,8 +8,8 @@
 		<p>現在の予約はありません。</p>
 		{% else %}
 		<div class="flex-container">		
-			<a href="{% url 'reservationlist' user_id %}" class="btn focus left-align">本日以降</a>
-			<a href="{% url 'reservationlistall' user_id %}" class="btn non-focus left-align">全て</a>
+			<a href="{% url 'reservationlist' %}" class="btn focus left-align">本日以降</a>
+			<a href="{% url 'reservationlistall' %}" class="btn non-focus left-align">全て</a>
 		</div>
 		<table class="reservation-table">
 			<tr>
@@ -25,7 +25,7 @@
 				<td class="reserved-date">{{ reservation.reserved_date }}</td>
 				<td class="reserved-time">{{ reservation.reserved_time }}</td>
 				<td class="reserved-people">{{ reservation.number_of_people }}</td>
-				<td class="reserved-cancel"><a href="{% url 'reservationdelete' user_id reservation.pk %}" class="btn cancel">キャンセル</a></td>
+				<td class="reserved-cancel"><a href="{% url 'reservationdelete' reservation.pk %}" class="btn cancel">キャンセル</a></td>
 			</tr>
 			{% endfor %}
 		</table>

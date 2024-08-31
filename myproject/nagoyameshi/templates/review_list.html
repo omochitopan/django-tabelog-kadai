@@ -21,7 +21,7 @@
 		{% for review in target_reviews %}
 		<table class="review-table">
 			<tr class="user-name-index">
-				<td class="user-name">{{ review.user.name }}<span class="san"> さん</span></td>
+				<td class="user-name">{{ review.user.nick_name }}<span class="san"> さん</span></td>
 			</tr>
 			<tr>
 				{% if review.score == 1 %}
@@ -48,13 +48,13 @@
 		{% if not writtenreview %}
 		<p class="reviewcheck">あなたはこのレストランにまだレビューしていません。</p>
 		<div class="flex-container btn-container">
-			<a href="{% url 'reviewcreate' restaurant_id %}" class= "btn submit">レビューを投稿する</a>
+			<a href="{% url 'reviewcreate' restaurant_id %}" class= "btn submit">レビューを投稿</a>
 		</div>
 		{% else %}
 		<p class="reviewcheck">あなたはこのレストランにレビュー済みです。</p>
 		<div class="flex-container btn-container">
-			<a href="{% url 'reviewupdate' restaurant_id writtenreview.pk %}" class= "btn submit">レビューを編集する</a>
-			<a href="{% url 'reviewdelete' restaurant_id writtenreview.pk %}" class= "btn submit">レビューを削除する</a>
+			<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn submit">レビューを編集</a>
+			<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn submit">レビューを削除</a>
 		</div>
 		{% endif %}
 	</div>

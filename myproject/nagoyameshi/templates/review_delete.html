@@ -10,15 +10,15 @@
 				<td class="user-name">{{ object.user.name }}<span> さん</span></td>
 			</tr>
 			<tr>
-				{% if object.score == 1 %}
-				<td class="star">★☆☆☆☆</td>
-				{% elif object.score == 2 %}
-				<td class="star">★★☆☆☆</td>
-				{% elif object.score == 3 %}
-				<td class="star">★★★☆☆</td>
-				{% elif object.score == 4 %}
-				<td class="star">★★★★☆</td>
-				{% elif object.score == 5 %}
+				{% if review.score == 1 %}
+				<td class="star">★<span class="notstar">★★★★</span></td>
+				{% elif review.score == 2 %}
+				<td class="star">★★<span class="notstar">★★★</span></td>
+				{% elif review.score == 3 %}
+				<td class="star">★★★<span class="notstar">★★</span></td>
+				{% elif review.score == 4 %}
+				<td class="star">★★★★<span class="notstar">★</span></td>
+				{% elif review.score == 5 %}
 				<td class="star">★★★★★</td>
 				{% endif %}
 			</tr>

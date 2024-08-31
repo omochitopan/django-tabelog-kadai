@@ -14,6 +14,10 @@
 				<td>{{ user.kana_name }}</td>
 			</tr>
 			<tr>
+				<th>ニックネーム</th>
+				<td>{{ user.nick_name }}</td>
+			</tr>
+			<tr>
 				<th>メールアドレス</th>
 				<td>{{ user.email }}</td>
 			</tr>
@@ -49,8 +53,13 @@
 			</tr>
 		</table>
         <div class="flex-container btn-container">
-			<a href="{% url 'userupdate' user_id %}" class="btn">編集</a>
-			<a href="{% url 'password_change' %}" class="btn">パスワード変更</a>
+			<a href="{% url 'userupdate' user_id %}" class="btn submit">プロフィール編集</a>
+		</div>
+		<div class="flex-container btn-container">
+			<a href="{% url 'password_change' %}" class="btn submit">パスワード変更</a>
+		</div>
+		<div class="flex-container btn-container bottom">
+			<a href="{% url 'resign' user_id %}" class="btn caution">NAGOYAMESHI退会</a>
 		</div>
 	</div>
 </div>

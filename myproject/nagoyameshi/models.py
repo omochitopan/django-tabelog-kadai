@@ -66,6 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     name = models.CharField(verbose_name="お名前（漢字）", max_length=50)
     kana_name = models.CharField(verbose_name="お名前（フリガナ）", max_length=50)
+    nick_name = models.CharField(verbose_name="ニックネーム", max_length=50)
     email = models.EmailField(verbose_name="e-mail", max_length=100, unique=True)
     postal_code = models.CharField(verbose_name='郵便番号', validators=[postal_code_regex], max_length=7)
     address = models.CharField(verbose_name="住所", max_length=150)
@@ -176,6 +177,7 @@ class Restaurant(models.Model):
     seating_capacity = models.PositiveIntegerField(verbose_name='予約可能な座席数')
     category_name = models.ManyToManyField(Category, verbose_name='カテゴリ（3つまで選択可）', blank=True)
     managers = models.ManyToManyField(User, verbose_name="店舗管理ユーザー", blank=False)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
@@ -202,7 +204,7 @@ class Reservation(models.Model):
     reserved_date = models.DateField(verbose_name="予約日")
     reserved_time = models.TimeField(verbose_name="予約時間")
     number_of_people = models.PositiveIntegerField(verbose_name="予約人数")
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)    
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)

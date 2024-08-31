@@ -65,6 +65,14 @@ header .upper {
   margin-bottom: 3px;
 }
 
+header .before-login {
+  display: flex;
+}
+
+header .before-login a {
+  margin-left: 30px;
+}
+
 .welcome {
   color: rgb(0, 105, 140);
   font-weight: bold;
@@ -893,7 +901,7 @@ footer {
 
 .reservationcreate .inner-container {
   width: 300px;
-  margin: 0 auto;
+  margin: 20px auto 0 auto;
 }
 
 .reservationcreate .comment {
@@ -1119,7 +1127,7 @@ footer {
   border-bottom: solid rgb(170, 170, 170) 1px;
 }
 
-.user .btn {
+.user .submit {
   color: black;
   font-size: 14px;
   background-color: rgb(255, 210, 197);
@@ -1127,9 +1135,26 @@ footer {
   border: none;
 }
 
-.user .btn:hover {
+.user .submit:hover {
   color: white;
   background-color: orangered;
+}
+
+.user .caution {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(224, 197, 255);
+  padding: 4px 10px;
+  border: none;
+}
+
+.user .caution:hover {
+  color: white;
+  background-color: rgb(119, 0, 255);
+}
+
+.user .bottom {
+  margin-top: 40px;
 }
 
 .user-update .outer-container {
@@ -1191,6 +1216,29 @@ footer {
   margin-top: 20px;
 }
 
+.resign .outer-container {
+  width: 300px;
+  margin: 120px auto 30px auto;
+  text-align: center;
+}
+
+.resign .btn-container {
+  margin-top: 30px;
+}
+
+.resign .btn {
+  color: black;
+  font-size: 14px;
+  background-color: rgb(255, 210, 197);
+  padding: 4px 10px;
+  border: none;
+}
+
+.resign .btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
 .company .outer-container {
   width: 500px;
   margin: 90px auto 30px auto;
@@ -1243,7 +1291,56 @@ footer {
   margin: 90px auto 30px auto;
 }
 
-.management-restaurant .btn {
+.management-restaurant .upper {
+  justify-content: space-between;
+}
+
+.management-restaurant .focus {
+  color: white;
+  font-size: 13px;
+  background-color: orangered;
+  margin-left: 20px;
+  padding: 2px 4px;
+  border: none;
+}
+
+.management-restaurant .focus:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.management-restaurant .non-focus {
+  color: black;
+  font-size: 13px;
+  background-color: rgb(253, 225, 217);
+  margin-left: 20px;
+  padding: 2px 4px;
+  border: none;
+}
+
+.management-restaurant .non-focus:hover {
+  font-weight: bold;
+  background-color: rgb(253, 225, 217);
+}
+
+.management-restaurant .new {
+  color: black;
+  font-size: 13px;
+  background-color: rgb(190, 255, 198);
+  margin-left: 80px;
+  padding: 2px 4px;
+  border: none;
+}
+
+.management-restaurant .new:hover {
+  color: black;
+  font-size: 13px;
+  background-color: rgb(0, 255, 30);
+  padding: 2px 4px;
+  border: none;
+}
+
+.management-restaurant .submit {
   color: black;
   font-size: 14px;
   background-color: rgb(255, 210, 197);
@@ -1251,7 +1348,7 @@ footer {
   border: none;
 }
 
-.management-restaurant .btn:hover {
+.management-restaurant .submit:hover {
   color: white;
   background-color: orangered;
 }
