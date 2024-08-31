@@ -605,7 +605,7 @@ class ManagementRestaurantDeleteView(OnlyManagementUserMixin, UpdateView):
     fields = ("is_active",)
     
     def get_success_url(self):
-        return reverse_lazy('managementrestaurant', kwargs=dict(user_id = self.request.user.pk))
+        return reverse_lazy('managementopenrestaurant', kwargs=dict(user_id = self.request.user.pk))
     
     def update(request, pk):
         restaurant = Restaurant.objects.get(pk = request.kwargs["pk"])
