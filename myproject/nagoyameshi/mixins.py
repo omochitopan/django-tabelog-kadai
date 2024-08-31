@@ -26,8 +26,8 @@ class OnlyManagedUserInformationMixin(UserPassesTestMixin):
         target_user_id = []
         for reservation in target_reservations:
             target_user_id.append(reservation.user.pk)
-        target_user_id = list(set(target_user_id))
-        return user.role == 1 and user.pk == self.kwargs['user_id'] and self.kwargs['pk'] in target_user_id
+        target_user_id = set(target_user_id)
+        return (user.role == 1 and user.pk == self.kwargs['user_id'] and self.kwargs['pk'] in target_user_id) or self.kwargs['pk'] == self.request.user.pk
 
 class OnlyMyUserInformationMixin(UserPassesTestMixin):
     raise_exception = True

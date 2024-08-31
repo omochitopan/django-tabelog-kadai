@@ -31,6 +31,14 @@ header {
   top: 0;
 }
 
+header .own-link {
+  color: rgb(0, 105, 140);
+}
+
+header .own-link:hover {
+  color: black;
+}
+
 .header-logo-wrap {
   display: flex;
 }
@@ -1769,7 +1777,7 @@ footer {
 }
 
 .management-user-table .email {
-  width: 300px;
+  width: 350px;
 }
 
 .management-user-table .member {
@@ -1791,6 +1799,11 @@ footer {
 .management-user .btn:hover {
   color: white;
   background-color: orangered;
+}
+
+.management-user .resign {
+  font-size: 14px;
+  padding-left: 2px;
 }
 
 .management-user-table th {

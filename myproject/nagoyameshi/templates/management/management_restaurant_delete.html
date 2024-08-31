@@ -56,7 +56,7 @@
             {% csrf_token %}
             <div class="flex-container btn-container">
                 <button type="submit" class="btn">削除</button>
-                <a href="{% url 'managementrestaurantdetail' user_id object.pk %}" class="btn">戻る</a>
+                <a href="{% url 'managementrestaurantdetail' user.pk object.pk %}" class="btn">戻る</a>
             </div>
         </form>
 	</div>

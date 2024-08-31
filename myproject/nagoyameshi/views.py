@@ -391,8 +391,7 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
 class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,
     def post(self, request, *args, **kwargs):
         user = request.user
-        restaurant_id = request.session["restaurant_id"]
-        restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
+        restaurant = get_object_or_404(Restaurant, pk=self.kwargs.get("restaurant_id"))
         favorite, created = Favorite.objects.get_or_create(user=user, restaurant=restaurant)
 
         if not created:
@@ -402,7 +401,8 @@ class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,
             status = 'favorited'
 
         return JsonResponse({'status': 'success', 'favorite_status': status})
-    
+
+# favoritelistで解除ボタンを押した際のview    
 class FavoriteDeleteView(LoginRequiredMixin, View): # LoginRequiredMixin,
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -412,7 +412,7 @@ class FavoriteDeleteView(LoginRequiredMixin, View): # LoginRequiredMixin,
 
         favorite.delete()
         
-        return redirect('favoritelist', user_id = user.pk)
+        return redirect('favoritelist')
 
 class FavoriteListView(LoginRequiredMixin, ListView):
     model = Favorite
@@ -506,9 +506,7 @@ class ManagementTopView(OnlyManagementUserMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        context["user"] = user
-        context['user_id'] = user.pk
+        context["user"] = self.request.user
         return context
 
 class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
@@ -524,7 +522,7 @@ class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
                 if self.request.user == manager:
                     target_restaurants.append(restaurant)
                     break
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         context['target_restaurants'] = target_restaurants
         return context
 
@@ -541,7 +539,7 @@ class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
                 if self.request.user == manager:
                     target_restaurants.append(restaurant)
                     break
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         context['target_restaurants'] = target_restaurants
         return context
 
@@ -555,7 +553,7 @@ class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
@@ -597,7 +595,7 @@ class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
@@ -618,7 +616,7 @@ class ManagementRestaurantDeleteView(OnlyManagementUserMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         return context
 
 class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
@@ -630,7 +628,7 @@ class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
         restaurant_id = self.kwargs.get("restaurant_id")
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
         target_reservations = Reservation.objects.filter(restaurant = target_restaurant, reserved_date__gte = date.today()).order_by("reserved_date", "reserved_time")
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
         context['target_reservations'] = target_reservations
@@ -646,7 +644,7 @@ class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
         target_reservations = Reservation.objects.filter(restaurant = target_restaurant).order_by("reserved_date", "reserved_time")
         today = date.today()
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
         context['target_reservations'] = target_reservations
@@ -713,7 +711,7 @@ class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
@@ -733,7 +731,7 @@ class ManagementReservationDeleteView(OnlyManagementUserMixin, DeleteView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        context['user'] = self.request.user
         return context
 
 class ManagementUserView(OnlyManagementUserMixin, ListView):
@@ -756,7 +754,7 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
             target_user_id.append(reservation.user.pk)
         target_user_id = list(set(target_user_id))
         target_users = User.objects.filter(pk__in=target_user_id).order_by("pk")
-        context['user_id'] = user.pk
+        context["user"] = user
         context['target_users'] = target_users
         return context
 
@@ -766,7 +764,16 @@ class ManagementUserDetailView(OnlyManagedUserInformationMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
+        return context
+
+class ManagementManagerDetailView(OnlyManagementUserMixin, DetailView):
+    model = User
+    template_name = "management/management_manager_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
         return context
 
 class ManagementCompanyView(TemplateView):
@@ -775,7 +782,7 @@ class ManagementCompanyView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         company = Company.objects.get(id = 1)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         context["company"] = company
         return context
 
@@ -785,6 +792,6 @@ class ManagementTermsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         terms = Terms.objects.get(id = 1)
-        context['user_id'] = self.request.user.pk
+        context["user"] = self.request.user
         context["terms"] = terms
         return context

@@ -9,27 +9,19 @@
 				<th class="name">氏名</th>
 				<th class="kana-name">フリガナ</th>
 				<th class="email">メールアドレス</th>
-				<th class="member">会員区分</th>
 				<th class="detail"></th>
 			</tr>
-			{% for user in target_users %}
+			{% for target_user in target_users %}
 			<tr>
-				<td>{{ user.name }}</td>
-				<td>{{ user.kana_name }}</td>
-				<td>{{ user.email }}</td>
-				{% if not user.is_active %}
-				<td>退会済</td>
-				{% elif not user.role %}
-				<td>一般ユーザー</td>
-				{% else %}
-				<td>管理ユーザー</td>
-				{% endif %}
-				<td><a href="{% url 'managementuserdetail' user_id user.pk %}" class="btn">詳細</a></td>
+				<td>{{ target_user.name }}</td>
+				<td>{{ target_user.kana_name }}</td>
+				<td>{{ target_user.email }}</td>
+				<td><a href="{% url 'managementuserdetail' user.pk target_user.pk %}" class="btn">詳細</a></td>
 			</tr>
 			{% endfor %}
 		</table>
 		<div class="flex-container btn-container">
-	        <a href="{% url 'management' user_id %}" class="btn">管理ページトップに戻る</a>
+	        <a href="{% url 'management' user.pk %}" class="btn">管理ページトップに戻る</a>
 		</div>
 	</div>
 </div>

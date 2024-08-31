@@ -6,14 +6,14 @@
         <h4 class="center">{{ reservation.restaurant.restaurant_name }}</h4>
         <div class="form-container">
             {{ referer }}
-            <p>予約名：<a href="{% url 'managementuserdetail' user_id reservation.user.pk %}" class="ref">{{ reservation.user.name }}</a></p>
+            <p>予約名：<a href="{% url 'managementuserdetail' user.pk reservation.user.pk %}" class="ref">{{ reservation.user.name }}</a></p>
             <p class="crimson">編集内容を入力してください</p>
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="flex-container btn-container">
                     <button type="submit" class="btn">更新</button>
-                    <a href="{% url 'managementreservationrestaurant' user_id reservation.restaurant.pk %}" class="btn">戻る</a>
+                    <a href="{% url 'managementreservationrestaurant' user.pk reservation.restaurant.pk %}" class="btn">戻る</a>
                 </div>
             </form>
         </div>

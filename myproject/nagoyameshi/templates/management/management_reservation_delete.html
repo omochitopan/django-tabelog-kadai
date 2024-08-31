@@ -13,18 +13,18 @@
                 <th class="user">予約者</th>
             </tr>
             <tr>
-                <td><a href="{% url 'managementrestaurantdetail' user_id object.restaurant.pk %}" class="ref">{{ object.restaurant.restaurant_name }}</a></td>
+                <td><a href="{% url 'managementrestaurantdetail' user.pk object.restaurant.pk %}" class="ref">{{ object.restaurant.restaurant_name }}</a></td>
                 <td>{{ object.reserved_date }}</td>
                 <td>{{ object.reserved_time }}</td>
                 <td>{{ object.number_of_people }}</td>
-                <td><a href="{% url 'managementuserdetail' user_id reservation.user.pk %}" class="ref">{{ object.user.name }}</a></td>
+                <td><a href="{% url 'managementuserdetail' user.pk reservation.user.pk %}" class="ref">{{ object.user.name }}</a></td>
             </tr>
         </table>
         <form method="post">
             {% csrf_token %}
             <div class="flex-container btn-container">
                 <button type="submit" class="btn">削除</button>
-                <a href="{% url 'managementreservation' user_id %}" class="btn">戻る</a>
+                <a href="{% url 'managementreservationrestaurant' user.pk object.restaurant.pk %}" class="btn">戻る</a>
             </div>
         </form>
     </div>

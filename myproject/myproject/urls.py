@@ -68,6 +68,7 @@ urlpatterns = [
     path('management/<int:user_id>/reservation/<int:pk>/delete/', views.ManagementReservationDeleteView.as_view(), name="managementreservationdelete"),
     path('management/<int:user_id>/user_information/', views.ManagementUserView.as_view(), name="managementuser"),
     path('management/<int:user_id>/user_information/<int:pk>/', views.ManagementUserDetailView.as_view(), name="managementuserdetail"),
+    path('management/<int:user_id>/manager_information/<int:pk>/', views.ManagementManagerDetailView.as_view(), name="managementmanagerdetail"),
     path('management/<int:user_id>/company/', views.ManagementCompanyView.as_view(), name="managementcompany"),
     path('management/<int:user_id>/terms/', views.ManagementTermsView.as_view(), name="managementterms"),
 ]
