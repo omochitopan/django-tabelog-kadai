@@ -17,7 +17,9 @@ class SignUpForm(UserCreationForm):
         self.fields['postal_code'].widget.attrs.update({'placeholder': '0123456',})
         self.fields['address'].widget.attrs.update({'placeholder': '愛知県栄区X-X-X',})
         self.fields['tel_number'].widget.attrs.update({'placeholder': '09012345678',})
-    
+        self.fields['password1'].widget.render_value = True
+        self.fields['password2'].widget.render_value = True
+            
     email = forms.EmailField(label = "メールアドレス")
 
     class Meta:
@@ -25,6 +27,7 @@ class SignUpForm(UserCreationForm):
         fields = (
             "name",
             "kana_name",
+            "nick_name",
             "email",
             "postal_code",
             "address",
@@ -251,9 +254,9 @@ class RestaurantEditForm(forms.ModelForm):
         
     def clean_holiday(self):
         holiday = self.cleaned_data["holiday"]
-        if "8" in holiday or "9" in holiday:
+        if "9" in holiday:
             if len(holiday) > 1:
-                raise ValidationError("「不定休」または「なし」と他の項目を同時に選択しないでください")
+                raise ValidationError("「なし」と他の項目を同時に選択しないでください")
         elif "1" in holiday and "2" in holiday and "3" in holiday and "4" in holiday and "5" in holiday and "6" in holiday and "7" in holiday:
             raise ValidationError("定休日を正しく設定してください")
         return holiday

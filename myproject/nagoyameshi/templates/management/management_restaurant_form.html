@@ -6,7 +6,7 @@
 <div class="management-restaurant-create">
 	<div class="outer-container">
         <p class="bold">登録する店舗の情報を入力してください</p>
-        <form method="post">
+        <form method="post" action="{% url 'managementrestaurantconfirm' user.pk %}">
             {% csrf_token %}
             {% for error in form.non_field_errors %}
             <p class="crimson">＊{{ error }}</p>

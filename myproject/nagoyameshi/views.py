@@ -13,7 +13,7 @@ from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from typing import Any, Dict
-from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms
+from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms, RegularHoliday
 from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
 from datetime import date, time
@@ -124,16 +124,54 @@ class RestaurantDetailView(LoginRequiredMixin, DetailView):
         context['isFavorite'] = isFavorite
         return context
 
-class ServiceGuideView(TemplateView):
-    template_name = 'service_guide.html'
+class ServiceGuideView(FormView):
+    form_class = SignUpForm
+
+class SignupFormView(FormView):
+    form_class = SignUpForm
+    template_name = "signup_form.html"
+    
+    def form_valid(self, form):
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'signup_form.html', context)
+
+class SignupConfirmView(FormView):
+    form_class = SignUpForm
+    
+    def form_valid(self, form):
+        passlength = len(form.cleaned_data.get("password1"))
+        password = "･" * passlength
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+            'password': password,
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'signup.html', context)
+    
+    def form_invalid(self, form):
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+        }
+        return render(self.request, 'signup_form.html', context)
 
 class SignupView(CreateView):
     form_class = SignUpForm
-    model = User
-    template_name = 'signup.html'
-    # 登録成功時に移行
+    success_url = reverse_lazy('usercreated')
+
+class SignupConfirmationView(CreateView):
+    form_class = SignUpForm
     success_url = reverse_lazy("usercreated")
-    
+
 class PasswordReset(PasswordResetView):
     # パスワード変更URL付きメールのカスタマイズ
     subject_template_name = 'mail/subject.txt'
@@ -500,15 +538,6 @@ class ResignView(OnlyMyUserInformationMixin, UpdateView):
         context['user_id'] = self.request.user.pk
         return context
 
-"""
-def resign(request):
-    if request.method == "post":
-        user = User.objects.get(pk = request.user.pk)
-        user.is_active = False
-        user.save()
-        return redirect("resigndone")
-"""
-
 class ResignDoneView(TemplateView):
     model = User
     template_name = "resign_done.html"
@@ -575,22 +604,62 @@ class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
         context['target_restaurants'] = target_restaurants
         return context
 
-class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
+class ManagementRestaurantFormView(OnlyManagementUserMixin, FormView):
     form_class = RestaurantCreateForm
-    model = Restaurant
     template_name = "management/management_restaurant_form.html"
 
-    def get_success_url(self):
-        return reverse_lazy('managementrestaurant', kwargs=dict(user_id = self.request.user.pk))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["user"] = self.request.user
+    def form_valid(self, form):
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+        }
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
-        return context
+        return render(self.request, 'management/management_restaurant_form.html', context)
     
+class ManagementRestaurantConfirmView(OnlyManagementUserMixin, FormView):
+    form_class = RestaurantCreateForm
+
+    def form_valid(self, form):
+        holiday_indices = [int(i) for i in form.cleaned_data.get("holiday")]
+        holidays = []
+        for i in holiday_indices:
+            holidays.append(RegularHoliday.objects.get(holiday_index = i).holiday)
+        holidays = " ".join(holidays)
+        category_indices = [int(i) for i in form.cleaned_data.get("category_name")]
+        categories = []
+        description = form.cleaned_data.get("description").rstrip('\r\n')
+        for i in category_indices:
+            categories.append(Category.objects.get(pk = i).category_name)
+        categories = "　".join(categories)
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+            'description': description,
+            'opening_time': form.cleaned_data.get("opening_time"),
+            'closing_time': form.cleaned_data.get("closing_time"),
+            'holidays': holidays,
+            'categories': categories,
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'management/management_restaurant_create.html', context)
+    
+    def form_invalid(self, form):
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+        }
+        return render(self.request, 'management/management_restaurant_form.html', context)
+
+class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
+    form_class = RestaurantCreateForm
+
+    def get_success_url(self):
+        return reverse_lazy('managementopenrestaurant', kwargs=dict(user_id = self.request.user.pk))
+
     def form_valid(self, form):
         qryset = form.save(commit=False)
         qryset.save()

@@ -1,0 +1,119 @@
+{% extends "base_management.html" %}
+{% block title %}店舗情報作成ページ{% endblock %}
+{% block contents %}
+<div class="management-restaurant-confirm">
+	<div class="outer-container">
+        <p class="crimson">以下の情報で登録しますか？</p>
+        <table class="restaurant-confirm-table">
+            <tr>
+                <th>
+                    {{ form.restaurant_name.label_tag }}
+                </th>
+                <td>
+                    {{ form.restaurant_name.value }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.image.label_tag }}
+                </th>
+                <td>
+                    {{ form.image.value }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.description.label_tag }}
+                </th>
+                <td>
+                    {{ description }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.lowest_price.label_tag }}
+                </th>
+                <td>
+                    {{ form.lowest_price.value }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.highest_price.label_tag }}
+                </th>
+                <td>
+                    {{ form.highest_price.value }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.postal_code.label_tag }}
+                </th>
+                <td>
+                    {{ form.postal_code.value }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.address.label_tag }}
+                </th>
+                <td>
+                    {{ form.address.value }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.opening_time.label_tag }}
+                </th>
+                <td>
+                    {{ opening_time }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.closing_time.label_tag }}
+                </th>
+                <td>
+                    {{ closing_time }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.holiday.label_tag }}
+                </th>
+                <td>
+                    {{ holidays }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.seating_capacity.label_tag }}
+                </th>
+                <td>
+                    {{ form.seating_capacity.value }}席
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form.category_name.label_tag }}
+                </th>
+                <td>
+                    {{ categories }}
+                </td>
+            </tr>
+        </table>
+        <div class="flex-container btn-container">
+            <form method="post" action={% url 'managementrestaurantcreate' user.pk %}>
+                {% csrf_token %}
+                <button type="submit" class="btn">登録</button>
+                {% for field in form %}{{ field.as_hidden }}{% endfor %}
+            </form>
+            <form method="post" action={% url 'managementrestaurantform' user.pk %}>
+                {% csrf_token %}
+                <button type="submit" class="btn">戻る</button>
+                {% for field in form %}{{ field.as_hidden }}{% endfor %}
+            </form>
+        </div>
+	</div>
+</div>
+{% endblock %}
