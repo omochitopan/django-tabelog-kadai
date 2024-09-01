@@ -1666,7 +1666,7 @@ footer {
 }
 
 .management-reservation-list .outer-container {
-  width: 500px;
+  width: 550px;
   margin: 90px auto 30px auto;
 }
 
@@ -1728,7 +1728,7 @@ footer {
 }
 
 .management-reservation-list-table .user {
-  width: 120px;
+  width: 170px;
 }
 
 .management-reservation-list-table .edit {
@@ -1872,23 +1872,19 @@ footer {
 }
 
 .management-user-table .name {
-  width: 120px;
+  width: 150px;
 }
 
 .management-user-table .kana-name {
-  width: 150px;
+  width: 200px;
 }
 
 .management-user-table .email {
   width: 350px;
 }
 
-.management-user-table .member {
-  width: 120px;
-}
-
 .management-user-table .detail {
-  width: 60px;
+  width: 50px;
 }
 
 .management-user .btn {
