@@ -34,10 +34,12 @@
 				<th>住所</th>
 				<td>{{ object.address }}</td>
 			</tr>
+			{% endif %}
 			<tr>
 				<th>電話番号</th>
 				<td>{{ object.tel_number }}</td>
 			</tr>
+			{% if object.is_active %}
 			<tr>
 				<th>誕生日</th>
 				<td>{{ object.birthday }}</td>
@@ -49,10 +51,10 @@
 			{% endif %}
 			<tr>
 				<th>会員状態</th>
-				{% if not object.is_active %}
-				<td>退会</td>
-				{% else %}
+				{% if object.is_active %}
 				<td>継続</td>
+				{% else %}
+				<td>退会済</td>
 				{% endif %}
 			</tr>
 		</table>

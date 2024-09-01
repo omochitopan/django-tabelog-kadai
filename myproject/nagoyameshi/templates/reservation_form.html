@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}予約ページ{% endblock %}
+{% block contents %}
+<div class="reservationcreate">
+	<div class="outer-container">
+		<h2 class="center">{% if not restaurant.is_active %}[閉店] {% endif %}{{ restaurant.restaurant_name }}</h2>
+		{{ reservation_candidates }}
+		<div class="flex-container ref-container">
+			<a href="{% url 'detail' restaurant.pk %}" class="btn non-focus left-align">店舗情報</a>
+			{% if restaurant.is_active %}
+			<div class="btn focus left-align">予約フォーム</div>
+			<a href="{% url 'reviewlist' restaurant.pk %}" class="btn non-focus left-align">レビュー</a>
+			{% else %}
+			<div class="btn non-active left-align">予約フォーム</div>
+			<div class="btn non-active left-align">レビュー</div>
+			{% endif %}
+		</div>
+			{% if restaurant.is_active %}
+			<div class="inner-container">
+				<p class="crimson">予約情報を入力してください。</p>
+				<form method="post" action="{% url 'reservationconfirm' restaurant.pk %}" class="reservation-form">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<div class="flex-container btn-container">
+						<button type="submit" class="btn submit">予約確認</button>
+					</div>
+				</form>
+				{% else %}
+				<p class="center">閉店しています。</p>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

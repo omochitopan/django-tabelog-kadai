@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from django.http.response import JsonResponse
 from typing import Any, Dict
 from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms
-from .forms import SignUpForm, ReviewForm, ReservationForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
+from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
@@ -204,9 +204,7 @@ class ReviewListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant_id = self.kwargs.get("restaurant_id")
-        reviews = Review.objects
-        target_reviews = reviews.filter(restaurant = restaurant_id)
-        target_reviews = target_reviews.order_by('-updated_at')
+        target_reviews = Review.objects.filter(restaurant = restaurant_id).order_by('-updated_at')
         average_score = target_reviews.aggregate(Avg('score'))['score__avg']
         if average_score == None:
             average_score = "---"
@@ -277,15 +275,12 @@ class ReviewDeleteView(OnlyMyReviewMixin, LoginRequiredMixin, DeleteView):
         context["restaurant_id"] = self.request.session["restaurant_id"]
         return context
 
-class ReservationCreateView(LoginRequiredMixin, CreateView):
-    form_class = ReservationForm
-    model = Reservation
-    
-    def get_success_url(self):
-        return reverse_lazy('detail', kwargs=dict(pk = self.kwargs.get('restaurant_id')))
+class ReservationFormView(LoginRequiredMixin, FormView):
+    form_class = ReservationInputForm
+    template_name = "reservation_form.html"
     
     def get_form_kwargs(self):
-        kwargs = super(ReservationCreateView, self).get_form_kwargs()
+        kwargs = super(ReservationFormView, self).get_form_kwargs()
         restaurant = Restaurant.objects.get(pk = self.kwargs.get('restaurant_id'))
         seating_capacity = restaurant.seating_capacity
         opening_time = restaurant.opening_time
@@ -336,14 +331,53 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         for v in form.fields.values():
             v.label_suffix = ""
         return context
+    
+    def form_valid(self, form):
+        context = {
+            'form': form,
+            'restaurant': Restaurant.objects.get(pk = self.kwargs.get("restaurant_id")),
+            'kwargs': self.kwargs,
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'reservation_form.html', context)
 
+class ReservationConfirmView(LoginRequiredMixin, FormView):
+    form_class = ReservationConfirmForm
+    
+    def form_valid(self, form):
+        context = {
+            'form': form,
+            'restaurant': Restaurant.objects.get(pk = self.kwargs.get("restaurant_id")),
+            'kwargs': self.kwargs,
+            'reserved_date': form.cleaned_data.get("reserved_date"),
+            'reserved_time': form.cleaned_data.get("reserved_time"),
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'reservation_create.html', context)
+    
+    def form_invalid(self, form):
+        context = {
+            'form': form,
+            'restaurant': Restaurant.objects.get(pk = self.kwargs.get("restaurant_id")),
+            'kwargs': self.kwargs,
+        }
+        return render(self.request, 'reservation_form.html', context)
+
+class ReservationCreateView(LoginRequiredMixin, CreateView):
+    form_class = ReservationConfirmForm
+    success_url = reverse_lazy('reservationlist')
+    
     def form_valid(self, form):
         qryset = form.save(commit=False)
         qryset.user = self.request.user
-        qryset.restaurant = Restaurant.objects.get(id = self.request.session['restaurant_id'])
+        qryset.restaurant = Restaurant.objects.get(id = self.kwargs.get('restaurant_id'))
         qryset.save()
         return  super().form_valid(form)
-
+        
 class ReservationListView(LoginRequiredMixin, ListView):
     model = Reservation
     template_name = "reservation_list.html"
@@ -377,7 +411,7 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
     template_name = "reservation_delete.html"
     
     def get_success_url(self):
-        return reverse_lazy('reservationlist', kwargs=dict(user_id = self.request.user.id))
+        return reverse_lazy('reservationlist')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -650,7 +684,7 @@ class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
         return context
 
 class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
-    form_class = ReservationForm
+    form_class = ReservationInputForm
     model = Reservation
     template_name = "management/management_reservation_edit.html"
     

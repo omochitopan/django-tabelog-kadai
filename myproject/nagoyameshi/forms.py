@@ -87,13 +87,13 @@ class ReviewForm(forms.ModelForm):
             "content",
         )
 
-class ReservationForm(forms.ModelForm):
+class ReservationInputForm(forms.ModelForm):
     reserved_time = forms.ChoiceField(label="予約時間")
     
     def __init__(self, request, seating_capacity, reservation_candidates, *args, **kwargs):
         self.request = request
         self.seating_capacity = seating_capacity
-        super(ReservationForm, self).__init__(*args, **kwargs)
+        super(ReservationInputForm, self).__init__(*args, **kwargs)
         self.fields["reserved_time"].choices = reservation_candidates
         self.fields['number_of_people'].widget.attrs['min'] = 1
         self.fields['number_of_people'].widget.attrs['max'] = seating_capacity
@@ -111,6 +111,15 @@ class ReservationForm(forms.ModelForm):
             "min": datetime.date.today() + relativedelta(days = 1) # 予約可能な一番早い日を翌日に設定
             }),
         }
+
+class ReservationConfirmForm(forms.ModelForm):
+    class Meta:
+        model = Reservation                
+        fields = (
+            "reserved_date",
+            "reserved_time",
+            "number_of_people",
+        )
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField(label = "メールアドレス")

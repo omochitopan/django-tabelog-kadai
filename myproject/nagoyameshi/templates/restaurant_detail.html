@@ -10,11 +10,12 @@
 		<div class="flex-container ref-container">
 			<a href="" class="btn focus left-align">店舗情報</a>
 			{% if object.is_active %}
-			<a href="{% url 'reservationcreate' object.pk %}" class="btn non-focus left-align">予約フォーム</a>
+			<a href="{% url 'reservationform' object.pk %}" class="btn non-focus left-align">予約フォーム</a>
+			<a href="{% url 'reviewlist' object.pk %}" class="btn non-focus left-align">レビュー</a>
 			{% else %}
 			<div class="btn non-active left-align">予約フォーム</div>
+			<div class="btn non-active left-align">レビュー</div>
 			{% endif %}
-			<a href="{% url 'reviewlist' object.pk %}" class="btn non-focus left-align">レビュー</a>
 		</div>
 		<img src="{{ object.image.url }}" class="detail-image" alt="店舗イメージ">
 		<table class="restaurant-table">

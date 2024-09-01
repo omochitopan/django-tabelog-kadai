@@ -316,7 +316,7 @@ main {
 }
 
 .signup select {
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .signup .btn {
@@ -624,7 +624,7 @@ footer {
   text-decoration: underline;
 }
 
-.detail-image {
+.detail img {
   width: 500px;
 }
 
@@ -808,6 +808,13 @@ footer {
   padding: 2px 4px;
 }
 
+.review-table .my-name {
+  font-size: 18px;
+  background-color: rgb(255, 253, 120);
+  border-bottom: solid 1px gray;
+  padding: 2px 4px;
+}
+
 .review-table .san {
   font-size: 14px;
 }
@@ -946,19 +953,13 @@ footer {
   background-color: rgb(190, 190, 190);
 }
 
-.reservationcreate .restaurant-name, .average {
-  text-align: center;
-  margin-top: 20px;
-}
-
 .reservationcreate .inner-container {
   width: 300px;
   margin: 20px auto 0 auto;
 }
 
-.reservationcreate .comment {
-  color: crimson;
-  margin-top: 10px;
+.reservationcreate .crimson {
+  margin-top: 40px;
   margin-bottom: 0;
 }
 
@@ -968,11 +969,11 @@ footer {
 }
 
 .reservationcreate label {
-  width: 80px;
+  width: 120px;
 }
 
 .reservationcreate input {
-  width: 215px;
+  width: 172px;
 }
 
 .reservationcreate .submit {
@@ -991,6 +992,10 @@ footer {
 .reservationcreate .btn-container {
   text-align: center;
   margin-top: 40px;
+}
+
+.reservationcreate .form-group {
+  margin: 10px 0;
 }
 
 .reservation .outer-container {
@@ -1092,6 +1097,19 @@ footer {
 .reservation .deletecheck {
   color: crimson;
   margin-top: 20px;
+}
+
+.reservation-confirm-table {
+  margin-top: 20px;
+}
+
+.reservation-confirm-table tr {
+  height: 35px;
+  border-bottom: solid gray 1px;
+}
+
+.reservation-confirm-table td {
+  width: 180px;
 }
 
 .favoritelist .outer-container {
@@ -1463,6 +1481,7 @@ footer {
 
 .management-restaurant-create .label {
   width: 230px;
+  vertical-align: top;
 }
 
 .management-restaurant-create .const input {
@@ -1493,6 +1512,7 @@ footer {
 
 .management-restaurant-edit .label {
   width: 230px;
+  vertical-align: top;
 }
 
 .management-restaurant-edit .const input {
@@ -1508,28 +1528,6 @@ footer {
 }
 
 .management-restaurant-edit .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.management-restaurant-delete .outer-container {
-  width: 700px;
-  margin: 90px auto 30px auto;
-}
-
-.management-restaurant-delete .delete-check {
-  color: crimson;
-}
-
-.management-restaurant-delete .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-restaurant-delete .btn:hover {
   color: white;
   background-color: orangered;
 }
