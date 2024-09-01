@@ -192,6 +192,11 @@ main {
   text-decoration: underline;
 }
 
+.login .lower-comment {
+  width: 530px;
+  margin: 30px auto;
+}
+
 .login-check {
   margin-bottom: 30px;
 }
