@@ -173,16 +173,34 @@ class Restaurant(models.Model):
     address = models.CharField(verbose_name="店舗住所", max_length=200)
     opening_time = models.TimeField(verbose_name='開店時間')
     closing_time = models.TimeField(verbose_name='閉店時間')
-    holiday = models.ManyToManyField(RegularHoliday, verbose_name='定休日', blank=True)    
+    holiday = models.ManyToManyField(RegularHoliday, through="HolidayRestaurantRelation", verbose_name='定休日', blank=True)    
     seating_capacity = models.PositiveIntegerField(verbose_name='予約可能な座席数')
-    category_name = models.ManyToManyField(Category, verbose_name='カテゴリ（3つまで選択可）', blank=True)
-    managers = models.ManyToManyField(User, verbose_name="店舗管理ユーザー", blank=False)
+    category_name = models.ManyToManyField(Category, through="CategoryRestaurantRelation", verbose_name='カテゴリ（3つまで選択可）', blank=True)
+    managers = models.ManyToManyField(User, through="ManagerRestaurantRelation", verbose_name="店舗管理ユーザー", blank=False)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
     def __str__(self):
         return self.restaurant_name
+
+class ManagerRestaurantRelation(models.Model):
+    manager = models.ForeignKey("User", on_delete=models.CASCADE)
+    restaurant = models.ForeignKey("Restaurant", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+
+class CategoryRestaurantRelation(models.Model):
+    category = models.ForeignKey("Category", on_delete=models.CASCADE)
+    restaurant = models.ForeignKey("Restaurant", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
+
+class HolidayRestaurantRelation(models.Model):
+    holiday = models.ForeignKey("RegularHoliday", on_delete=models.CASCADE)
+    restaurant = models.ForeignKey("Restaurant", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
 
 class Review(models.Model):
     class Meta:
@@ -198,7 +216,7 @@ class Review(models.Model):
 
 class Reservation(models.Model):
     class Meta:
-        db_table = 'nagoyameshi_rerervation'
+        db_table = 'nagoyameshi_reservation'
         verbose_name = verbose_name_plural = '予約'
     
     reserved_date = models.DateField(verbose_name="予約日")
