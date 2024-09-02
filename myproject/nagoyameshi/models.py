@@ -198,7 +198,7 @@ class Review(models.Model):
 
 class Reservation(models.Model):
     class Meta:
-        db_table = 'nagoyameshi_rervation'
+        db_table = 'nagoyameshi_rerervation'
         verbose_name = verbose_name_plural = '予約'
     
     reserved_date = models.DateField(verbose_name="予約日")
