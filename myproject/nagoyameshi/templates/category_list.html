@@ -15,26 +15,26 @@
 
 	<!-- 検索結果の数 -->
 	<div class="search-count">
-		{% if object_list %}
-		<p>{{ object_list|length }}件の店舗が見つかりました</p>
+		{% if category_restaurants %}
+		<p>{{ category_restaurants|length }}件の店舗が見つかりました</p>
 		{% else %}
 		<p>お探しの店舗は見つかりませんでした</p>
 		{% endif %}
 	<div>
-	{% for restaurant in object_list %}
+	{% for object in category_restaurants %}
 	</div>
 	<table class="restaurant-table">
 		<tr>
 			<td rowspan="4" class="image-table">
-				<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="restaurant-image" alt="店舗画像"></a>
+				<a href="{% url 'detail' object.restaurant.pk %}"><img src="{{ object.restaurant.image.url }}" class="restaurant-image" alt="店舗画像"></a>
 			</td>
 			<td class="first-row">
-				<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a><br>
+				<a href="{% url 'detail' object.restaurant.pk %}" class="restaurant-name">{{ object.restaurant.restaurant_name }}</a><br>
 			</td>
 		</tr>
 		<tr>
 			<td class="second-row">
-				{% for category in restaurant.category_name.all %}
+				{% for category in object.restaurant.category_name.all %}
 				<span class="category">{{ category }}　</span>
 				{% endfor %}
 				<div></div>
@@ -42,12 +42,12 @@
 		</tr>
 		<tr>
 			<td class="third-row">
-				{{ restaurant.lowest_price }}~{{ restaurant.highest_price }}円<br>
+				{{ object.restaurant.lowest_price }}~{{ object.restaurant.highest_price }}円<br>
 			</td>
 		</tr>
 		<tr>
 			<td class="fourth-row">
-				{{ restaurant.description}}</p>
+				{{ object.restaurant.description}}</p>
 			</td>
 		</tr>
 	</table>

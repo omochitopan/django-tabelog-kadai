@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -185,18 +184,30 @@ class Restaurant(models.Model):
         return self.restaurant_name
 
 class ManagerRestaurantRelation(models.Model):
-    manager = models.ForeignKey("User", on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'nagoyameshi_managerrestaurantrelation'
+        verbose_name = verbose_name_plural = '店舗運営者-レストラン'
+        
+    managers = models.ForeignKey("User", on_delete=models.CASCADE)
     restaurant = models.ForeignKey("Restaurant", on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
 
 class CategoryRestaurantRelation(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_categoryrestaurantrelation'
+        verbose_name = verbose_name_plural = 'カテゴリ-レストラン'
+    
     category = models.ForeignKey("Category", on_delete=models.CASCADE)
     restaurant = models.ForeignKey("Restaurant", on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
 
 class HolidayRestaurantRelation(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_holidayrestaurantrelation'
+        verbose_name = verbose_name_plural = '定休日-レストラン'
+
     holiday = models.ForeignKey("RegularHoliday", on_delete=models.CASCADE)
     restaurant = models.ForeignKey("Restaurant", on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)

@@ -13,7 +13,7 @@ from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from typing import Any, Dict
-from .models import Restaurant, User, UserActivateTokens, Category, Review, Reservation, Favorite, Company, Terms, RegularHoliday
+from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, CategoryRestaurantRelation, HolidayRestaurantRelation, ManagerRestaurantRelation
 from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
 from datetime import date, time
@@ -80,28 +80,12 @@ class RestaurantCategoryList(LoginRequiredMixin, ListView):
     model = Restaurant
     template_name = "category_list.html"
 
-    def get_queryset(self):
-        query = self.request.GET.get('query')
-        restaurants = Restaurant.objects.filter(is_active = True)
-        categoryRestaurants = []
-        for restaurant in restaurants:
-            for category in restaurant.category_name.all():
-                if query == category.category_name:
-                    categoryRestaurants.append(restaurant)
-        return categoryRestaurants
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('query')
-        restaurants = Restaurant.objects.filter(is_active = True)
-        categoryRestaurants = []
-        for restaurant in restaurants:
-            for category in restaurant.category_name.all():
-                if query == category.category_name:
-                    categoryRestaurants.append(restaurant)
-                    break
+        category_restaurants = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True).filter(category__category_name = query)
         context['user_id'] = self.request.user.pk
-        context["data"] = categoryRestaurants
+        context["category_restaurants"] = category_restaurants
         return context
     
 class RestaurantDetailView(LoginRequiredMixin, DetailView):
@@ -576,15 +560,9 @@ class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurants = Restaurant.objects.filter(is_active = True)
-        target_restaurants = []
-        for restaurant in restaurants:
-            for manager in restaurant.managers.all():
-                if self.request.user == manager:
-                    target_restaurants.append(restaurant)
-                    break
+        managed_restaurants = ManagerRestaurantRelation.objects.filter(restaurant__is_active = True).filter(managers = self.request.user)
         context["user"] = self.request.user
-        context['target_restaurants'] = target_restaurants
+        context['managed_restaurants'] = managed_restaurants
         return context
 
 class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
@@ -593,15 +571,9 @@ class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        restaurants = Restaurant.objects.filter(is_active = False)
-        target_restaurants = []
-        for restaurant in restaurants:
-            for manager in restaurant.managers.all():
-                if self.request.user == manager:
-                    target_restaurants.append(restaurant)
-                    break
+        managed_restaurants = ManagerRestaurantRelation.objects.filter(restaurant__is_active = False).filter(managers = self.request.user)
         context["user"] = self.request.user
-        context['target_restaurants'] = target_restaurants
+        context['managed_restaurants'] = managed_restaurants
         return context
 
 class ManagementRestaurantFormView(OnlyManagementUserMixin, FormView):
@@ -842,19 +814,10 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        restaurants = Restaurant.objects.all()
-        target_restaurant = []
-        for restaurant in restaurants:
-            for manager in restaurant.managers.all():
-                if user == manager:
-                    target_restaurant.append(restaurant)
-                    break
-        target_reservations = Reservation.objects.filter(restaurant__in=target_restaurant)
-        target_user_id = []
-        for reservation in target_reservations:
-            target_user_id.append(reservation.user.pk)
-        target_user_id = list(set(target_user_id))
-        target_users = User.objects.filter(pk__in=target_user_id).order_by("pk")
+        managed_restaurants = [object.restaurant for object in ManagerRestaurantRelation.objects.filter(managers = self.request.user)]
+        target_reservations = Reservation.objects.filter(restaurant__in = managed_restaurants)
+        target_user_id = set(reservation.user.pk for reservation in target_reservations)
+        target_users = User.objects.filter(pk__in=target_user_id)
         context["user"] = user
         context['target_users'] = target_users
         return context

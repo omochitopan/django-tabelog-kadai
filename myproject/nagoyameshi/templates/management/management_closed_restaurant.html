@@ -24,17 +24,17 @@
                 <th class="reservationlist"></th>
                 <th class="sales"></th>
             </tr>
-            {% for restaurant in target_restaurants %}
+            {% for object in managed_restaurants %}
             <tr>
-                <td><a href="{% url 'managementrestaurantdetail' user.pk restaurant.pk %}" class="ref">{{ restaurant.restaurant_name }}</a></td>
-                <td>{{ restaurant.postal_code }}</td>
-                <td>{{ restaurant.address }}</td>
+                <td><a href="{% url 'managementrestaurantdetail' user.pk object.restaurant.pk %}" class="ref">{{ object.restaurant.restaurant_name }}</a></td>
+                <td>{{ object.restaurant.postal_code }}</td>
+                <td>{{ object.restaurant.address }}</td>
                 <td>
-                    {% for manager in restaurant.managers.all %}
+                    {% for manager in object.restaurant.managers.all %}
                     <span><a href="{% url 'managementmanagerdetail' user.pk manager.pk %}" class="ref">{{ manager.name }}</a>　</span>
                     {% endfor %}
                 </td>
-                <td><a href="{% url 'managementreservationrestaurant' user.pk restaurant.pk %}" class="btn submit">予約一覧</a></td>
+                <td><a href="{% url 'managementreservationrestaurant' user.pk object.restaurant.pk %}" class="btn submit">予約一覧</a></td>
                 <td><a href="" class="btn submit">売上</a></td>
             </tr>
             {% endfor %}

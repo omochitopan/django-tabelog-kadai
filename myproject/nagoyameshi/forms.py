@@ -151,7 +151,7 @@ class RestaurantCreateForm(forms.ModelForm):
     holiday = forms.MultipleChoiceField(
         label="定休日",
         widget=forms.CheckboxSelectMultiple,
-        choices = [(day.pk, day.holiday) for day in RegularHoliday.objects.all()],
+        choices = [(day.holiday_index, day.holiday) for day in RegularHoliday.objects.all()],
         required = True,
     )
     

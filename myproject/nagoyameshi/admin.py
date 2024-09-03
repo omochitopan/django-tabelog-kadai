@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import RestaurantAdminForm
-from .models import Restaurant, User, UserActivateTokens, Category, RegularHoliday, Terms, Review, Reservation, Company
+from .models import Restaurant, User, UserActivateTokens, Terms, Review, Reservation, Company, Category, RegularHoliday, ManagerRestaurantRelation, CategoryRestaurantRelation, HolidayRestaurantRelation
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
@@ -18,7 +18,6 @@ class RestaurantAdmin(ImportExportModelAdmin):
     search_fields = ('restaurant_name',)
     list_per_page = 25
     form = RestaurantAdminForm
-    #filter_horizontal = ('holiday', 'category_name', 'managers',)
     resource_class = RestaurantResource
 
 class UserResource(resources.ModelResource):
@@ -72,6 +71,15 @@ class ReservationAdmin(admin.ModelAdmin):
 
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'address', 'representative',)
+    
+class ManagerRestaurantRelationAdmin(admin.ModelAdmin):
+    list_display = ('restaurant', 'managers',)
+
+class CategoryRestaurantRelationAdmin(admin.ModelAdmin):
+    list_display = ('restaurant', 'category',)
+
+class HolidayRestaurantRelationAdmin(admin.ModelAdmin):
+    list_display = ('restaurant', 'holiday',)
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)
@@ -82,3 +90,6 @@ admin.site.register(Terms, TermsAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Reservation, ReservationAdmin)
 admin.site.register(Company, CompanyAdmin)
+admin.site.register(ManagerRestaurantRelation, ManagerRestaurantRelationAdmin)
+admin.site.register(CategoryRestaurantRelation, CategoryRestaurantRelationAdmin)
+admin.site.register(HolidayRestaurantRelation, HolidayRestaurantRelationAdmin)
