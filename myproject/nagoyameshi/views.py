@@ -249,7 +249,6 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     
     def get_success_url(self):
-        restaurant_id = self.request.session["restaurant_id"]
         return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
 
     def get_context_data(self, **kwargs):
@@ -273,7 +272,6 @@ class ReviewUpdateView(OnlyMyReviewMixin, LoginRequiredMixin, UpdateView):
     template_name = "review_update.html"
     
     def get_success_url(self):
-        restaurant_id = self.request.session["restaurant_id"]
         return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
     
     def get_context_data(self, **kwargs):
