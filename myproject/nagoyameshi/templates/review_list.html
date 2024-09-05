@@ -6,76 +6,78 @@
 	<div class="outer-container">
 		<h2 class="restaurant-name">{% if not restaurant.is_active %}[閉店] {% endif %}{{ restaurant.restaurant_name }}</h2>
 		<div class="flex-container ref-container">
-			<a href="{% url 'detail' restaurant.pk %}" class="btn non-focus left-align">店舗情報</a>
+			<a href="{% url 'detail' restaurant.pk %}" class="btn nonfocus-btn left-align">店舗情報</a>
 			{% if restaurant.is_active %}
-			<a href="{% url 'reservationform' restaurant.pk %}" class="btn non-focus left-align">予約フォーム</a>
-			<div class="btn focus left-align">レビュー</div>
+			<a href="{% url 'reservationform' restaurant.pk %}" class="btn nonfocus-btn left-align">予約フォーム</a>
+			<div class="btn focus-btn left-align">レビュー</div>
 			{% else %}
-			<div class="btn non-active left-align">予約フォーム</div>
-			<div class="btn non-active left-align">レビュー</div>
+			<div class="btn nonactive-btn left-align">予約フォーム</div>
+			<div class="btn nonactive-btn left-align">レビュー</div>
 			{% endif %}
 		</div>
 		{% if restaurant.is_active %}
-		<p class="average">平均：{{ average_score }}点（{{ target_reviews|length }}件）</p>
-		{% if not writtenreview %}
-		<p class="reviewcheck">あなたはこのレストランに{% if restaurant.is_active %}まだ{% endif %}レビューしていません。</p>
-		{% if restaurant.is_active %}
-		<div class="flex-container btn-container">
-			<a href="{% url 'reviewcreate' restaurant.pk %}" class= "btn submit">レビューを投稿</a>
-		</div>
-		{% endif %}
-		{% else %}
-		<p class="reviewcheck">あなたはこのレストランにレビュー済みです。</p>
-		<div class="flex-container btn-container">
+		<div class="information">
+			<p class="center">平均：{{ average_score }}点（{{ target_reviews|length }}件）</p>
+			{% if not writtenreview %}
+			<p class="reviewcheck">あなたはこのレストランに{% if restaurant.is_active %}まだ{% endif %}レビューしていません。</p>
 			{% if restaurant.is_active %}
-			<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn submit">レビューを編集</a>
+			<div class="flex-container btn-container">
+				<a href="{% url 'reviewcreate' restaurant.pk %}" class= "btn new-btn">＋レビューを投稿</a>
+			</div>
 			{% endif %}
-			<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn submit">レビューを削除</a>
+			{% else %}
+			<p class="reviewcheck">あなたはこのレストランにレビュー済みです。</p>
+			<div class="flex-container btn-container">
+				{% if restaurant.is_active %}
+				<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn accept-btn">レビューを編集</a>
+				{% endif %}
+				<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn cancel-btn">レビューを削除</a>
+			</div>
+			{% endif %}
+			{% if not target_reviews %}
+			<table class="review-table">
+				<tr>
+					<td class="noreview">このレストランのレビューはまだありません。</td>
+				</tr>
+			</table>
+			{% else %}
+			{% for review in target_reviews %}
+			<table class="review-table">
+				<tr class="user-name-index">
+					{% if not review.user == user %}
+					<td class="user-name">
+					{% else %}
+					<td class="user-name my-name">
+					{% endif %}
+						{{ review.user.nick_name }}<span class="san"> さん</span>
+					</td>
+				</tr>
+				<tr>
+					{% if review.score == 1 %}
+					<td class="star">★<span class="notstar">★★★★</span></td>
+					{% elif review.score == 2 %}
+					<td class="star">★★<span class="notstar">★★★</span></td>
+					{% elif review.score == 3 %}
+					<td class="star">★★★<span class="notstar">★★</span></td>
+					{% elif review.score == 4 %}
+					<td class="star">★★★★<span class="notstar">★</span></td>
+					{% elif review.score == 5 %}
+					<td class="star">★★★★★</td>
+					{% endif %}
+				</tr>
+				<tr>
+					<td class="content">{{ review.content }}</td>
+				</tr>
+				<tr>
+					<td class="update">更新日：{{ review.updated_at|date:"Y年m月d日" }}</td>
+				</tr>
+			</table>
+			{% endfor %}
+			{% endif %}
+			{% else %}
+			<p class="center">閉店しています。</p>
+			{% endif %}
 		</div>
-		{% endif %}
-		{% if not target_reviews %}
-		<table class="review-table">
-			<tr>
-				<td class="noreview">このレストランのレビューはまだありません。</td>
-			</tr>
-		</table>
-		{% else %}
-		{% for review in target_reviews %}
-		<table class="review-table">
-			<tr class="user-name-index">
-				{% if not review.user == user %}
-				<td class="user-name">
-				{% else %}
-				<td class="user-name my-name">
-				{% endif %}
-					{{ review.user.nick_name }}<span class="san"> さん</span>
-				</td>
-			</tr>
-			<tr>
-				{% if review.score == 1 %}
-				<td class="star">★<span class="notstar">★★★★</span></td>
-				{% elif review.score == 2 %}
-				<td class="star">★★<span class="notstar">★★★</span></td>
-				{% elif review.score == 3 %}
-				<td class="star">★★★<span class="notstar">★★</span></td>
-				{% elif review.score == 4 %}
-				<td class="star">★★★★<span class="notstar">★</span></td>
-				{% elif review.score == 5 %}
-				<td class="star">★★★★★</td>
-				{% endif %}
-			</tr>
-			<tr>
-				<td class="content">{{ review.content }}</td>
-			</tr>
-			<tr>
-				<td class="update">更新日：{{ review.updated_at|date:"Y年m月d日" }}</td>
-			</tr>
-		</table>
-		{% endfor %}
-		{% endif %}
-		{% else %}
-		<p class="center">閉店しています。</p>
-		{% endif %}
 	</div>
 </div>
 {% endblock %}

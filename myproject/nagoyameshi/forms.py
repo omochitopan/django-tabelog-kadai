@@ -13,6 +13,7 @@ class SignUpForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'placeholder':'名古屋 太郎',})
         self.fields['kana_name'].widget.attrs.update({'placeholder':'ナゴヤ タロウ',})
+        self.fields['nick_name'].widget.attrs.update({'placeholder':'タロちゃん',})
         self.fields['email'].widget.attrs.update({'placeholder': 'tarou@nagoyameshi.com',})
         self.fields['postal_code'].widget.attrs.update({'placeholder': '0123456',})
         self.fields['address'].widget.attrs.update({'placeholder': '愛知県栄区X-X-X',})

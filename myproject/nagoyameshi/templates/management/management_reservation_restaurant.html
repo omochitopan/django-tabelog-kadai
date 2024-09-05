@@ -3,10 +3,10 @@
 {% block contents %}
 <div class="management-reservation-list">
 	<div class="outer-container">
-		<h4 class="center">{{ target_restaurant.restaurant_name }} 予約一覧</h4>
+		<h2 class="center">{{ target_restaurant.restaurant_name }} 予約一覧</h2>
 		<div class="flex-container">
-			<a href="" class="btn focus left-align">本日以降</a>
-			<a href="{% url 'managementreservationrestaurantall' user.pk restaurant_id %}" class="btn non-focus left-align">全て</a>
+			<a href="" class="btn focus-btn left-align">本日以降</a>
+			<a href="{% url 'managementreservationrestaurantall' user.pk restaurant_id %}" class="btn nonfocus-btn left-align">全て</a>
 		</div>
 		<table class="management-reservation-list-table">
 			<tr>
@@ -25,8 +25,8 @@
 				<td>{{ reservation.reserved_time }}</td>
 				<td>{{ reservation.number_of_people }}</td>
 				<td><a href="{% url 'managementuserdetail' user.pk reservation.user.pk %}" class="ref">{{ reservation.user.name }}</a></td>
-				<td><a href="{% url 'managementreservationedit' user.pk reservation.pk %}" class="btn submit">編集</a></td>
-				<td><a href="{% url 'managementreservationdelete' user.pk reservation.pk %}" class="btn submit">削除</a></td>
+				<td class="center"><a href="{% url 'managementreservationedit' user.pk reservation.pk %}" class="btn accept-btn">編集</a></td>
+				<td class="center"><a href="{% url 'managementreservationdelete' user.pk reservation.pk %}" class="btn resign-btn">削除</a></td>
 			</tr>
 			{% endfor %}
 			{% else %}
@@ -42,7 +42,7 @@
 			</tr>
 		</table>
 		<div class="flex-container btn-container">
-        	<a href="{% url 'managementopenrestaurant' user.pk %}" class="btn submit">管理店舗一覧に戻る</a>
+        	<a href="{% url 'managementopenrestaurant' user.pk %}" class="btn cancel-btn">管理店舗一覧に戻る</a>
 		</div>
 		</div>
 </div>

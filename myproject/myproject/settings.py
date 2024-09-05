@@ -162,7 +162,7 @@ STATIC_ROOT = '/var/www/static/'
 """
 
 # ログイン認証
-LOGIN_URL = 'serviceguide'
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'top'
 LOGOUT_REDIECT_URL = 'top'
 

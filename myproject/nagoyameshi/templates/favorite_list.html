@@ -4,7 +4,7 @@
 {% block contents %}
 <div class="favoritelist">
 	<div class="outer-container">
-		<h4 class="center">お気に入り一覧</h4>
+		<h2 class="center">お気に入り店舗一覧</h2>
 		{% if not target_favorites %}
 		<p>現在のお気に入りレストランはありません。</p>
 		{% else %}
@@ -21,9 +21,9 @@
 				<td>{{ favorite.restaurant.postal_code }}</td>
 				<td>{{ favorite.restaurant.address }}</td>
 				<td>
-					<form method="post" action="{% url 'favoritedelete' favorite.restaurant.pk %}">
+					<form method="post" action="{% url 'favoritedelete' favorite.restaurant.pk %}" class="center">
 						{% csrf_token %}
-						<button type="submit" name="button" value="{{ favorite.restaurant.pk }}" class="btn">解除</button>
+						<button type="submit" name="button" value="{{ favorite.restaurant.pk }}" class="btn cancel-btn">解除</button>
 					</form>
 				</td>
 			</tr>

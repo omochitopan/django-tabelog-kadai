@@ -3,7 +3,11 @@
 {% block contents %}
 <div class="user">
 	<div class="outer-container">
-		<h4 class="center">会員情報</h4>
+		<h2 class="center">会員情報</h2>
+		<div class="top-container">
+			<a href="{% url 'userupdate' user_id %}" class="btn edit-btn top-ref">プロフィール編集</a>
+			<a href="{% url 'password_change' %}" class="btn edit-btn top-ref">パスワード変更</a>
+		</div>
         <table class="user-table">
 			<tr>
 				<th>氏名</th>
@@ -52,17 +56,9 @@
                 </td>
 			</tr>
 		</table>
-        <div class="flex-container btn-container">
-			<a href="{% url 'userupdate' user_id %}" class="btn submit">プロフィール編集</a>
-		</div>
 		<div class="flex-container btn-container">
-			<a href="{% url 'password_change' %}" class="btn submit">パスワード変更</a>
-		</div>
-		<div class="flex-container btn-container">
-			<a href="" class="btn submit">有料会員アップグレード</a>
-		</div>
-		<div class="flex-container btn-container bottom">
-			<a href="{% url 'resign' user_id %}" class="btn caution">NAGOYAMESHI退会</a>
+			<a href="" class="btn type1-btn">有料会員アップグレード</a>
+			<a href="{% url 'resign' user_id %}" class="btn resign-btn">NAGOYAMESHI退会</a>
 		</div>
 	</div>
 </div>

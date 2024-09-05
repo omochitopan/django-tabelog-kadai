@@ -3,7 +3,7 @@
 {% block contents %}
 <div class="reservation">
 	<div class="outer-container">
-        <h6 class="deletecheck">以下の予約をキャンセルしますか？</h6>
+        <h5 class="deletecheck">以下の予約をキャンセルしますか？</h5>
 		<table class="reservation-table">
 			<tr>
 				<th class="restaurant-name">店舗名</th>
@@ -21,8 +21,8 @@
 		<form method="post">
 			{% csrf_token %}
 			<div class="flex-container btn-container">		
-				<button type="submit" class="btn cancel">キャンセル</button>
-				<a href="{% url 'reservationlist' %}" class="btn cancel">戻る</a>
+				<button type="submit" class="btn resign-btn">キャンセル</button>
+				<a href="{% url 'reservationlist' %}" class="btn cancel-btn">予約一覧に戻る</a>
 			</div>
 		</form>	
 	</div>

@@ -62,9 +62,13 @@ if (favoriteButton) {
         console.log('Favorite status toggled');
         this.setAttribute('data-favorite', String(!isFavorite));
         if (data.favorite_status === 'unfavorited') {
-          this.innerHTML = '&#x2661;　お気に入り追加'; // 塗りなしのハート
+          this.innerHTML = '&#9825; お気に入り追加';
+					this.classList.remove("favorite-btn");
+					this.classList.add("unfavorite-btn");
         } else if (data.favorite_status === 'favorited') {
-          this.innerHTML = '&hearts;　お気に入り解除'; // 塗りありのハート
+          this.innerHTML = '&#9829; お気に入り解除';
+					this.classList.remove("unfavorite-btn");
+					this.classList.add("favorite-btn");
         }
       } else {
         alert(data.message);

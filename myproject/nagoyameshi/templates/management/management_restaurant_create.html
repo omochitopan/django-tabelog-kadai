@@ -105,12 +105,12 @@
         <div class="flex-container btn-container">
             <form method="post" action={% url 'managementrestaurantcreate' user.pk %}>
                 {% csrf_token %}
-                <button type="submit" class="btn">登録</button>
+                <button type="submit" class="btn accept-btn">店舗情報を登録する</button>
                 {% for field in form %}{{ field.as_hidden }}{% endfor %}
             </form>
             <form method="post" action={% url 'managementrestaurantform' user.pk %}>
                 {% csrf_token %}
-                <button type="submit" class="btn">戻る</button>
+                <button type="submit" class="btn cancel-btn">入力画面に戻る</button>
                 {% for field in form %}{{ field.as_hidden }}{% endfor %}
             </form>
         </div>

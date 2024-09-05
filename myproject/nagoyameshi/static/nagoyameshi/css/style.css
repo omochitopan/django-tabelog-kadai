@@ -14,8 +14,164 @@ body {
   flex: 1;
 }
 
-h1 {
-  font-size: 20px;
+label {
+  display: inline-block;
+}
+
+input, select {
+  font-size: 100%;
+}
+
+textarea {
+  font-size: 16px;
+}
+
+th {
+  text-align: left;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+.btn {
+  color: black;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 3px;
+  border-radius: 6px;
+  border: none;
+}
+
+.accept-btn {
+  background-color: rgb(255, 210, 197);
+}
+
+.accept-btn:hover {
+  color: white;
+  background-color: orangered;
+}
+
+.cancel-btn {
+  background-color: rgb(165, 217, 255);
+}
+
+.cancel-btn:hover {
+  color: white;
+  background-color: rgb(0, 149, 255);
+}
+
+.new-btn {
+  background-color: rgb(175, 255, 164);
+}
+
+.new-btn:hover {
+  font-weight: bold;
+  background-color: rgb(30, 255, 0);
+}
+
+.focus-btn {
+  color: white;
+  background-color: rgb(255, 174, 0);
+}
+
+.nonfocus-btn {
+  color: black;
+  background-color: rgb(255, 235, 190);
+}
+
+.edit-btn {
+  background-color: rgb(255, 235, 190);
+}
+
+.edit-btn:hover {
+  color: white;
+  background-color: rgb(255, 174, 0);
+}
+
+.nonfocus-btn:hover {
+  font-weight: bold;
+}
+
+.nonactive-btn {
+  background-color: rgb(190, 190, 190);
+}
+
+.favorite-btn {
+  color: black;
+  background-color: rgb(255, 185, 243);
+}
+
+.favorite-btn:hover {
+  font-weight: bold;
+}
+
+.unfavorite-btn {
+  color: black;
+  background-color: rgb(155, 220, 255);
+}
+
+.unfavorite-btn:hover {
+  font-weight: bold;
+}
+
+.resign-btn {
+  background-color: rgb(205, 151, 255);
+}
+
+.resign-btn:hover {
+  color: white;
+  background-color: rgb(132, 0, 255);
+}
+
+.type1-btn {
+  background-color: rgb(255, 189, 207);
+}
+
+.type1-btn:hover {
+  color: white;
+  background-color: rgb(255, 72, 121);
+}
+
+.type2-btn {
+  background-color: rgb(225, 180, 255);
+}
+
+.type2-btn:hover {
+  color: white;
+  background-color: rgb(182, 72, 255);
+}
+
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.wrap-container {
+  flex-wrap: wrap;
+}
+
+.btn-container {
+  justify-content: space-around;
+}
+
+.crimson {
+  color: crimson;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 header {
@@ -65,11 +221,11 @@ header .own-link:hover {
 
 header .flex-container {
   width: 550px;
-  margin-bottom: 10px;
   justify-content: space-between;
 }
 
 header .upper {
+  margin-top: 0;
   margin-bottom: 3px;
 }
 
@@ -85,7 +241,7 @@ header .before-login a {
   color: rgb(0, 105, 140);
   font-weight: bold;
   text-align: right;
-  margin-bottom: 0;
+  margin: 0 0 0 0;
 }
 
 .link-container {
@@ -106,51 +262,12 @@ header .nav-input {
   border: none;
 }
 
-main {
-  margin-top: 60px;
-}
-
-.center {
-  text-align: center;
-}
-
-.right {
-  text-align: right;
-}
-
-.crimson {
-  color: crimson;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-.serviceguide .outer-container {
-  width: 600px;
+.outer-container {
   margin: 90px auto 30px auto;
-}
-
-.serviceguide .ref-container {
-  margin-top: 30px;
-}
-
-.serviceguide .ref-list {
-  list-style: none;
-  text-align: center;
-}
-
-.serviceguide .btn {
-  color: gray;
-}
-
-.serviceguide .btn:hover {
-  color: black;
 }
 
 .login .outer-container {
   width: 350px;
-  margin: 90px auto 30px auto;
 }
 
 .login .form-section {
@@ -194,7 +311,11 @@ main {
 
 .login .lower-comment {
   width: 530px;
-  margin: 30px auto;
+  margin: 60px auto;
+}
+
+.login p {
+  font-size: 16px;
 }
 
 .login-check {
@@ -203,7 +324,6 @@ main {
 
 .passwordreset .outer-container {
   width: 450px;
-  margin: 90px auto 30px auto;
 }
 
 .passwordreset .title {
@@ -237,14 +357,13 @@ main {
 }
 
 .passwordchange .outer-container {
+  margin-top: 150px;
   width: 430px;
-  margin: 90px auto 30px auto;
 }
 
 .passwordchange .comment {
   color: gray;
 }
-
 .passwordchange label {
   width: 220px;
 }
@@ -257,19 +376,6 @@ main {
   margin: 20px 0;
 }
 
-.passwordchange .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.passwordchange .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .passwordchange .comment {
   padding-top: 30px;
 }
@@ -280,12 +386,14 @@ main {
 
 .signup .outer-container {
   width: 500px;
-  margin: 90px auto 30px auto;
 }
 
 .signup .title {
-  margin-bottom: 20px;
   text-align: center;
+}
+
+.signup p {
+  margin: 0 0 15px 0;
 }
 
 .signup .label {
@@ -324,19 +432,6 @@ main {
   margin-right: 10px;
 }
 
-.signup .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.signup .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .signup .btn-container {
   margin-top: 20px;
 }
@@ -368,6 +463,10 @@ main {
   margin-top: 40px;
 }
 
+.top .outer-container {
+  margin-top: 60px;
+}
+
 .topVisualContainer {
   position: relative;
 }
@@ -382,7 +481,7 @@ main {
 .topVisualText {
   color: white;
   position: absolute;
-  top: 70px;
+  top: 45px;
   left: 50px;
 }
 
@@ -397,66 +496,62 @@ main {
 
 .search-box {
   width: 250px;
-  margin: 0 10px 0 5px;
+  margin: 0 15px 0 15px;
 }
 
-.topOuterContainer {
-  width: 800px;
-  margin: 40px auto;
+.top .restaurants-container {
+  max-width: 840px;
+  margin: 30px auto;
 }
 
-.flex-container {
-  display: flex;
+.top .middle-container {
+  margin-bottom: 30px;
 }
 
-.topInnerContainer {
+.top .title {
+  margin-bottom: 5px;
+}
+
+.top .inner-container {
   width: 130px;
   border: solid 1px;
   border-color: rgb(205, 205, 205);
   margin-right: 10px;
 }
 
-.top-text-container {
-  margin: 0 5px;
+.top .text-container {
+  margin: 0 5px 5px 5px;
 }
 
-.category-container {
+.top .category-container {
   width: 130px;
   margin-right: 10px;
   position: relative;
-  border: none;
 }
 
-.big-category-btn {
-  color: white;
-  background: none;
-  border: none;
+.top .category-img {
+  width: 100%;
   padding: 0;
-  position: absolute;
-}
-
-.category-text {
-  color: white;
-  background: none;
-  border: none;
-  padding: 0;
-  position: absolute;
-  top: 29.7px;
-  right: 0;
-  left: 0;
-  margin: 0 auto;
-}
-
-.category-image {
   filter: brightness(50%);
 }
 
-.lower-category-container{
-  margin-top: 90px;
+.top .category-text {
+  font-size: 16px;
+  color: white;
+  text-decoration: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 10;
 }
 
-.small-category-form {
-  width: 100%;  
+.category-text:hover {
+  font-weight: bold;
+}
+
+.lower-category-container{
+  margin-top: 10px;
 }
 
 .small-category-btn {
@@ -503,24 +598,6 @@ main {
 
 .categoryref-constainer {
   margin: 10px 0;
-}
-
-.categoryref-constainer > a {
-  color: rgb(170, 170, 170);
-  font-size: 15px;
-  text-decoration: none;
-  white-space: nowrap;
-  border: solid 1px rgb(205, 205, 205);
-  border-radius: 1px;
-}
-
-.categoryref-constainer > a:hover {
-  color:rgb(125, 125, 125);
-}
-
-.restaurant-description {
-  font-size: 12px;
-  margin: 5px 0;
 }
 
 footer {
@@ -570,7 +647,6 @@ footer {
 
 .detail .outer-container {
   width: 500px;
-  margin: 80px auto 0 auto;
 }
 
 .detail .restaurant-name {
@@ -578,46 +654,8 @@ footer {
   text-align: center;
 }
 
-.detail .ref-container {
-  margin-bottom: 15px;
-}
-
-.detail .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  padding: 2px 4px;
-  border: none;
-}
-
-.detail .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.detail .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  padding: 2px 4px;
-  border: none;
-}
-
-.detail .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
-}
-
-.detail .non-active {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(190, 190, 190);
-  padding: 2px 4px;
-  border: none;
-}
-
-.detail .non-active:hover {
-  background-color: rgb(190, 190, 190);
+.detail .information {
+  margin-top: 30px;
 }
 
 .detail .favorite {
@@ -629,19 +667,6 @@ footer {
 }
 
 .detail .favorite:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.detail .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.detail .submit:hover {
   color: white;
   background-color: orangered;
 }
@@ -742,59 +767,16 @@ footer {
   font-size: 15px;
 }
 
-#favorite-btn {
-  padding: 5px 15px;
-}
-
 .reviewlist {
   margin-top: 80px;
 }
 
 .reviewlist .outer-container {
   width: 500px;
-  margin: 0 auto;
 }
 
 .reviewlist .ref-container {
   margin-bottom: 15px;
-}
-
-.reviewlist .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  padding: 2px 4px;
-  border: none;
-}
-
-.reviewlist .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.reviewlist .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  padding: 2px 4px;
-  border: none;
-}
-
-.reviewlist .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
-}
-
-.reviewlist .non-active {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(190, 190, 190);
-  padding: 2px 4px;
-  border: none;
-}
-
-.reviewlist .non-active:hover {
-  background-color: rgb(190, 190, 190);
 }
 
 .detail .favorite {
@@ -805,9 +787,8 @@ footer {
   border: none;
 }
 
-.reviewlist .average {
-  text-align: center;
-  margin-top: 20px;
+.reviewlist .information {
+  margin-top: 30px;
 }
 
 .reviewlist .noreview {
@@ -874,22 +855,8 @@ footer {
   margin: 30px auto;
 }
 
-.reviewlist .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.reviewlist .submit:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .reviewcreate .outer-container {
   width: 500px;
-  margin: 80px auto 30px auto;
 }
 
 .reviewcreate .score {
@@ -913,22 +880,9 @@ footer {
   height: 200px;
 }
 
-.btn-container {
+.reviewcreate .btn-container {
   margin: 0 auto 20px auto;
   justify-content: space-around;
-}
-
-.reviewcreate .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.reviewcreate .btn:hover {
-  color: white;
-  background-color: orangered;
 }
 
 .reviewcreate .deletecheck {
@@ -938,54 +892,14 @@ footer {
 
 .reservationcreate .outer-container {
   width: 500px;
-  margin: 80px auto 30px auto;
-}
-
-.reservationcreate .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  padding: 2px 4px;
-  border: none;
-}
-
-.reservationcreate .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.reservationcreate .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  padding: 2px 4px;
-  border: none;
-}
-
-.reservationcreate .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
-}
-
-.reservationcreate .non-active {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(190, 190, 190);
-  padding: 2px 4px;
-  border: none;
-}
-
-.reservationcreate .non-active:hover {
-  background-color: rgb(190, 190, 190);
 }
 
 .reservationcreate .inner-container {
   width: 300px;
-  margin: 20px auto 0 auto;
+  margin: 30px auto 0 auto;
 }
 
 .reservationcreate .crimson {
-  margin-top: 40px;
   margin-bottom: 0;
 }
 
@@ -995,24 +909,12 @@ footer {
 }
 
 .reservationcreate label {
+  display: inline-block;
   width: 120px;
 }
 
 .reservationcreate input {
   width: 172px;
-}
-
-.reservationcreate .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.reservationcreate .submit:hover {
-  color: white;
-  background-color: orangered;
 }
 
 .reservationcreate .btn-container {
@@ -1029,8 +931,17 @@ footer {
   margin: 90px auto 30px auto;
 }
 
+.reservation .top-container {
+  justify-content: space-between;
+}
+
 .left-align {
   margin-left: 25px;
+}
+
+.right-align {
+  color: gray;
+  margin: 0;
 }
 
 .reservation-table {
@@ -1077,45 +988,6 @@ footer {
   border-bottom: solid gray 1px;
 }
 
-.reservation .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  padding: 2px 4px;
-  border: none;
-}
-
-.reservation .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.reservation .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  padding: 2px 4px;
-  border: none;
-}
-
-.reservation .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
-}
-
-.reservation .cancel {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.reservation .cancel:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .reservation .btn-container {
   margin-top: 20px;
 }
@@ -1140,7 +1012,6 @@ footer {
 
 .favoritelist .outer-container {
   width: 700px;
-  margin: 90px auto 30px auto;
 }
 
 .favorite-table {
@@ -1149,6 +1020,7 @@ footer {
 }
 
 .favorite-table th {
+  text-align: left;
   background-color: whitesmoke;
   border-bottom: solid gray 1px;
   padding: 3px 0;
@@ -1185,22 +1057,21 @@ footer {
   text-decoration: underline;
 }
 
-.favoritelist .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.favoritelist .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .user .outer-container {
   width: 500px;
-  margin: 90px auto 30px auto;
+}
+
+.user h2 {
+  margin-bottom: 0;
+}
+
+.user .top-container {
+  margin: 10px 0;
+}
+
+.user .edit-btn {
+  margin-left: 20px;
+  padding: 5px 2px;
 }
 
 .user form {
@@ -1209,7 +1080,7 @@ footer {
 
 .user-table {
   width: 100%;
-  margin: 20px 0;
+  margin-bottom: 30px;
 }
 
 .user-table th {
@@ -1223,44 +1094,21 @@ footer {
   border-bottom: solid rgb(170, 170, 170) 1px;
 }
 
-.user .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.user .submit:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.user .caution {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(224, 197, 255);
-  padding: 4px 10px;
-  border: none;
-}
-
-.user .caution:hover {
-  color: white;
-  background-color: rgb(119, 0, 255);
-}
-
 .user .bottom {
   margin-top: 40px;
 }
 
 .user-update .outer-container {
   width: 500px;
-  margin: 90px auto 30px auto;
 }
 
 .user-update .title {
   margin-bottom: 20px;
   text-align: center;
+}
+
+.user-update .flex-container {
+  margin-bottom: 20px;
 }
 
 .user-update .label {
@@ -1275,7 +1123,7 @@ footer {
 
 .user-update .right {
   width: 300px;
-  text-align: right;
+  text-align: left;
 }
 
 .user-update .error {
@@ -1292,20 +1140,7 @@ footer {
 }
 
 .user-update select {
-  margin-left: 10px;
-}
-
-.user-update .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.user-update .btn:hover {
-  color: white;
-  background-color: orangered;
+  margin-right: 10px;
 }
 
 .user-update .btn-container {
@@ -1320,19 +1155,6 @@ footer {
 
 .resign .btn-container {
   margin-top: 30px;
-}
-
-.resign .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.resign .btn:hover {
-  color: white;
-  background-color: orangered;
 }
 
 .company .outer-container {
@@ -1357,7 +1179,6 @@ footer {
 
 .management .outer-container {
   width: 600px;
-  margin: 90px auto 30px auto;
 }
 
 .management .comment {
@@ -1368,22 +1189,14 @@ footer {
   margin: 30px 0;
 }
 
-.management .btn {
-  color: black;
-  font-size: 14px;
-  width: 120px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management .btn:hover {
-  color: white;
-  background-color: orangered;
+.management .edit-btn {
+  font-size: 16px;
+  display: inline-block;
+  width: 180px;
 }
 
 .management-restaurant .outer-container {
-  width: 970px;
+  width: 940px;
   margin: 90px auto 30px auto;
 }
 
@@ -1391,62 +1204,8 @@ footer {
   justify-content: space-between;
 }
 
-.management-restaurant .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  margin-left: 20px;
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-restaurant .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.management-restaurant .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  margin-left: 20px;
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-restaurant .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
-}
-
-.management-restaurant .new {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(190, 255, 198);
-  margin-left: 80px;
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-restaurant .new:hover {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(0, 255, 30);
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-restaurant .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-restaurant .submit:hover {
-  color: white;
-  background-color: orangered;
+.management-restaurant .left-ref {
+  margin-left: 10px;
 }
 
 .management-restaurant-table {
@@ -1457,6 +1216,7 @@ footer {
   border-bottom: solid gray 1px;
   background-color: whitesmoke;
   padding: 3px 0;
+  text-align: left;
 }
 
 .management-restaurant-table td {
@@ -1489,16 +1249,15 @@ footer {
 }
 
 .management-restaurant-table .reservationlist {
-  width: 90px;
+  width: 70px;
 }
 
 .management-restaurant-table .sales {
-  width: 50px;
+  width: 40px;
 }
 
 .management-restaurant-create .outer-container {
   width: 600px;
-  margin: 90px auto 30px auto;
 }
 
 .management-restaurant-create .cluster {
@@ -1514,35 +1273,8 @@ footer {
   width: 362px;
 }
 
-.management-restaurant-create .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-restaurant-create .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .management-restaurant-confirm .outer-container {
   width: 600px;
-  margin: 90px auto 30px auto;
-}
-
-.management-restaurant-confirm .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-restaurant-confirm .btn:hover {
-  color: white;
-  background-color: orangered;
 }
 
 .restaurant-confirm-table {
@@ -1564,7 +1296,6 @@ footer {
 
 .management-restaurant-edit .outer-container {
   width: 600px;
-  margin: 90px auto 30px auto;
 }
 
 .management-restaurant-edit .cluster {
@@ -1580,19 +1311,6 @@ footer {
   width: 362px;
 }
 
-.management-restaurant-edit .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-restaurant-edit .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .management-reservation .outer-container {
   width: 720px;
   margin: 90px auto 30px auto;
@@ -1600,32 +1318,6 @@ footer {
 
 .management-reservation .flex-container {
   margin-top: 20px;
-}
-
-.management-reservation .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-reservation .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.management-reservation .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-reservation .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
 }
 
 .management-restaurant-table .date {
@@ -1652,19 +1344,6 @@ footer {
   width: 65px;
 }
 
-.management-reservation .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-reservation .submit:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .management-reservation-list .outer-container {
   width: 550px;
   margin: 90px auto 30px auto;
@@ -1672,32 +1351,6 @@ footer {
 
 .management-reservation-list .flex-container {
   margin-top: 20px;
-}
-
-.management-reservation-list .focus {
-  color: white;
-  font-size: 13px;
-  background-color: orangered;
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-reservation-list .focus:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.management-reservation-list .non-focus {
-  color: black;
-  font-size: 13px;
-  background-color: rgb(253, 225, 217);
-  padding: 2px 4px;
-  border: none;
-}
-
-.management-reservation-list .non-focus:hover {
-  font-weight: bold;
-  background-color: rgb(253, 225, 217);
 }
 
 .management-reservation-list-table {
@@ -1747,22 +1400,8 @@ footer {
   font-weight: bold;
 }
 
-.management-reservation-list .submit {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-reservation-list .submit:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .management-reservation-edit .outer-container {
   width: 500px;
-  margin: 90px auto 30px auto;
 }
 
 .management-reservation-edit .form-container {
@@ -1790,22 +1429,8 @@ footer {
   width: 200px;
 }
 
-.management-reservation-edit .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-reservation-edit .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .managementreservationdelete .outer-container {
   width: 650px;
-  margin: 90px auto 30px auto;
 }
 
 .managementreservationdelete .delete-check {
@@ -1850,23 +1475,6 @@ footer {
   width: 100px;
 }
 
-.managementreservationdelete .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.managementreservationdelete .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.management-user .outer-container {
-  margin: 90px auto 30px auto;
-}
-
 .management-user-table {
   margin: 30px auto;
 }
@@ -1887,19 +1495,6 @@ footer {
   width: 50px;
 }
 
-.management-user .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-user .btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
 .management-user .resign {
   font-size: 14px;
   padding-left: 2px;
@@ -1908,7 +1503,7 @@ footer {
 .management-user-table th {
   border-bottom: solid gray 1px;
   background-color: whitesmoke;
-
+  text-align: left;
 }
 
 .management-user-table td {
@@ -1916,34 +1511,18 @@ footer {
   border-bottom: solid gray 1px;
 }
 
-.management-user-detail .outer-container {
-  margin: 90px auto 30px auto;
-}
-
 .management-user-detail-table {
   margin: 20px auto;
 }
 
 .management-user-detail-table th {
-  width: 150px;
+  width: 130px;
   padding: 3px 0;
   border-bottom: solid gray 1px;
+  text-align: left;
 }
 
 .management-user-detail-table td {
   width: 300px;
   border-bottom: solid gray 1px;
-}
-
-.management-user-detail .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.management-user-detail .btn:hover {
-  color: white;
-  background-color: orangered;
 }

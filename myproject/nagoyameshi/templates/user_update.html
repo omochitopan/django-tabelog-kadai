@@ -3,17 +3,18 @@
 {% block contents %}
 <div class="user-update">
 	<div class="outer-container">
-		<h4 class="title">会員情報編集</h4>
+		<h2 class="title">会員情報編集</h2>
 		<div>
+			<h5>編集する情報を入力してください</h5>
 			<form method="post">
 				{% csrf_token %}
 				{{ form.non_field_errors }}
 				{% for field in form %}
 				<div class="flex-container">
-					<p class="label">
-						<span>{{ field.label }}　</span>
+					<label class="label">
+						<span>{{ field.label }} </span>
 						{% if field.field.required %}<span class="must">必須</span>{% endif %}
-					</p>
+					</label>
 					<div class="right">{{ field }}</div>
 				</div>
 				{% if field.errors %}
@@ -23,8 +24,8 @@
 				{% endif %}
 				{% endfor %}
 				<div class="flex-container btn-container">
-					<button type="submit" class="btn">更新</button>
-					<a href="{% url 'user' user_id %}" class="btn">戻る</a>
+					<button type="submit" class="btn accept-btn">登録情報を更新</button>
+					<a href="{% url 'user' user_id %}" class="btn cancel-btn">会員情報に戻る</a>
 				</div>
 			</form>
 		</div>

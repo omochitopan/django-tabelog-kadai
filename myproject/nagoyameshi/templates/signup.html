@@ -5,7 +5,7 @@
 {% block contents %}
 <div class="signup">
   <div class="outer-container">
-    <h3 class="title">登録情報確認</h3>
+    <h2 class="title">登録情報確認</h2>
     <div class="inner-container">
       <p class="crimson">以下の情報で仮登録しますか？</p>
       <table class="signup-confirm-table">
@@ -27,12 +27,12 @@
         <!-- メール認証参考URL: https://blog.narito.ninja/detail/38/ -->
         <form method="post" action="{% url 'signup' %}">
           {% csrf_token %}    
-          <button type="submit" class="btn">仮登録</button>
+          <button type="submit" class="btn accept-btn">仮登録</button>
           {% for field in form %}{{ field.as_hidden }}{% endfor %}
         </form>
         <form method="post" action="{% url 'signupform' %}">
           {% csrf_token %}    
-          <button type="submit" class="btn">戻る</button>
+          <button type="submit" class="btn cancel-btn">戻る</button>
           {% for field in form %}{{ field.as_hidden }}{% endfor %}
         </form>
       </div>

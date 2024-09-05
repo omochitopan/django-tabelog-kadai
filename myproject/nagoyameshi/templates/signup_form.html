@@ -5,7 +5,7 @@
 {% block contents %}
 <div class="signup">
   <div class="outer-container">
-    <h3 class="title">会員登録</h3>
+    <h2 class="title">会員登録</h2>
     <div>
       <form method="post" action="{% url 'signupconfirm' %}">
         {% csrf_token %}
@@ -29,8 +29,8 @@
         {% endfor %}
         <div class="flex-container btn-container mt-3">
 					<!-- メール認証参考URL: https://blog.narito.ninja/detail/38/ -->
-					<button type="submit" class="btn">確認</button>
-					<a href="{% url 'login' %}" class="btn">戻る</a>
+					<button type="submit" class="btn accept-btn">登録情報確認</button>
+					<a href="{% url 'login' %}" class="btn cancel-btn">ログイン画面</a>
         </div>
       </form>
     </div>

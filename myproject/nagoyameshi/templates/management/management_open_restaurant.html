@@ -5,14 +5,14 @@
 {% block contents %}
 <div class="management-restaurant">
 	<div class="outer-container">
-        <h4 class="center">管理店舗一覧</h4>
+        <h2 class="center">管理店舗一覧</h2>
 		<div class="flex-container upper">
             <div>
-                <a href="" class="btn focus">営業中</a>
-                <a href="{% url 'managementclosedrestaurant' user.pk %}" class="btn non-focus">閉店済</a>
+                <a href="" class="btn focus-btn left-ref">営業中</a>
+                <a href="{% url 'managementclosedrestaurant' user.pk %}" class="btn nonfocus-btn left-ref">閉店済</a>
             </div>
             <div>
-                <a href="{% url 'managementrestaurantform' user.pk %}" class="btn new">＋新規店舗追加</a>
+                <a href="{% url 'managementrestaurantform' user.pk %}" class="btn new-btn">＋新規店舗追加</a>
             </div>
         </div>
         <table class="management-restaurant-table">
@@ -34,13 +34,13 @@
                     <span><a href="{% url 'managementmanagerdetail' user.pk manager.pk %}" class="ref">{{ manager.name }}</a>　</span>
                     {% endfor %}
                 </td>
-                <td><a href="{% url 'managementreservationrestaurant' user.pk object.restaurant.pk %}" class="btn submit">予約一覧</a></td>
-                <td><a href="" class="btn submit">売上</a></td>
+                <td class="center"><a href="{% url 'managementreservationrestaurant' user.pk object.restaurant.pk %}" class="btn type1-btn">予約一覧</a></td>
+                <td class="center"><a href="" class="btn type2-btn">売上</a></td>
             </tr>
             {% endfor %}
         </table>
 		<div class="flex-container btn-container">
-            <a href="{% url 'management' user.pk %}" class="btn submit">管理ページトップに戻る</a>
+            <a href="{% url 'management' user.pk %}" class="btn cancel-btn">管理トップに戻る</a>
         </div>
 	</div>
 </div>

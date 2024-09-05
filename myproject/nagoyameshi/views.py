@@ -50,11 +50,18 @@ class TopView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurants = Restaurant.objects.filter(is_active = True)
-        categories = Category.objects.all()
-        context['user_id'] = self.request.user.pk
+        all_categories = Category.objects.all()
+        categories = [["和食", "washoku"], ["うどん", "udon"], ["丼物", "don"], ["ラーメン", "ramen"], ["おでん", "oden"], ["揚げ物", "fried"],]
+        category_information = []
+        for category in categories:
+            url = (f'/media/{category[1]}.jpg')
+            id = (all_categories.get(category_name = category[0]).pk)
+            category_information.append({'name': category[0], 'url': url, 'id': id})
+        context['user'] = self.request.user
         context['evaluated_restaurants'] = restaurants.order_by('id')[:6]
         context['new_restaurants'] = restaurants.order_by('-created_at')[:6]
-        context['categories'] = categories.order_by('id')
+        context['all_categories'] = all_categories.order_by('id')
+        context['category_information'] = category_information
         return context
 
 class RestaurantListView(LoginRequiredMixin, ListView):
@@ -82,8 +89,8 @@ class RestaurantCategoryList(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        query = self.request.GET.get('query')
-        category_restaurants = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True).filter(category__category_name = query)
+        category_id = self.kwargs.get("category_id")
+        category_restaurants = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True).filter(category__pk = category_id)
         context['user_id'] = self.request.user.pk
         context["category_restaurants"] = category_restaurants
         return context
@@ -407,8 +414,10 @@ class ReservationListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         target_reservations = Reservation.objects.filter(user = user, reserved_date__gte = date.today()).order_by('reserved_date', 'reserved_time',)
+        cancel_date = datetime.date.today() + relativedelta(days = 3)
         context['user_id'] = user.pk
         context["target_reservations"] = target_reservations
+        context["cancel_date"] = cancel_date
         return context
 
 class ReservationListAllView(LoginRequiredMixin, ListView):
@@ -420,10 +429,10 @@ class ReservationListAllView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         target_reservations = Reservation.objects.filter(user = user).order_by('reserved_date', 'reserved_time',)
-        today = datetime.date.today()
+        cancel_date = datetime.date.today() + relativedelta(days = 3)
         context["user_id"] = user.pk
         context["target_reservations"] = target_reservations
-        context["today"] = today
+        context["cancel_date"] = cancel_date
         return context
 
 class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteView):

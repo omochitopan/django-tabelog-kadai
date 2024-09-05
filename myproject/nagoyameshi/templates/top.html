@@ -3,92 +3,73 @@
 {% block title %}トップページ{% endblock %}
 {% block contents %}
 <div class="top">
-	<div class="topVisualContainer">
-		<img src="/media/udon.jpg" class="topVisual" alt="TopVisual">
-		<div class="topVisualText">
-			<h1>名古屋ならではの味を、<br>みつけよう</h1>
-			<p>NAGOYAMESHIは、<br>名古屋市の応援グルメ専門のレビューサイトです。</p>
+	<div class="outer-container">
+		<div class="topVisualContainer">
+			<img src="/media/udon.jpg" class="topVisual" alt="TopVisual">
+			<div class="topVisualText">
+				<h1>名古屋ならではの味を、<br>みつけよう</h1>
+				<p>NAGOYAMESHIは、<br>名古屋市の応援グルメ専門のレビューサイトです。</p>
+			</div>
 		</div>
-	</div>
-	<!-- 検索フォーム -->
-	<div class="search-container">
-		<form class="search-form" method="get" action="{% url 'list' %}">
-			{% csrf_token %}
-			<label for="">キーワードから探す</label>
-			<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
-			<button type="submit" class="search-btn">検索</button>
-		</form>
-	</div>
-	<div class="topContainer">
-		<div class="topOuterContainer">
-			<h4>評価が高いお店</h4>
-			<div class="flex-container">
-				{% for restaurant in evaluated_restaurants %}
-				<div class="topInnerContainer">
-					<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
-					<div class="top-text-container">
-						<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a>
-						{% for category in restaurant.category_name.all %}
-						<p class="category-name">{{ category }}</p>
+		<!-- 検索フォーム -->
+		<div class="search-container">
+			<form class="search-form" method="get" action="{% url 'list' %}">
+				{% csrf_token %}
+				<label for="">キーワードから探す</label>
+				<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
+				<button type="submit" class="search-btn">検索</button>
+			</form>
+		</div>
+		<div class="restaurants-container">
+			<div class="middle-container">
+				<h2 class="title">評価が高いお店</h2>
+				<div class="flex-container wrap-container">
+					{% for restaurant in evaluated_restaurants %}
+					<div class="inner-container">
+						<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
+						<div class="text-container">
+							<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a>
+							{% for category in restaurant.category_name.all %}
+							<p class="category-name">{{ category }}</p>
+							{% endfor %}
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="middle-container">
+				<h2 class="title">カテゴリから探す</h2>
+				<div class="categoryContainer">
+					<div class="flex-container wrap-container">
+						{% for information in category_information %}
+						<div class="category-container">
+							<a href="{% url 'category' information.id %}" "image-ref"><img src="{{ information.url }}" class="category-img" alt="和食を検索"></a>
+							<a href="{% url 'category' information.id %}" class="category-text">{{ information.name }}</a>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="btn-container">
+						{% for category in all_categories %}
+						<a href="{% url 'category' category.pk %}" class="btn accept-btn">{{ category.category_name }}</a>
 						{% endfor %}
 					</div>
 				</div>
-				{% endfor %}
 			</div>
-		</div>
-		<div class="topOuterContainer">
-			<h4>カテゴリから探す</h4>
-			<div class="categoryContainer">
-				<div class="flex-container">
-					<form class="category-container" method="get" action="{% url 'category' %}">
-						<button type="submit" class="big-category-btn" name="query" value="和食"><img src="/media/washoku.jpg" class="top-image category-image" alt="和食を検索"></button>
-						<button type="submit" class="category-text" name="query" value="和食">和食</button>
-					</form>
-					<form class="category-container" method="get" action="{% url 'category' %}">
-						<button type="submit" class="big-category-btn" name="query" value="うどん"><img src="/media/udon.jpg" class="top-image category-image" alt="和食を検索"></button>
-						<button type="submit" class="category-text" name="query" value="うどん">うどん</button>
-					</form>
-					<form class="category-container" method="get" action="{% url 'category' %}">
-						<button type="submit" class="big-category-btn" name="query" value="丼物"><img src="/media/don.jpg" class="top-image category-image" alt="和食を検索"></button>
-						<button type="submit" class="category-text" name="query" value="丼物">丼物</button>
-					</form>
-					<form class="category-container" method="get" action="{% url 'category' %}">
-						<button type="submit" class="big-category-btn" name="query" value="ラーメン"><img src="/media/ramen.jpg" class="top-image category-image" alt="和食を検索"></button>
-						<button type="submit" class="category-text" name="query" value="ラーメン">ラーメン</button>
-					</form>
-					<form class="category-container" method="get" action="{% url 'category' %}">
-						<button type="submit" class="big-category-btn" name="query" value="おでん"><img src="/media/oden.jpg" class="top-image category-image" alt="和食を検索"></button>
-						<button type="submit" class="category-text" name="query" value="おでん">おでん</button>
-					</form>
-					<form class="category-container" method="get" action="{% url 'category' %}">
-						<button type="submit" class="big-category-btn" name="query" value="揚げ物"><img src="/media/fried.jpg" class="top-image category-image" alt="和食を検索"></button>
-						<button type="submit" class="category-text" name="query" value="揚げ物">揚げ物</button>
-					</form>
-				</div>
-				<div class="lower-category-container">
-					<form class="small-category-form" method="get" action="{% url 'category' %}">
-						{% for category in categories %}
-						<button type="submit" class="small-category-btn" name="query" value={{ category.category_name }}>{{ category.category_name }}</button>
-						{% endfor %}
-					</form>
-				</div>
-			</div>
-		</div>
-		</div>
-		<div class="topOuterContainer">
-			<h4>新規掲載店</h4>
-			<div class="flex-container">
-				{% for restaurant in new_restaurants %}
-				<div class="topInnerContainer">
-					<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
-					<div class="top-text-container">
-						<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a>
-						{% for category in restaurant.category_name.all %}
-						<p class="category-name">{{ category }}</p>
-						{% endfor %}
+			<div class="middle-container">
+				<h2 class="title">新規掲載店</h2>
+				<div class="flex-container wrap-container">
+					{% for restaurant in new_restaurants %}
+					<div class="inner-container">
+						<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
+						<div class="text-container">
+							<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a>
+							{% for category in restaurant.category_name.all %}
+							<p class="category-name">{{ category }}</p>
+							{% endfor %}
+						</div>
 					</div>
+					{% endfor %}
 				</div>
-				{% endfor %}
 			</div>
 		</div>
 	</div>
