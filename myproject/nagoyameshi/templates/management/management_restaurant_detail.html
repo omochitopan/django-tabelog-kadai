@@ -1,5 +1,6 @@
 {% extends "base_management.html" %}
 {% load static %}
+{% load humanize %}
 {% block title %}店舗詳細ページ{% endblock %}
 {% block contents %}
 <div class="detail">
@@ -17,11 +18,11 @@
 			</tr>
 			<tr>
 				<th class="tableheader">価格帯</th>
-				<td class="cell">{{ object.lowest_price }}~{{ object.highest_price }}円</td>
+				<td class="cell">{{ object.lowest_price|intcomma }}~{{ object.highest_price|intcomma }}円</td>
 			</tr>
 			<tr>
 				<th class="tableheader">郵便番号</th>
-				<td class="cell">{{ object.postal_code}}</td>
+				<td class="cell">{{ object.postal_code|slice:":3" }}-{{ object.postal_code|slice:"3:" }}</td>
 			</tr>
 			<tr>
 				<th class="tableheader">住所</th>

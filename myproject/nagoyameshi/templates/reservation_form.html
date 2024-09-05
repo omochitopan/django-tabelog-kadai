@@ -17,7 +17,7 @@
 		</div>
 			{% if restaurant.is_active %}
 			<div class="inner-container">
-				<p class="crimson">予約情報を入力してください。</p>
+				<p class="bold">予約情報を入力してください。</p>
 				<form method="post" action="{% url 'reservationconfirm' restaurant.pk %}" class="reservation-form">
 					{% csrf_token %}
 					{{ form.as_p }}

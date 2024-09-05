@@ -26,7 +26,7 @@
 			{% if object.is_active %}
 			<tr>
 				<th>郵便番号</th>
-				<td>{{ object.postal_code }}</td>
+				<td>{{ object.postal_code|slice:":3" }}-{{ object.postal_code|slice:"3:" }}</td>
 			</tr>
 			<tr>
 				<th>住所</th>
@@ -40,11 +40,11 @@
 			{% if object.is_active %}
 			<tr>
 				<th>誕生日</th>
-				<td>{{ object.birthday }}</td>
+				<td>{{ object.birthday|default:"" }}</td>
 			</tr>
 			<tr>
 				<th>職業</th>
-				<td>{{ object.occupation }}</td>
+				<td>{{ object.occupation|default:"" }}</td>
 			</tr>
 			{% endif %}
 			<tr>

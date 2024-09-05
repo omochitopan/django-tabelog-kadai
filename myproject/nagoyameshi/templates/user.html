@@ -27,7 +27,7 @@
 			</tr>
 			<tr>
 				<th>郵便番号</th>
-				<td>{{ user.postal_code }}</td>
+				<td>{{ user.postal_code|slice:":3" }}-{{ user.postal_code|slice:"3:" }}</td>
 			</tr>
 			<tr>
 				<th>住所</th>
@@ -40,19 +40,13 @@
 			<tr>
 				<th>誕生日</th>
 				<td>
-                    {% if not user.birthday %}
-                    {% else %}
-                    {{ user.birthday }}
-                    {% endif %}
+                    {{ user.birthday|default:"" }}
                 </td>
 			</tr>
 			<tr>
 				<th>職業</th>
 				<td>
-                    {% if not user.occupation %}
-                    {% else %}
-                    {{ user.occupation }}
-                    {% endif %}
+                    {{ user.occupation|default:"" }}
                 </td>
 			</tr>
 		</table>

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'nagoyameshi.apps.NagoyameshiConfig',
     'bootstrapform',
     'import_export',
@@ -129,6 +130,8 @@ USE_I18N = True
 USE_TZ = True
 
 USE_L10N = True
+
+NUMBER_GROUPING = 3
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 

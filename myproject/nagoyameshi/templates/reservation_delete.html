@@ -3,7 +3,11 @@
 {% block contents %}
 <div class="reservation">
 	<div class="outer-container">
+		{% if object.reserved_date >= cancel_date %}
         <h5 class="deletecheck">以下の予約をキャンセルしますか？</h5>
+		{% else %}
+        <h5 class="deletecheck">この予約はキャンセル出来ません</h5>
+		{% endif %}
 		<table class="reservation-table">
 			<tr>
 				<th class="restaurant-name">店舗名</th>
@@ -20,8 +24,12 @@
 		</table>
 		<form method="post">
 			{% csrf_token %}
-			<div class="flex-container btn-container">		
+			<div class="flex-container btn-container">
+				{% if object.reserved_date >= cancel_date %}
 				<button type="submit" class="btn resign-btn">キャンセル</button>
+				{% else %}
+				<div class="btn nonactive-btn">キャンセル</div>
+				{% endif %}
 				<a href="{% url 'reservationlist' %}" class="btn cancel-btn">予約一覧に戻る</a>
 			</div>
 		</form>	

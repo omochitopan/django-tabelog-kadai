@@ -27,7 +27,7 @@
             {% for object in managed_restaurants %}
             <tr>
                 <td><a href="{% url 'managementrestaurantdetail' user.pk object.restaurant.pk %}" class="ref">{{ object.restaurant.restaurant_name }}</a></td>
-                <td>{{ object.restaurant.postal_code }}</td>
+                <td>{{ object.restaurant.postal_code|slice:":3" }}-{{ object.restaurant.postal_code|slice:"3:" }}</td>
                 <td>{{ object.restaurant.address }}</td>
                 <td>
                     {% for manager in object.restaurant.managers.all %}

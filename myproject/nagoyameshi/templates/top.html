@@ -50,7 +50,7 @@
 					</div>
 					<div class="btn-container">
 						{% for category in all_categories %}
-						<a href="{% url 'category' category.pk %}" class="btn accept-btn">{{ category.category_name }}</a>
+						<a href="{% url 'category' category.pk %}" class="btn category-btn">{{ category.category_name }}</a>
 						{% endfor %}
 					</div>
 				</div>

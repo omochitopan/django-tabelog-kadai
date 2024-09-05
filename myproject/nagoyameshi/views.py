@@ -79,8 +79,10 @@ class RestaurantListView(LoginRequiredMixin, ListView):
         return restaurants
     
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)        
+        context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
+        context['query'] = self.request.GET.get('query')
+        context['izakaya_id'] = Category.objects.get(category_name = "居酒屋").pk
         return context
 
 class RestaurantCategoryList(LoginRequiredMixin, ListView):
@@ -89,9 +91,13 @@ class RestaurantCategoryList(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        all_categories = Category.objects.all()
         category_id = self.kwargs.get("category_id")
+        target_category = Category.objects.get(pk = category_id)
         category_restaurants = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True).filter(category__pk = category_id)
         context['user_id'] = self.request.user.pk
+        context["all_categories"] = all_categories
+        context['target_category'] = target_category
         context["category_restaurants"] = category_restaurants
         return context
     
@@ -374,11 +380,15 @@ class ReservationConfirmView(LoginRequiredMixin, FormView):
     form_class = ReservationConfirmForm
     
     def form_valid(self, form):
+        reserved_date = form.cleaned_data.get("reserved_date")
+        week_days = ['月', '火', '水', '木', '金', '土', '日',]
+        week_day = week_days[reserved_date.weekday()]
         context = {
             'form': form,
             'restaurant': Restaurant.objects.get(pk = self.kwargs.get("restaurant_id")),
             'kwargs': self.kwargs,
-            'reserved_date': form.cleaned_data.get("reserved_date"),
+            'reserved_date': reserved_date,
+            'week_day': week_day,
             'reserved_time': form.cleaned_data.get("reserved_time"),
         }
         form = context['form']
@@ -444,9 +454,11 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        cancel_date = datetime.date.today() + relativedelta(days = 3)
         context['user_id'] = self.request.user.pk
         context["restaurant_name"] = self.request.session["restaurant_name"]
         context["restaurant_id"] = self.request.session["restaurant_id"]
+        context["cancel_date"] = cancel_date
         return context
 
 class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,

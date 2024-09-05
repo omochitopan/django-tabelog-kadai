@@ -1,56 +1,63 @@
 {% extends "base.html" %}
-
-{% block title %}トップページ{% endblock %}
+{% load humanize %}
+{% block title %}カテゴリ検索ページ{% endblock %}
 {% block contents %}
-<div class="category">
-	<!-- 検索フォーム -->
-	<div class="search-container">
-		<form class="search-form" method="get" action="{% url 'list' %}">
-			{% csrf_token %}
-			<label for="">キーワードから探す</label>
-			<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
-			<button type="submit" class="search-btn">検索</button>
-		</form>
-	</div>
-
-	<!-- 検索結果の数 -->
-	<div class="search-count">
-		{% if category_restaurants %}
-		<p>{{ category_restaurants|length }}件の店舗が見つかりました</p>
-		{% else %}
-		<p>お探しの店舗は見つかりませんでした</p>
-		{% endif %}
-	<div>
-	{% for object in category_restaurants %}
-	</div>
-	<table class="restaurant-table">
-		<tr>
-			<td rowspan="4" class="image-table">
-				<a href="{% url 'detail' object.restaurant.pk %}"><img src="{{ object.restaurant.image.url }}" class="restaurant-image" alt="店舗画像"></a>
-			</td>
-			<td class="first-row">
-				<a href="{% url 'detail' object.restaurant.pk %}" class="restaurant-name">{{ object.restaurant.restaurant_name }}</a><br>
-			</td>
-		</tr>
-		<tr>
-			<td class="second-row">
-				{% for category in object.restaurant.category_name.all %}
-				<span class="category">{{ category }}　</span>
+<div class="list">
+	<div class="outer-container">
+		<div class="flex-container">
+			<a href="{% url 'list' %}" class="btn nonfocus-btn top-ref">キーワードから探す</a>
+			<div class="btn focus-btn top-ref">カテゴリから探す</div>
+		</div>
+		<div class="back-container">
+			<div class="btn-container">
+				{% for category in all_categories %}
+				{% if not category.category_name == target_category.category_name %}
+				<a href="{% url 'category' category.pk %}" class="btn category-btn">{{ category.category_name }}</a>
+				{% else %}
+				<a href="{% url 'category' category.pk %}" class="btn focus-btn">{{ category.category_name }}</a>
+				{% endif %}
 				{% endfor %}
-				<div></div>
-			</td>
-		</tr>
-		<tr>
-			<td class="third-row">
-				{{ object.restaurant.lowest_price }}~{{ object.restaurant.highest_price }}円<br>
-			</td>
-		</tr>
-		<tr>
-			<td class="fourth-row">
-				{{ object.restaurant.description}}</p>
-			</td>
-		</tr>
-	</table>
-	{% endfor %}
+			</div>
+		</div>
+		<!-- 検索結果の数 -->
+		<div class="search-count">
+			{% if category_restaurants %}
+			<p>[カテゴリ：{{ target_category.category_name }}] {{ category_restaurants|length }}件の店舗が見つかりました</p>
+			{% else %}
+			<p>[カテゴリ：{{ target_category.category_name }}] お探しの店舗は見つかりませんでした</p>
+			{% endif %}
+		<div>
+		{% for object in category_restaurants %}
+		</div>
+		<table class="restaurant-table">
+			<tr>
+				<td rowspan="4" class="image-table">
+					<a href="{% url 'detail' object.restaurant.pk %}"><img src="{{ object.restaurant.image.url }}" class="restaurant-image" alt="店舗画像"></a>
+				</td>
+				<td class="first-row">
+					<a href="{% url 'detail' object.restaurant.pk %}" class="restaurant-name">{{ object.restaurant.restaurant_name }}</a><br>
+				</td>
+			</tr>
+			<tr>
+				<td class="second-row">
+					{% for category in object.restaurant.category_name.all %}
+					<span class="category">{{ category }}　</span>
+					{% endfor %}
+					<div></div>
+				</td>
+			</tr>
+			<tr>
+				<td class="third-row">
+					{{ object.restaurant.lowest_price|intcomma }}~{{ object.restaurant.highest_price|intcomma }}円<br>
+				</td>
+			</tr>
+			<tr>
+				<td class="fourth-row">
+					{{ object.restaurant.description}}</p>
+				</td>
+			</tr>
+		</table>
+		{% endfor %}
+	</div>
 </div>
 {% endblock %}
