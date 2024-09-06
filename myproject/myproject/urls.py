@@ -77,6 +77,7 @@ urlpatterns = [
     path('management/<int:user_id>/manager_information/<int:pk>/', views.ManagementManagerDetailView.as_view(), name="managementmanagerdetail"),
     path('management/<int:user_id>/company/', views.ManagementCompanyView.as_view(), name="managementcompany"),
     path('management/<int:user_id>/terms/', views.ManagementTermsView.as_view(), name="managementterms"),
+    path('.well-known/acme-challenge/', views.TestView.as_view(), name="test"),
 ]
 
 if settings.DEBUG:

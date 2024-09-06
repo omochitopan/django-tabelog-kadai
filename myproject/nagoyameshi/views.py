@@ -878,3 +878,6 @@ class ManagementTermsView(TemplateView):
         context["user"] = self.request.user
         context["terms"] = terms
         return context
+
+class TestView(View):
+    template_name = "test.html"
