@@ -455,9 +455,9 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cancel_date = datetime.date.today() + relativedelta(days = 3)
+        restaurant = Reservation.objects.get(pk = self.kwargs.get("pk")).restaurant
         context['user_id'] = self.request.user.pk
-        context["restaurant_name"] = self.request.session["restaurant_name"]
-        context["restaurant_id"] = self.request.session["restaurant_id"]
+        context["restaurant"] = restaurant
         context["cancel_date"] = cancel_date
         return context
 

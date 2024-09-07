@@ -26,6 +26,15 @@ textarea {
   font-size: 16px;
 }
 
+ul {
+  margin: 0;
+}
+
+table {
+  font-size: 15px;
+  border-spacing: 0;
+}
+
 th {
   text-align: left;
 }
@@ -38,7 +47,7 @@ h5 {
   color: black;
   font-size: 14px;
   text-decoration: none;
-  padding: 3px;
+  padding: 3px 6px;
   border-radius: 6px;
   border: none;
 }
@@ -77,7 +86,7 @@ h5 {
 
 .nonfocus-btn {
   color: black;
-  background-color: rgb(255, 235, 190);
+  background-color: #eee;
 }
 
 .edit-btn {
@@ -98,20 +107,11 @@ h5 {
 }
 
 .favorite-btn {
-  color: black;
-  background-color: rgb(255, 185, 243);
+  color: #fff;
+  background-color: #a9894b;
 }
 
 .favorite-btn:hover {
-  font-weight: bold;
-}
-
-.unfavorite-btn {
-  color: black;
-  background-color: rgb(155, 220, 255);
-}
-
-.unfavorite-btn:hover {
   font-weight: bold;
 }
 
@@ -142,6 +142,40 @@ h5 {
   background-color: rgb(182, 72, 255);
 }
 
+.thin-btn {
+  color: black;
+  background-color: #f2efe6;
+}
+
+.thin-btn:hover {
+  font-weight: bold;
+}
+
+.strong-btn {
+  color: white;
+  background-color: #a9894b;
+}
+
+.strong-btn:hover {
+  font-weight: bold;
+}
+
+.one-btn {
+  width: 300px;
+  height: 50px;
+  padding: 15px;
+  text-align: center;
+  display: inline-block;
+}
+
+.two-btn {
+  width: 200px;
+  height: 50px;
+  padding: 15px;
+  text-align: center;
+  display: inline-block;
+}
+
 .left {
   text-align: left;
 }
@@ -162,6 +196,10 @@ h5 {
   flex-wrap: wrap;
 }
 
+.space-between {
+  justify-content: space-between;
+}
+
 .btn-container {
   justify-content: space-around;
 }
@@ -177,7 +215,7 @@ h5 {
 header {
   max-width: 1080px;
   height: 60px;
-  background-color: whitesmoke;
+  background-color: #f2efe6;
   z-index: 100;
   display: flex;
   justify-content: space-between;
@@ -282,17 +320,8 @@ header .nav-input {
   width: 212px;
 }
 
-.login .btn {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px 10px;
-  border: none;
-}
-
-.login .btn:hover {
-  color: white;
-  background-color: orangered;
+.login .btn-container {
+  margin-bottom: 30px;
 }
 
 .login .ref-container {
@@ -306,7 +335,6 @@ header .nav-input {
 
 .login .ref:hover {
   color: black;
-  text-decoration: underline;
 }
 
 .login .lower-comment {
@@ -399,10 +427,11 @@ header .nav-input {
   width: 200px;
 }
 
-.signup .must {
+.must {
   color: white;
   font-size: 12px;
-  background-color: crimson;
+  padding: 3px;
+  background-color: rgb(254, 89, 122);
 }
 
 .signup .right {
@@ -447,10 +476,15 @@ header .nav-input {
 
 .signup-confirm-table th {
   width: 170px;
+  background-color: #f2efe6;
+  padding: 3px 0 3px 15px;
+  border-bottom: solid #fff 1px;
 }
 
 .signup-confirm-table td {
   width: 280px;
+  padding: 3px 0 3px 15px;
+  border-bottom: solid #ececec 1px;
 }
 
 .temp-registration {
@@ -511,21 +545,48 @@ header .nav-input {
   margin-bottom: 5px;
 }
 
+.top ul.wrap-container {
+  padding: 0;
+}
+
+.top ul.wrap-container a {
+  text-decoration: none;
+}
+
+.top ul.wrap-container a:hover {
+  text-decoration: none;
+  opacity: 0.7;
+}
+
 .top .inner-container {
   width: 130px;
   border: solid 1px;
-  border-color: rgb(205, 205, 205);
+  border-color: #f2efe6;
+  background-color: #f2efe6;
   margin-right: 10px;
+  list-style: none;
 }
 
-.top .text-container {
-  margin: 0 5px 5px 5px;
+.top .inner-container p {
+  line-height: 1.3;
+  margin: 5px;
+}
+
+.top .restaurant-name {
+  color: black;
+  font-size: 14px;
+}
+
+.top .category-name {
+  color: gray;
+  font-size: 12px;
 }
 
 .top .category-container {
   width: 130px;
   margin-right: 10px;
   position: relative;
+  list-style: none;
 }
 
 .top .category-img {
@@ -543,10 +604,7 @@ header .nav-input {
   left: 50%;
   transform: translate(-50%,-50%);
   z-index: 10;
-}
-
-.category-text:hover {
-  font-weight: bold;
+  margin: 0;
 }
 
 .lower-category-container{
@@ -560,28 +618,16 @@ header .nav-input {
 }
 
 .category-btn:hover {
-  background-color: rgb(0, 255, 251);
+  color: #fff;
+  background-color: #a9894b;
 }
 
-.top-image {
+.top .restaurant-image {
   width: 100%;
+  height: 80px;
+  object-fit: cover;
 }
 
-.top .restaurant-name {
-  color: black;
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.top .restaurant-name:hover {
-  text-decoration: underline;
-}
-
-.category-name {
-  color: gray;
-  font-size: 12px;
-  margin: 5px 0;
-}
 
 .categoryRef {
   color: white;
@@ -636,7 +682,6 @@ footer {
 
 .footer-ref > a:hover {
   color: rgb(0, 0, 0);
-  text-decoration: underline;
 }
 
 .footer-copyright {
@@ -650,6 +695,13 @@ footer {
   width: 500px;
 }
 
+.detail .upper-btn,
+.reservationcreate .upper-btn,
+.reviewlist .upper-btn {
+  width: 150px;
+  text-align: center;
+}
+
 .detail .restaurant-name {
   width: 100%;
   text-align: center;
@@ -660,16 +712,8 @@ footer {
 }
 
 .detail .favorite {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
-.detail .favorite:hover {
-  color: white;
-  background-color: orangered;
+  width: 300px;
+  height: 50px;
 }
 
 .detail .ref:hover {
@@ -687,9 +731,10 @@ footer {
 .tableheader {
   font-size: 15px;
   padding: 5px 10px;
-  border-bottom-color: #2710d5;
+  border-bottom-color: #fff;
   border-bottom-width: 1px;
   border-bottom-style: solid;
+  background-color: #f2efe6;
   width: 100px;
 }
 
@@ -716,6 +761,11 @@ footer {
 
 .list .flex-container {
   margin-bottom: 15px;
+}
+
+.list .btn {
+  width: 150px;
+  text-align: center;
 }
 
 .list .top-ref {
@@ -804,14 +854,6 @@ footer {
   margin-bottom: 15px;
 }
 
-.detail .favorite {
-  color: black;
-  font-size: 14px;
-  background-color: rgb(255, 210, 197);
-  padding: 4px;
-  border: none;
-}
-
 .reviewlist .information {
   margin-top: 30px;
 }
@@ -829,20 +871,28 @@ footer {
   border: solid 1px gray;
 }
 
+.reviewlist  .middle-btn {
+  width: 200px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .reviewlist .restaurant-name {
   text-align: center;
 }
 
 .review-table .user-name {
   font-size: 18px;
-  background-color: whitesmoke;
+  background-color: #f2efe6;
   border-bottom: solid 1px gray;
   padding: 2px 4px;
 }
 
 .review-table .my-name {
+  color: #fff;
   font-size: 18px;
-  background-color: rgb(255, 253, 120);
+  background-color: #a9894b;
   border-bottom: solid 1px gray;
   padding: 2px 4px;
 }
@@ -884,6 +934,10 @@ footer {
   width: 500px;
 }
 
+.reviewcreate h4 {
+  margin-bottom: 5px;
+}
+
 .reviewcreate .score {
   margin: 30px 0;
 }
@@ -915,6 +969,10 @@ footer {
   margin-top: 20px;
 }
 
+.reviewcreate .nonactive-btn:hover {
+  font-weight: bold;
+}
+
 .reservationcreate .outer-container {
   width: 500px;
 }
@@ -922,10 +980,6 @@ footer {
 .reservationcreate .inner-container {
   width: 300px;
   margin: 30px auto 0 auto;
-}
-
-.reservationcreate .crimson {
-  margin-bottom: 0;
 }
 
 .reservationcreate .reservation-form {
@@ -947,9 +1001,25 @@ footer {
   margin-top: 40px;
 }
 
+.reservationcreate .favorite-btn {
+  width: 300px;
+  height: 50px;
+}
+
 .reservationcreate .form-group {
   margin: 10px 0;
 }
+
+.reservationcreate .lower-btn,
+.reservation .lower-btn {
+  width: 200px;
+  height: 50px;
+  text-align: center;
+}
+
+.reservationcreate .nonactive-btn:hover {
+  font-weight: bold;
+} 
 
 .reservation .outer-container {
   width: 550px;
@@ -960,8 +1030,11 @@ footer {
   justify-content: space-between;
 }
 
-.left-align {
-  margin-left: 25px;
+.reservation .upper-btn {
+  display: inline-block;
+  text-align: center;
+  width: 90px;
+  margin-right: 15px;
 }
 
 .right-align {
@@ -971,7 +1044,7 @@ footer {
 
 .reservation-table {
   font-size: 14px;
-  width: 550px;
+  width: 555px;
   margin-top: 20px;
 }
 
@@ -1002,12 +1075,21 @@ footer {
 }
 
 .reservation-table .reservation-cancel {
-  width: 85px;
+  width: 90px;
+}
+
+.reservation-table td .nonactive-btn {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.reservation .nonactive-btn:hover {
+  font-weight: bold;
 }
 
 .reservation-table th {
   padding: 3px;
-  background-color: whitesmoke;
+  background-color: #f2efe6;
   border-bottom: solid gray 1px;
 }
 
@@ -1039,8 +1121,14 @@ footer {
   width: 180px;
 }
 
+.reviewcreate .lower-btn {
+  width: 200px;
+  height: 50px;
+  text-align: center;
+}
+
 .favoritelist .outer-container {
-  width: 700px;
+  width: 730px;
 }
 
 .favorite-table {
@@ -1050,12 +1138,13 @@ footer {
 
 .favorite-table th {
   text-align: left;
-  background-color: whitesmoke;
+  background-color: #f2efe6;
   border-bottom: solid gray 1px;
   padding: 3px 0;
 }
 
 .favoritelist td {
+  height: 40px;
   border-bottom: solid gray 1px;
   padding: 3px 0;
 }
@@ -1073,7 +1162,7 @@ footer {
 }
 
 .favorite-table .cancel {
-  width: 50px;
+  width: 80px;
 }
 
 .favoritelist .restaurant-ref {
@@ -1086,6 +1175,13 @@ footer {
   text-decoration: underline;
 }
 
+.favoritelist .nonactive-btn {
+  width: 80px;
+}
+
+.favoritelist .nonactive-btn:hover {
+  font-weight: bold;
+}
 .user .outer-container {
   width: 500px;
 }
@@ -1095,11 +1191,14 @@ footer {
 }
 
 .user .top-container {
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
 .user .edit-btn {
-  margin-left: 20px;
+  width: 150px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 15px;
   padding: 5px 2px;
 }
 
@@ -1114,13 +1213,18 @@ footer {
 
 .user-table th {
   width: 150px;
-  padding: 3px 0 3px 3px;
-  border-bottom: solid rgb(170, 170, 170) 1px;
+  padding: 3px 0 3px 15px;
+  background-color: #f2efe6;
+  border-bottom: solid #fff 1px;
 }
 
 .user-table td {
-  padding: 3px 0 3px 3px;
-  border-bottom: solid rgb(170, 170, 170) 1px;
+  padding: 3px 0 3px 15px;
+  border-bottom: solid #ececec 1px;
+}
+
+.user .nonactive-btn:hover {
+  font-weight: bold;
 }
 
 .user .bottom {
@@ -1142,12 +1246,6 @@ footer {
 
 .user-update .label {
   width: 200px;
-}
-
-.user-update .must {
-  color: white;
-  font-size: 13px;
-  background-color: crimson;
 }
 
 .user-update .right {
@@ -1173,17 +1271,21 @@ footer {
 }
 
 .user-update .btn-container {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .resign .outer-container {
-  width: 350px;
+  width: 500px;
   margin: 120px auto 30px auto;
   text-align: center;
 }
 
 .resign .btn-container {
   margin-top: 30px;
+}
+
+.resign .nonactive-btn:hover {
+  font-weight: bold;
 }
 
 .company .outer-container {
@@ -1197,13 +1299,14 @@ footer {
 
 .company-table th {
   width: 135px;
-  padding: 3px 0 3px 3px;
-  border-bottom: solid rgb(170, 170, 170) 1px;
+  padding: 3px 0 3px 15px;
+  background-color: #f2efe6;
+  border-bottom: solid #fff;
 }
 
 .company-table td {
-  padding: 3px 0 3px 3px;
-  border-bottom: solid rgb(170, 170, 170) 1px;
+  padding: 3px 0 3px 15px;
+  border-bottom: solid #ececec 1px;
 }
 
 .management .outer-container {

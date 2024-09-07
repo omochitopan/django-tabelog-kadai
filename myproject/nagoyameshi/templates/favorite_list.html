@@ -23,7 +23,7 @@
 				<td>
 					<form method="post" action="{% url 'favoritedelete' favorite.restaurant.pk %}" class="center">
 						{% csrf_token %}
-						<button type="submit" name="button" value="{{ favorite.restaurant.pk }}" class="btn cancel-btn">解除</button>
+						<button type="submit" name="button" value="{{ favorite.restaurant.pk }}" class="btn nonactive-btn">解除</button>
 					</form>
 				</td>
 			</tr>

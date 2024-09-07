@@ -8,14 +8,14 @@
 		<div class="restaurant-name">
 			<h2>{% if not object.is_active %}[閉店] {% endif %}{{ object.restaurant_name }}</h2>
 		</div>
-		<div class="flex-container ref-container">
-			<a href="" class="btn focus-btn left-align">店舗情報</a>
+		<div class="flex-container space-between">
+			<a href="" class="btn focus-btn upper-btn">店舗情報</a>
 			{% if object.is_active %}
-			<a href="{% url 'reservationform' object.pk %}" class="btn nonfocus-btn left-align">予約フォーム</a>
-			<a href="{% url 'reviewlist' object.pk %}" class="btn nonfocus-btn left-align">レビュー</a>
+			<a href="{% url 'reservationform' object.pk %}" class="btn nonfocus-btn upper-btn">予約フォーム</a>
+			<a href="{% url 'reviewlist' object.pk %}" class="btn nonfocus-btn upper-btn">レビュー</a>
 			{% else %}
-			<div class="btn nonactive-btn left-align">予約フォーム</div>
-			<div class="btn nonactive-btn left-align">レビュー</div>
+			<div class="btn nonactive-btn upper-btn">予約フォーム</div>
+			<div class="btn nonactive-btn upper-btn">レビュー</div>
 			{% endif %}
 		</div>
 		<div class="information">
@@ -72,10 +72,10 @@
 				{% csrf_token %}
 				<!-- 以下のbuttonをtype="button"に設定することでリロードされなくなった -->
 				{% if isFavorite %}
-				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn favorite-btn">
+				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn favorite-btn favorite">
 					&#9829; お気に入り解除
 				{% else %}
-				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn unfavorite-btn">
+				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn nonfocus-btn favorite">
 					&#9825; お気に入り追加
 				{% endif %}
 				</button>

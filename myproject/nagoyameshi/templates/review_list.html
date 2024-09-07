@@ -5,14 +5,14 @@
 <div class="reviewlist">
 	<div class="outer-container">
 		<h2 class="restaurant-name">{% if not restaurant.is_active %}[閉店] {% endif %}{{ restaurant.restaurant_name }}</h2>
-		<div class="flex-container ref-container">
-			<a href="{% url 'detail' restaurant.pk %}" class="btn nonfocus-btn left-align">店舗情報</a>
+		<div class="flex-container space-between">
+			<a href="{% url 'detail' restaurant.pk %}" class="btn nonfocus-btn upper-btn">店舗情報</a>
 			{% if restaurant.is_active %}
-			<a href="{% url 'reservationform' restaurant.pk %}" class="btn nonfocus-btn left-align">予約フォーム</a>
-			<div class="btn focus-btn left-align">レビュー</div>
+			<a href="{% url 'reservationform' restaurant.pk %}" class="btn nonfocus-btn upper-btn">予約フォーム</a>
+			<div class="btn focus-btn upper-btn">レビュー</div>
 			{% else %}
-			<div class="btn nonactive-btn left-align">予約フォーム</div>
-			<div class="btn nonactive-btn left-align">レビュー</div>
+			<div class="btn nonactive-btn upper-btn">予約フォーム</div>
+			<div class="btn nonactive-btn upper-btn">レビュー</div>
 			{% endif %}
 		</div>
 		{% if restaurant.is_active %}
@@ -22,16 +22,16 @@
 			<p class="reviewcheck">あなたはこのレストランに{% if restaurant.is_active %}まだ{% endif %}レビューしていません。</p>
 			{% if restaurant.is_active %}
 			<div class="flex-container btn-container">
-				<a href="{% url 'reviewcreate' restaurant.pk %}" class= "btn new-btn">＋レビューを投稿</a>
+				<a href="{% url 'reviewcreate' restaurant.pk %}" class= "btn strong-btn one-btn">＋レビューを投稿</a>
 			</div>
 			{% endif %}
 			{% else %}
 			<p class="reviewcheck">あなたはこのレストランにレビュー済みです。</p>
 			<div class="flex-container btn-container">
 				{% if restaurant.is_active %}
-				<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn accept-btn">レビューを編集</a>
+				<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn favorite-btn middle-btn">レビューを編集</a>
 				{% endif %}
-				<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn cancel-btn">レビューを削除</a>
+				<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn nonfocus-btn middle-btn">レビューを削除</a>
 			</div>
 			{% endif %}
 			{% if not target_reviews %}

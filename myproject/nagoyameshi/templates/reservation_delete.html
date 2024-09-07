@@ -26,11 +26,11 @@
 			{% csrf_token %}
 			<div class="flex-container btn-container">
 				{% if object.reserved_date >= cancel_date %}
-				<button type="submit" class="btn resign-btn">キャンセル</button>
+				<button type="submit" class="btn nonactive-btn two-btn">キャンセル</button>
 				{% else %}
 				<div class="btn nonactive-btn">キャンセル</div>
 				{% endif %}
-				<a href="{% url 'reservationlist' %}" class="btn cancel-btn">予約一覧に戻る</a>
+				<a href="{% url 'reservationlist' %}" class="btn thin-btn two-btn">予約一覧に戻る</a>
 			</div>
 		</form>	
 	</div>

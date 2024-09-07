@@ -5,14 +5,14 @@
 	<div class="outer-container">
 		<h2 class="center">{% if not restaurant.is_active %}[閉店] {% endif %}{{ restaurant.restaurant_name }}</h2>
 		{{ reservation_candidates }}
-		<div class="flex-container ref-container">
-			<a href="{% url 'detail' restaurant.pk %}" class="btn nonfocus-btn left-align">店舗情報</a>
+		<div class="flex-container space-between">
+			<a href="{% url 'detail' restaurant.pk %}" class="btn nonfocus-btn upper-btn">店舗情報</a>
 			{% if restaurant.is_active %}
-			<div class="btn focus-btn left-align">予約フォーム</div>
-			<a href="{% url 'reviewlist' restaurant.pk %}" class="btn nonfocus-btn left-align">レビュー</a>
+			<div class="btn focus-btn upper-btn">予約フォーム</div>
+			<a href="{% url 'reviewlist' restaurant.pk %}" class="btn nonfocus-btn upper-btn">レビュー</a>
 			{% else %}
-			<div class="btn nonactive-btn left-align">予約フォーム</div>
-			<div class="btn nonactive-btn left-align">レビュー</div>
+			<div class="btn nonactive-btn upper-btn">予約フォーム</div>
+			<div class="btn nonactive-btn upper-btn">レビュー</div>
 			{% endif %}
 		</div>
 		<div class="inner-container">
@@ -32,22 +32,22 @@
 					<td>{{ form.number_of_people.value }}</td>
 				</tr>
 			</table>
-			<div class="flex-container btn-container">
-				<form method="post" action="{% url 'reservationcreate' restaurant.pk %}">
-					{% csrf_token %}
-						<button type="submit" class="btn accept-btn">予約確定</button>
-						{% for field in form %}{{ field.as_hidden }}{% endfor %}
-				</form>
-				<form method="post" action="{% url 'reservationform' restaurant.pk %}">
-					{% csrf_token %}
-					<button type="submit" class="btn cancel-btn">再入力</button>
-					{% for field in form %}{{ field.as_hidden }}{% endfor %}
-				</form>
-			</div> 
-			{% else %}
-			<p class="center">閉店しています。</p>
-			{% endif %}
 		</div>
+		<div class="flex-container btn-container">
+			<form method="post" action="{% url 'reservationcreate' restaurant.pk %}">
+				{% csrf_token %}
+					<button type="submit" class="btn strong-btn two-btn">予約確定</button>
+					{% for field in form %}{{ field.as_hidden }}{% endfor %}
+			</form>
+			<form method="post" action="{% url 'reservationform' restaurant.pk %}">
+				{% csrf_token %}
+				<button type="submit" class="btn nonactive-btn two-btn">再入力</button>
+				{% for field in form %}{{ field.as_hidden }}{% endfor %}
+			</form>
+		</div> 
+		{% else %}
+		<p class="center">閉店しています。</p>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

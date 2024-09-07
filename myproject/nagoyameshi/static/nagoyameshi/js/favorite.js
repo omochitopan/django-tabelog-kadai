@@ -64,10 +64,10 @@ if (favoriteButton) {
         if (data.favorite_status === 'unfavorited') {
           this.innerHTML = '&#9825; お気に入り追加';
 					this.classList.remove("favorite-btn");
-					this.classList.add("unfavorite-btn");
+					this.classList.add("nonfocus-btn");
         } else if (data.favorite_status === 'favorited') {
           this.innerHTML = '&#9829; お気に入り解除';
-					this.classList.remove("unfavorite-btn");
+					this.classList.remove("nonfocus-btn");
 					this.classList.add("favorite-btn");
         }
       } else {

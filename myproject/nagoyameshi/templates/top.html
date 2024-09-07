@@ -23,31 +23,33 @@
 		<div class="restaurants-container">
 			<div class="middle-container">
 				<h2 class="title">評価が高いお店</h2>
-				<div class="flex-container wrap-container">
+				<ul class="flex-container wrap-container">
 					{% for restaurant in evaluated_restaurants %}
-					<div class="inner-container">
-						<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
-						<div class="text-container">
-							<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a>
+					<li class="inner-container">
+						<a href="{% url 'detail' restaurant.pk %}">
+							<img src="{{ restaurant.image.url }}" class="restaurant-image" alt="店舗画像">
+							<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
 							{% for category in restaurant.category_name.all %}
 							<p class="category-name">{{ category }}</p>
 							{% endfor %}
-						</div>
-					</div>
+						</a>
+					</li>
 					{% endfor %}
-				</div>
+				</ul>
 			</div>
 			<div class="middle-container">
 				<h2 class="title">カテゴリから探す</h2>
 				<div class="categoryContainer">
-					<div class="flex-container wrap-container">
+					<ul class="flex-container wrap-container">
 						{% for information in category_information %}
-						<div class="category-container">
-							<a href="{% url 'category' information.id %}" "image-ref"><img src="{{ information.url }}" class="category-img" alt="和食を検索"></a>
-							<a href="{% url 'category' information.id %}" class="category-text">{{ information.name }}</a>
-						</div>
+						<li class="category-container">
+							<a href="{% url 'category' information.id %}">
+								<img src="{{ information.url }}" class="category-img" alt="和食を検索"></a>
+								<p class="category-text">{{ information.name }}</p>
+							</a>
+						</li>
 						{% endfor %}
-					</div>
+					</ul>
 					<div class="btn-container">
 						{% for category in all_categories %}
 						<a href="{% url 'category' category.pk %}" class="btn category-btn">{{ category.category_name }}</a>
@@ -57,19 +59,19 @@
 			</div>
 			<div class="middle-container">
 				<h2 class="title">新規掲載店</h2>
-				<div class="flex-container wrap-container">
+				<ul class="flex-container wrap-container">
 					{% for restaurant in new_restaurants %}
-					<div class="inner-container">
-						<a href="{% url 'detail' restaurant.pk %}"><img src="{{ restaurant.image.url }}" class="top-image" alt="店舗画像"></a>
-						<div class="text-container">
-							<a href="{% url 'detail' restaurant.pk %}" class="restaurant-name">{{ restaurant.restaurant_name }}</a>
+					<li class="inner-container">
+						<a href="{% url 'detail' restaurant.pk %}">
+							<img src="{{ restaurant.image.url }}" class="restaurant-image" alt="店舗画像">
+							<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
 							{% for category in restaurant.category_name.all %}
 							<p class="category-name">{{ category }}</p>
 							{% endfor %}
-						</div>
-					</div>
+						</a>
+					</li>
 					{% endfor %}
-				</div>
+				</ul>
 			</div>
 		</div>
 	</div>
