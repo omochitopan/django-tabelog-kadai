@@ -29,9 +29,9 @@
 			<p class="reviewcheck">あなたはこのレストランにレビュー済みです。</p>
 			<div class="flex-container btn-container">
 				{% if restaurant.is_active %}
-				<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn favorite-btn middle-btn">レビューを編集</a>
+				<a href="{% url 'reviewupdate' writtenreview.pk %}" class= "btn favorite-btn two-btn">レビューを編集</a>
 				{% endif %}
-				<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn nonfocus-btn middle-btn">レビューを削除</a>
+				<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn nonfocus-btn two-btn">レビューを削除</a>
 			</div>
 			{% endif %}
 			{% if not target_reviews %}

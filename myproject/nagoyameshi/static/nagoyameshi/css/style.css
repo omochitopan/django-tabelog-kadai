@@ -52,33 +52,6 @@ h5 {
   border: none;
 }
 
-.accept-btn {
-  background-color: rgb(255, 210, 197);
-}
-
-.accept-btn:hover {
-  color: white;
-  background-color: orangered;
-}
-
-.cancel-btn {
-  background-color: rgb(165, 217, 255);
-}
-
-.cancel-btn:hover {
-  color: white;
-  background-color: rgb(0, 149, 255);
-}
-
-.new-btn {
-  background-color: rgb(175, 255, 164);
-}
-
-.new-btn:hover {
-  font-weight: bold;
-  background-color: rgb(30, 255, 0);
-}
-
 .focus-btn {
   color: white;
   background-color: rgb(255, 174, 0);
@@ -87,15 +60,6 @@ h5 {
 .nonfocus-btn {
   color: black;
   background-color: #eee;
-}
-
-.edit-btn {
-  background-color: rgb(255, 235, 190);
-}
-
-.edit-btn:hover {
-  color: white;
-  background-color: rgb(255, 174, 0);
 }
 
 .nonfocus-btn:hover {
@@ -115,17 +79,13 @@ h5 {
   font-weight: bold;
 }
 
-.resign-btn {
-  background-color: rgb(220, 182, 255);
+.new-btn {
+  color: #fff;
+  background-color: #1d365f;
 }
 
-.resign-btn:hover {
-  color: white;
-  background-color: rgb(132, 0, 255);
-}
-
-.type1-btn {
-  background-color: rgb(255, 189, 207);
+.new-btn:hover {
+  font-weight: bold;
 }
 
 .type1-btn:hover {
@@ -170,6 +130,14 @@ h5 {
 
 .two-btn {
   width: 200px;
+  height: 50px;
+  padding: 15px;
+  text-align: center;
+  display: inline-block;
+}
+
+.three-btn {
+  width: 150px;
   height: 50px;
   padding: 15px;
   text-align: center;
@@ -746,6 +714,10 @@ footer {
   border-bottom-style: solid;
 }
 
+.detail .three-btn:hover {
+  font-weight: bold;
+}
+
 .list .outer-container {
   margin-top: 60px;
 }
@@ -778,6 +750,10 @@ footer {
 
 .list .btn-container {
   padding: 10px 25px;
+}
+
+.list .focus-btn {
+  border: solid rgb(255, 174, 0) 1px;
 }
 
 .restaurant-table {
@@ -1017,7 +993,7 @@ footer {
   text-align: center;
 }
 
-.reservationcreate .nonactive-btn:hover {
+.reservationcreate .two-btn:hover {
   font-weight: bold;
 } 
 
@@ -1059,7 +1035,6 @@ footer {
 
 .reservation-table .restaurant-ref:hover {
   font-weight: bold;
-  text-decoration: underline;
 }
 
 .reservation-table .reserved-date {
@@ -1172,7 +1147,6 @@ footer {
 
 .favoritelist .restaurant-ref:hover {
   font-weight: bold;
-  text-decoration: underline;
 }
 
 .favoritelist .nonactive-btn {
@@ -1194,7 +1168,7 @@ footer {
   margin: 20px 0;
 }
 
-.user .edit-btn {
+.user .new-btn {
   width: 150px;
   display: inline-block;
   text-align: center;
@@ -1337,11 +1311,24 @@ footer {
 }
 
 .management-restaurant .left-ref {
-  margin-left: 10px;
+  margin-right: 20px;
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+}
+
+.management-restaurant .new-btn {
+  width: 150px;
+  text-align: center;
+  display: inline-block;
 }
 
 .management-restaurant-table {
   margin: 20px auto 30px auto;
+}
+
+.management-restaurant-table tr {
+  height: 40px;
 }
 
 .management-restaurant-table th {
@@ -1352,7 +1339,6 @@ footer {
 }
 
 .management-restaurant-table td {
-  height: 40px;
   border-bottom: solid gray 1px;
   padding: 3px 0;
 }
@@ -1377,15 +1363,20 @@ footer {
 }
 
 .management-restaurant-table .manager {
-  width: 210px;
+  width: 180px;
 }
 
 .management-restaurant-table .reservationlist {
-  width: 70px;
+  width: 90px;
 }
 
 .management-restaurant-table .sales {
-  width: 40px;
+  width: 90px;
+}
+
+.management-restaurant-table .strong-btn {
+  width: 80px;
+  display: inline-block;
 }
 
 .management-restaurant-create .outer-container {
@@ -1414,16 +1405,20 @@ footer {
 }
 
 .restaurant-confirm-table tr {
-  height: 35px;
-  border-bottom: solid gray 1px;
+  height: 40px;
 }
 
 .restaurant-confirm-table th {
   width: 220px;
+  background-color: #f2efe6;
+  border-bottom: solid #fff 1px;
+  padding: 3px 0 3px 15px;
 }
 
 .restaurant-confirm-table td {
   width: 380px;
+  border-bottom: solid #ececec 1px;
+  padding: 3px 0 3px 15px;
 }
 
 .management-restaurant-edit .outer-container {
@@ -1485,18 +1480,28 @@ footer {
   margin-top: 20px;
 }
 
+.management-reservation-list .left-align {
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 20px;
+}
+
 .management-reservation-list-table {
   margin: 30px auto;
 }
 
+.management-reservation-list-table tr {
+  height: 40px;
+  padding: 3px 0;
+}
+
 .management-reservation-list-table th {
   border-bottom: solid gray 1px;
-  background-color: whitesmoke;
+  background-color: #f2efe6;
 }
 
 .management-reservation-list-table td {
-  height: 40px;
-  padding: 3px 0;
   border-bottom: solid gray 1px;
 }
 
@@ -1513,15 +1518,25 @@ footer {
 }
 
 .management-reservation-list-table .user {
-  width: 170px;
+  width: 180px;
 }
 
 .management-reservation-list-table .edit {
-  width: 60px;
+  width: 90px;
 }
 
 .management-reservation-list-table .delete {
-  width: 60px;
+  width: 90px;
+}
+
+.management-reservation-list-table .nonactive-btn:hover {
+  font-weight: bold;
+}
+
+.management-reservation-list-table .btn {
+  width: 80px;
+  display: inline-block;
+  text-align: center;
 }
 
 .management-reservation-list-table .ref {
@@ -1561,6 +1576,8 @@ footer {
   width: 200px;
 }
 
+
+
 .managementreservationdelete .outer-container {
   width: 650px;
 }
@@ -1587,6 +1604,10 @@ footer {
   color: black;
 }
 
+.restaurant-table-delete .ref:hover {
+  font-weight: bold;
+}
+
 .restaurant-table-delete .restaurant-name {
   width: 300px;
 }
@@ -1607,6 +1628,10 @@ footer {
   width: 100px;
 }
 
+.managementreservationdelete .nonactive-btn:hover {
+  font-weight: bold;
+}
+
 .management-user-table {
   margin: 30px auto;
 }
@@ -1624,12 +1649,21 @@ footer {
 }
 
 .management-user-table .detail {
-  width: 50px;
+  width: 100px;
+}
+
+.management-user-table .strong-btn {
+  display: inline-block;
+  width: 100px;
 }
 
 .management-user .resign {
   font-size: 14px;
   padding-left: 2px;
+}
+
+.management-user-table tr {
+  height: 40px;
 }
 
 .management-user-table th {
@@ -1649,12 +1683,14 @@ footer {
 
 .management-user-detail-table th {
   width: 130px;
-  padding: 3px 0;
-  border-bottom: solid gray 1px;
+  padding: 3px 0 3px 15px;
+  background-color: #f2efe6;
+  border-bottom: solid #fff 1px;
   text-align: left;
 }
 
 .management-user-detail-table td {
   width: 300px;
-  border-bottom: solid gray 1px;
+  padding: 3px 0 3px 15px;
+  border-bottom: solid #ececec 1px;
 }

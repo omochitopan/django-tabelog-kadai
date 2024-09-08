@@ -16,12 +16,12 @@
 				<td>{{ target_user.name }}</td>
 				<td>{{ target_user.kana_name }}</td>
 				<td>{{ target_user.email }}</td>
-				<td class="center"><a href="{% url 'managementuserdetail' user.pk target_user.pk %}" class="btn type1-btn">詳細</a></td>
+				<td class="center"><a href="{% url 'managementuserdetail' user.pk target_user.pk %}" class="btn strong-btn">詳細</a></td>
 			</tr>
 			{% endfor %}
 		</table>
 		<div class="flex-container btn-container">
-	        <a href="{% url 'management' user.pk %}" class="btn cancel-btn">管理トップに戻る</a>
+	        <a href="{% url 'management' user.pk %}" class="btn thin-btn one-btn">管理トップに戻る</a>
 		</div>
 	</div>
 </div>

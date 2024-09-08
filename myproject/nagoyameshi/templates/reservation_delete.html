@@ -16,7 +16,7 @@
 				<th>予約人数</th>
 			</tr>
 			<tr>
-				<td class="restaurant-name"><a href="{% url 'detail' object.restaurant.id %}" class="restaurant-ref">{{ object.restaurant }}</a></td>
+				<td class="restaurant-name"><a href="{% url 'detail' object.restaurant.id %}" class="restaurant-ref">{{ object.restaurant.restaurant_name }}</a></td>
 				<td>{{ object.reserved_date }}</td>
 				<td>{{ object.reserved_time }}</td>
 				<td>{{ object.number_of_people }}</td>
