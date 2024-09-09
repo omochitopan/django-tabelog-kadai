@@ -5,7 +5,7 @@
 <div class="list">
 	<div class="outer-container">
 		<div class="flex-container">
-			<a href="{% url 'list' %}" class="btn nonfocus-btn top-ref">キーワードから探す</a>
+			<a href="{% url 'keyword' %}" class="btn nonfocus-btn top-ref">キーワードから探す</a>
 			<div class="btn focus-btn top-ref">カテゴリから探す</div>
 		</div>
 		<div class="back-container">
@@ -21,43 +21,47 @@
 		</div>
 		<!-- 検索結果の数 -->
 		<div class="search-count">
-			{% if category_restaurants %}
-			<p>[カテゴリ：{{ target_category.category_name }}] {{ category_restaurants|length }}件の店舗が見つかりました</p>
+			{% if object_list %}
+			<p>[カテゴリ：{{ target_category.category_name }}] {{ count }}件の店舗が見つかりました</p>
 			{% else %}
 			<p>[カテゴリ：{{ target_category.category_name }}] お探しの店舗は見つかりませんでした</p>
 			{% endif %}
-		<div>
-		{% for object in category_restaurants %}
 		</div>
-		<table class="restaurant-table">
-			<tr>
-				<td rowspan="4" class="image-table">
-					<a href="{% url 'detail' object.restaurant.pk %}"><img src="{{ object.restaurant.image.url }}" class="restaurant-image" alt="店舗画像"></a>
-				</td>
-				<td class="first-row">
-					<a href="{% url 'detail' object.restaurant.pk %}" class="restaurant-name">{{ object.restaurant.restaurant_name }}</a><br>
-				</td>
-			</tr>
-			<tr>
-				<td class="second-row">
-					{% for category in object.restaurant.category_name.all %}
-					<span class="category">{{ category }}　</span>
-					{% endfor %}
-					<div></div>
-				</td>
-			</tr>
-			<tr>
-				<td class="third-row">
-					{{ object.restaurant.lowest_price|intcomma }}~{{ object.restaurant.highest_price|intcomma }}円<br>
-				</td>
-			</tr>
-			<tr>
-				<td class="fourth-row">
-					{{ object.restaurant.description}}</p>
-				</td>
-			</tr>
-		</table>
-		{% endfor %}
+		<div class="inner-container">
+			{% include "pagination.html" %}
+			{% for object in object_list %}
+			<a href="{% url 'detail' object.restaurant.pk %}" class="table-ref">
+				<table class="restaurant-table">
+					<tr>
+						<td rowspan="4" class="image-table">
+							<img src="{{ object.restaurant.image.url }}" class="restaurant-image" alt="店舗画像">
+						</td>
+						<td class="first-row restaurant-name">
+							{{ object.restaurant.restaurant_name }}
+						</td>
+					</tr>
+					<tr>
+						<td class="second-row category">
+							{% for category in object.restaurant.category_name.all %}
+							<span class="category">{{ category }}　</span>
+							{% endfor %}
+							<div></div>
+						</td>
+					</tr>
+					<tr>
+						<td class="third-row price">
+							{{ object.restaurant.lowest_price|intcomma }}~{{ object.restaurant.highest_price|intcomma }}円<br>
+						</td>
+					</tr>
+					<tr>
+						<td class="fourth-row description">
+							{{ object.restaurant.description}}</p>
+						</td>
+					</tr>
+				</table>
+			</a>
+			{% endfor %}
+		</div>
 	</div>
 </div>
 {% endblock %}

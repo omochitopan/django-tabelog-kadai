@@ -1,0 +1,35 @@
+{% if is_paginated %}
+<ul class="pagination">
+    {% for num in page_list %}
+    {% if num == page_obj.number %}
+    <li class="current">
+        {{ num }}
+        <span>&nbsp;</span>
+    </li>
+    {% elif num == "..." %}
+    <li class="dot">
+        {{ num }}
+        <span>&nbsp;</span>
+    </li>
+    {% elif num == "最初" %}
+    <li>
+        <a class="gray" href="?query={{ request.GET.query }}&page=1">{{ num }}</a>
+        <span>&nbsp;</span>
+    </li>
+    {% elif num == "最後" %}
+    <li>
+        <a class="gray" href="?query={{ request.GET.query }}&page={{ page_obj.paginator.num_pages }}">{{ num }}</a>
+        <span>&nbsp;</span>
+    </li>
+    {% else %}
+    <li>
+        <a class="gray" href="?query={{ request.GET.query }}&page={{ num }}">{{ num }}</a>
+        <span>&nbsp;</span>
+    </li>
+    {% endif %}
+    {% endfor %}
+    <li class="">
+        ( {{ page_obj.number }}ページ / {{ page_obj.paginator.num_pages }}ページ中 )
+    </li>
+</ul>
+{% endif %}

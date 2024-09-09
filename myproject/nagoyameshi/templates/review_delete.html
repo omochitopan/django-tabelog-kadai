@@ -4,7 +4,7 @@
 <div class="reviewcreate">
 	<div class="outer-container">
 		<h2 class="restaurant-name">{{ restaurant_name }}</h2>
-		<h5 class="deletecheck">以下のレビューを削除しますか？</h5>
+		<h5 class="crimson">以下のレビューを削除しますか？</h5>
 		<table class="review-table">
 			<tr class="user-name-index">
 				<td class="my-name">{{ object.user.nick_name }}<span> さん</span></td>
@@ -33,8 +33,8 @@
 		<form method="post">
 			{% csrf_token %}
 			<div class="flex-container btn-container">		
-				<button type="submit" class="btn nonactive-btn lower-btn">削除する</button>
-				<a href="{% url 'reviewlist' restaurant_id %}" class="btn thin-btn lower-btn">一覧に戻る</a>
+				<button type="submit" class="btn nonactive-btn two-btn">削除する</button>
+				<a href="{% url 'reviewlist' restaurant_id %}" class="btn thin-btn two-btn">一覧に戻る</a>
 			</div>
 		</form>	
 	</div>

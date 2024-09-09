@@ -13,8 +13,7 @@
 		</div>
 		<!-- 検索フォーム -->
 		<div class="search-container">
-			<form class="search-form" method="get" action="{% url 'list' %}">
-				{% csrf_token %}
+			<form class="search-form" method="get" action="{% url 'keyword' %}">
 				<label for="">キーワードから探す</label>
 				<input class="search-box" type="text" name="query" placeholder="店舗名・エリア" value="{{ request.GET.query }}">
 				<button type="submit" class="search-btn">検索</button>

@@ -4,22 +4,68 @@
 <div class="management-user">
 	<div class="outer-container">
 		<h2 class="center">管理店舗に予約履歴のある会員一覧</h2>
-		<table class="management-user-table">
-			<tr>
-				<th class="name">氏名</th>
-				<th class="kana-name">フリガナ</th>
-				<th class="email">メールアドレス</th>
-				<th class="detail"></th>
-			</tr>
-			{% for target_user in target_users %}
-			<tr>
-				<td>{{ target_user.name }}</td>
-				<td>{{ target_user.kana_name }}</td>
-				<td>{{ target_user.email }}</td>
-				<td class="center"><a href="{% url 'managementuserdetail' user.pk target_user.pk %}" class="btn strong-btn">詳細</a></td>
-			</tr>
-			{% endfor %}
-		</table>
+		<div class="search-container">
+			<form method="get" action="{% url 'managementuser' user.pk %}" class="flex-container">
+				<div>
+					<div class="item">
+						<label>名前検索</label>
+						<input class="search-box" type="text" name="name" value="{{ request.GET.name }}" placeholder="漢字・カナ・ニックネーム">
+					</div>
+					<div class="item">
+						<label>メールアドレス検索</label>
+						<input class="search-box" type="text" name="email" value="{{ request.GET.email }}">
+					</div>
+					<div class="item">
+						<label>電話番号検索</label>
+						<input class="search-box" type="text" name="tel" value="{{ request.GET.tel }}">
+					</div>
+					<div class="item">
+						<label>住所検索</label>
+						<input class="search-box" type="text" name="address" value="{{ request.GET.address }}" placeholder="郵便番号（ハイフンなし）・住所">
+					</div>
+				</div>
+				<div class="right-container">
+					<button type="submit" class="btn strong-btn">検索</button>
+				</div>
+			</form>
+		</div>
+		<div class="inner-container">
+			{% if request.GET.name %}
+            <p class="query">[名前：{{ request.GET.name }}]</p>
+			{% endif %}
+			{% if request.GET.email %}
+            <p class="query">[メールアドレス：{{ request.GET.email }}]</p>
+			{% endif %}
+			{% if request.GET.tel %}
+            <p class="query">[電話番号：{{ request.GET.tel }}]</p>
+			{% endif %}
+			{% if request.GET.address %}
+            <p class="query">[住所：{{ request.GET.addres }}]</p>
+            {% endif %}
+			{% include "pagination.html" %}
+			<table class="management-user-table">
+				<tr>
+					<th class="name">氏名</th>
+					<th class="kana-name">フリガナ</th>
+					<th class="email">メールアドレス</th>
+					<th class="detail"></th>
+				</tr>
+				{% if object_list %}
+				{% for target_user in object_list %}
+				<tr>
+					<td>{{ target_user.name }}</td>
+					<td>{{ target_user.kana_name }}</td>
+					<td>{{ target_user.email }}</td>
+					<td class="center"><a href="{% url 'managementuserdetail' user.pk target_user.pk %}" class="btn strong-btn">詳細</a></td>
+				</tr>
+				{% endfor %}
+				{% else %}
+				<tr>
+					<td colspan="4">予約履歴のある会員はいません</td>
+				</tr>
+				{% endif %}
+			</table>
+		</div>
 		<div class="flex-container btn-container">
 	        <a href="{% url 'management' user.pk %}" class="btn thin-btn one-btn">管理トップに戻る</a>
 		</div>

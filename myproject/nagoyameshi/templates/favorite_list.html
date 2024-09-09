@@ -5,9 +5,10 @@
 <div class="favoritelist">
 	<div class="outer-container">
 		<h2 class="center">お気に入り店舗一覧</h2>
-		{% if not target_favorites %}
+		{% if not object_list %}
 		<p>現在のお気に入りレストランはありません。</p>
 		{% else %}
+		{% include "pagination.html" %}
 		<table class="favorite-table">
 			<tr>
 				<th class="restaurant-name">店舗名</th>
@@ -15,7 +16,7 @@
 				<th class="address">住所</th>
 				<th class="cancel"></th>
 			</tr>
-			{% for favorite in target_favorites %}
+			{% for favorite in object_list %}
 			<tr>
 				<td class="restaurant-name">{% if not favorite.restaurant.is_active %}[閉店] {% endif %}<a href="{% url 'detail' favorite.restaurant.id %}" class="restaurant-ref">{{ favorite.restaurant }}</a></td>
 				<td>{{ favorite.restaurant.postal_code }}</td>

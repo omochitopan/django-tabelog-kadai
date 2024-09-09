@@ -4,6 +4,7 @@ from django.views.generic import ListView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
+from django.contrib import messages
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -12,10 +13,12 @@ from django.urls import reverse_lazy, reverse
 from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from typing import Any, Dict
 from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, CategoryRestaurantRelation, HolidayRestaurantRelation, ManagerRestaurantRelation
 from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
+from .utils.pagination import pagination
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
 import datetime
@@ -64,41 +67,77 @@ class TopView(TemplateView):
         context['category_information'] = category_information
         return context
 
-class RestaurantListView(LoginRequiredMixin, ListView):
+class RestaurantKeywordListView(LoginRequiredMixin, ListView):
     model = Restaurant
+    template_name = "keyword_list.html"
+    paginate_by = 5
     
     def get_queryset(self):
         query = self.request.GET.get('query')
-
         if query:
-            restaurants = Restaurant.objects.filter(is_active = True).filter(
+            self.queryset = Restaurant.objects.filter(is_active = True).filter(
             Q(restaurant_name__icontains=query) | Q(address__icontains=query)
             )
         else:
-            restaurants = Restaurant.objects.none()
-        return restaurants
+            self.queryset = Restaurant.objects.none()
+        # Paginator
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        # テンプレートに変数を渡す
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
-        context['query'] = self.request.GET.get('query')
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
         context['izakaya_id'] = Category.objects.get(category_name = "居酒屋").pk
+        context['page_list'] = page_list
+        if self.queryset:
+            context['count'] = len(self.queryset)
         return context
 
-class RestaurantCategoryList(LoginRequiredMixin, ListView):
-    model = Restaurant
+class RestaurantCategoryListView(LoginRequiredMixin, ListView):
+    model = CategoryRestaurantRelation
     template_name = "category_list.html"
+    paginate_by = 5
+    
+    def get_queryset(self):
+        query = self.kwargs.get('category_id')
+        self.queryset = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True, category__pk = query).order_by("restaurant_id")
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        all_categories = Category.objects.all()
-        category_id = self.kwargs.get("category_id")
-        target_category = Category.objects.get(pk = category_id)
-        category_restaurants = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True).filter(category__pk = category_id)
-        context['user_id'] = self.request.user.pk
-        context["all_categories"] = all_categories
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
+        categories = Category.objects
+        target_category = categories.get(pk = self.kwargs.get("category_id"))
+        context["all_categories"] = categories.all()
         context['target_category'] = target_category
-        context["category_restaurants"] = category_restaurants
+        if self.queryset:
+            context['count'] = len(self.queryset)
+        context['page_list'] = page_list
+        context["restaurants"] = self.queryset
         return context
     
 class RestaurantDetailView(LoginRequiredMixin, DetailView):
@@ -236,23 +275,39 @@ class ReviewListView(LoginRequiredMixin, ListView):
     template_name = "review_list.html"
     paginate_by = 5
     
+    def get_queryset(self):
+        query = self.kwargs.get('restaurant_id')
+        self.queryset = Review.objects.filter(restaurant = query).order_by('-updated_at')
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
         restaurant_id = self.kwargs.get("restaurant_id")
-        target_reviews = Review.objects.filter(restaurant = restaurant_id).order_by('-updated_at')
-        average_score = target_reviews.aggregate(Avg('score'))['score__avg']
+        average_score = self.queryset.aggregate(Avg('score'))['score__avg']
         if average_score == None:
             average_score = "---"
         else:
             average_score = "{:.2f}".format(average_score)
-        writtenreview = None
-        for review in target_reviews:
-            if review.user == self.request.user:
-                writtenreview = review
-                break
+        try:
+            writtenreview = self.queryset.get(user = self.request.user)
+        except self.model.DoesNotExist:
+            writtenreview = None
+        context["page_list"] = page_list
         context['user'] = self.request.user
         context["restaurant"] = Restaurant.objects.get(pk = restaurant_id)
-        context["target_reviews"] = target_reviews
         context["average_score"] = average_score
         context["writtenreview"] = writtenreview
         return context
@@ -419,14 +474,30 @@ class ReservationListView(LoginRequiredMixin, ListView):
     model = Reservation
     template_name = "reservation_list.html"
     paginate_by = 15
+    
+    def get_queryset(self):
+        self.queryset = Reservation.objects.filter(user = self.request.user).filter(reserved_date__gte = date.today()).order_by('reserved_date', 'reserved_time')
+        # Paginator
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        # テンプレートに変数を渡す
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        target_reservations = Reservation.objects.filter(user = user, reserved_date__gte = date.today()).order_by('reserved_date', 'reserved_time',)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
         cancel_date = datetime.date.today() + relativedelta(days = 3)
-        context['user_id'] = user.pk
-        context["target_reservations"] = target_reservations
+        context["page_list"] = page_list
         context["cancel_date"] = cancel_date
         return context
 
@@ -434,14 +505,28 @@ class ReservationListAllView(LoginRequiredMixin, ListView):
     model = Reservation
     template_name = "reservation_list_all.html"
     paginate_by = 15
+    
+    def get_queryset(self):
+        self.queryset = Reservation.objects.filter(user = self.request.user).order_by('reserved_date', 'reserved_time')
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        target_reservations = Reservation.objects.filter(user = user).order_by('reserved_date', 'reserved_time',)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
         cancel_date = datetime.date.today() + relativedelta(days = 3)
-        context["user_id"] = user.pk
-        context["target_reservations"] = target_reservations
+        context["page_list"] = page_list
         context["cancel_date"] = cancel_date
         return context
 
@@ -489,12 +574,26 @@ class FavoriteListView(LoginRequiredMixin, ListView):
     template_name = "favorite_list.html"
     paginate_by = 15
     
+    def get_queryset(self):
+        self.queryset = Favorite.objects.filter(user = self.request.user).order_by('-updated_at')
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        target_favorites = Favorite.objects.filter(user = user).order_by('-updated_at')
-        context['user_id'] = user.pk
-        context["target_favorites"] = target_favorites
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
+        context["page_list"] = page_list
         return context
 
 class UserView(OnlyMyUserInformationMixin, LoginRequiredMixin, DetailView):
@@ -571,25 +670,69 @@ class ManagementTopView(OnlyManagementUserMixin, TemplateView):
         return context
 
 class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
-    model = Restaurant
+    model = ManagerRestaurantRelation
     template_name = "management/management_open_restaurant.html"
+    paginate_by = 15
+    
+    def get_queryset(self):
+        self.queryset = ManagerRestaurantRelation.objects.filter(restaurant__is_active = True, managers = self.request.user)
+        query = self.request.GET.get('query')
+        if query:
+            self.queryset = self.queryset.filter(
+                Q(restaurant__restaurant_name__icontains = query) | Q(restaurant__postal_code = query) | Q(restaurant__address__icontains=query)
+            )
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        managed_restaurants = ManagerRestaurantRelation.objects.filter(restaurant__is_active = True).filter(managers = self.request.user)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
+        context["page_list"] = page_list
         context["user"] = self.request.user
-        context['managed_restaurants'] = managed_restaurants
         return context
 
 class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
     model = Restaurant
     template_name = "management/management_closed_restaurant.html"
+    paginate_by = 15
+    
+    def get_queryset(self):
+        self.queryset = ManagerRestaurantRelation.objects.filter(restaurant__is_active = False, managers = self.request.user)
+        query = self.request.GET.get('query')
+        if query:
+            self.queryset = self.queryset.filter(
+                Q(restaurant__restaurant_name__icontains = query) | Q(restaurant__postal_code = query) | Q(restaurant__address__icontains=query)
+            )
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        managed_restaurants = ManagerRestaurantRelation.objects.filter(restaurant__is_active = False).filter(managers = self.request.user)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
+        context["page_list"] = page_list
         context["user"] = self.request.user
-        context['managed_restaurants'] = managed_restaurants
         return context
 
 class ManagementRestaurantFormView(OnlyManagementUserMixin, FormView):
@@ -711,33 +854,76 @@ class ManagementRestaurantDeleteView(OnlyManagementUserMixin, UpdateView):
 class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
     model = Reservation
     template_name = "management/management_reservation_restaurant.html"
+    paginate_by = 15
+    
+    def get_queryset(self):
+        target_restaurant = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
+        self.queryset = Reservation.objects.filter(restaurant = target_restaurant, reserved_date__gte = date.today()).order_by("reserved_date", "reserved_time")
+        query = self.request.GET.get('query')
+        if query:
+            self.queryset = self.queryset.filter(
+                Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
+            )
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
         restaurant_id = self.kwargs.get("restaurant_id")
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
-        target_reservations = Reservation.objects.filter(restaurant = target_restaurant, reserved_date__gte = date.today()).order_by("reserved_date", "reserved_time")
-        context["user"] = self.request.user
+        context["page_list"] = page_list
         context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
-        context['target_reservations'] = target_reservations
         return context
     
 class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
     model = Reservation
     template_name = "management/management_reservation_restaurant_all.html"
+    paginate_by = 15
+
+    def get_queryset(self):
+        target_restaurant = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
+        self.queryset = Reservation.objects.filter(restaurant = target_restaurant).order_by("reserved_date", "reserved_time")
+        query = self.request.GET.get('query')
+        if query:
+            self.queryset = self.queryset.filter(
+                Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
+            )
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
         restaurant_id = self.kwargs.get("restaurant_id")
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
-        target_reservations = Reservation.objects.filter(restaurant = target_restaurant).order_by("reserved_date", "reserved_time")
-        today = date.today()
-        context["user"] = self.request.user
+        context["page_list"] = page_list
         context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
-        context['target_reservations'] = target_reservations
-        context["today"] = today
+        context["today"] = date.today()
         return context
 
 class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
@@ -765,8 +951,6 @@ class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
         opening_time = datetime.datetime.combine(date.today(), opening_time)
         closing_time = datetime.datetime.combine(date.today(), closing_time)
 
-        # 予約可能な開始時間:start_timeと終了時間:end_timeを設定
-        # 閉店時間が24時を過ぎる場合の対応
         if opening_time > closing_time:
             closing_time = closing_time + relativedelta(days = +1)
         
@@ -826,16 +1010,46 @@ class ManagementReservationDeleteView(OnlyManagementUserMixin, DeleteView):
 class ManagementUserView(OnlyManagementUserMixin, ListView):
     model = User
     template_name = "management/management_user.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
+    paginate_by = 15
+    
+    def get_queryset(self):
         managed_restaurants = [object.restaurant for object in ManagerRestaurantRelation.objects.filter(managers = self.request.user)]
         target_reservations = Reservation.objects.filter(restaurant__in = managed_restaurants)
         target_user_id = set(reservation.user.pk for reservation in target_reservations)
-        target_users = User.objects.filter(pk__in=target_user_id)
-        context["user"] = user
-        context['target_users'] = target_users
+        self.queryset = User.objects.filter(pk__in=target_user_id)
+        name = self.request.GET.get('name')
+        email = self.request.GET.get('email')
+        tel = self.request.GET.get('tel')
+        address = self.request.GET.get('address')
+        if name:
+            self.queryset = self.queryset.filter(
+                Q(name__icontains = name) | Q(kana_name__icontains = name) | Q(nick_name__icontains = name)
+            )
+        if email:
+            self.queryset = self.queryset.filter(email__icontains = email)
+        if tel:
+            self.queryset = self.queryset.filter(tel_number = tel)
+        if address:
+            self.queryset = self.queryset.filter(Q(postal_code = address) | Q(address__icontains = address))
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
+        context["page_list"] = page_list
+        context["user"] = self.request.user
         return context
 
 class ManagementUserDetailView(OnlyManagedUserInformationMixin, DetailView):

@@ -88,20 +88,6 @@ h5 {
   font-weight: bold;
 }
 
-.type1-btn:hover {
-  color: white;
-  background-color: rgb(255, 72, 121);
-}
-
-.type2-btn {
-  background-color: rgb(225, 180, 255);
-}
-
-.type2-btn:hover {
-  color: white;
-  background-color: rgb(182, 72, 255);
-}
-
 .thin-btn {
   color: black;
   background-color: #f2efe6;
@@ -170,6 +156,21 @@ h5 {
 
 .btn-container {
   justify-content: space-around;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination a {
+  color: #bbb;
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  color: black;
 }
 
 .crimson {
@@ -756,45 +757,62 @@ footer {
   border: solid rgb(255, 174, 0) 1px;
 }
 
+.list .inner-container {
+  width: 700px;
+  margin: 0 auto;
+}
+
+.list .current, .dot {
+  color: #000;
+}
+
+.list .table-ref {
+  text-decoration: none;
+}
+
+.list .table-ref:hover {
+  opacity: 0.7;
+}
+
 .restaurant-table {
   width: 700px;
-  margin: 30px auto 30px auto;
+  margin: 10px 0 40px 0;
 }
 
 .restaurant-table .image-table {
   width: 300px;
   padding: 0;
-  border: solid 1px rgb(180, 180, 180);
+  border: solid 1px #999;
 }
 
 .restaurant-table .first-row {
-  height: 40px;
-  border-top: solid 1px rgb(180, 180, 180);
-  border-right: solid 1px rgb(180, 180, 180);
+  height: 50px;
+  border-top: solid 1px #999;
+  border-right: solid 1px #999;
   padding-left: 10px;
 }
 
 .restaurant-table .second-row {
   height: 30px;
-  border-right: solid 1px rgb(180, 180, 180);
+  border-right: solid 1px #999;
   padding-left: 10px;
 }
 
 .restaurant-table div {
   margin-right: 10px;
   padding-bottom: 5px;
-  border-bottom: solid 1px rgb(180, 180, 180);
+  border-bottom: solid 1px #999;
 }
 
 .restaurant-table .third-row {
-  height: 30px;
-  border-right: solid 1px rgb(180, 180, 180);
+  height: 40px;
+  border-right: solid 1px #999;
   padding-left: 10px;
 }
 
 .restaurant-table .fourth-row {
-  border-bottom: solid 1px rgb(180, 180, 180);
-  border-right: solid 1px rgb(180, 180, 180);
+  border-bottom: solid 1px #999;
+  border-right: solid 1px #999;
   padding-left: 10px;
   vertical-align: top;
 }
@@ -806,16 +824,16 @@ footer {
 .restaurant-table .restaurant-name {
   color: black;
   font-size: 20px;
-  text-decoration: none;
-}
-
-.restaurant-table .restaurant-name:hover {
-  text-decoration: underline;
 }
 
 .restaurant-table .category {
   color: gray;
   font-size: 15px;
+}
+
+.restaurant-table .price, .description {
+  color: black;
+  font-size: 16px;
 }
 
 .reviewlist {
@@ -841,9 +859,13 @@ footer {
   padding: 5px 0;
 }
 
+.reviewlist .inner-container {
+  margin-top: 20px;
+}
+
 .review-table {
   width: 500px;
-  margin: 20px auto 30px auto;
+  margin: 10px auto 30px auto;
   border: solid 1px gray;
 }
 
@@ -940,11 +962,6 @@ footer {
   justify-content: space-around;
 }
 
-.reviewcreate .deletecheck {
-  color: crimson;
-  margin-top: 20px;
-}
-
 .reviewcreate .nonactive-btn:hover {
   font-weight: bold;
 }
@@ -1018,10 +1035,14 @@ footer {
   margin: 0;
 }
 
+.reservation .inner-container {
+  margin-top: 20px;
+}
+
 .reservation-table {
   font-size: 14px;
   width: 555px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .reservation-table .restaurant-name {
@@ -1078,28 +1099,25 @@ footer {
   margin-top: 20px;
 }
 
-.reservation .deletecheck {
-  color: crimson;
-  margin-top: 20px;
-}
-
 .reservation-confirm-table {
   margin-top: 20px;
 }
 
 .reservation-confirm-table tr {
-  height: 35px;
-  border-bottom: solid gray 1px;
+  height: 40px;
+}
+
+.reservation-confirm-table th {
+  width: 100px;
+  background-color: #f2efe6;
+  border-bottom: solid #fff 1px;
+  padding: 3px 0 3px 15px;
 }
 
 .reservation-confirm-table td {
-  width: 180px;
-}
-
-.reviewcreate .lower-btn {
   width: 200px;
-  height: 50px;
-  text-align: center;
+  border-bottom: solid #ececec 1px;
+  padding: 3px 0 3px 15px;
 }
 
 .favoritelist .outer-container {
@@ -1306,6 +1324,14 @@ footer {
   margin: 90px auto 30px auto;
 }
 
+.management-restaurant .search-container {
+  margin: 20px 0;
+}
+
+.management-restaurant .search-container input {
+  width: 400px;
+}
+
 .management-restaurant .upper {
   justify-content: space-between;
 }
@@ -1323,8 +1349,12 @@ footer {
   display: inline-block;
 }
 
+.management-restaurant .inner-container {
+  margin-top: 20px;
+}
+
 .management-restaurant-table {
-  margin: 20px auto 30px auto;
+  margin: 10px auto 30px auto;
 }
 
 .management-restaurant-table tr {
@@ -1487,8 +1517,11 @@ footer {
   margin-right: 20px;
 }
 
+.management-reservation-list .inner-container {
+  margin-top: 20px;
+}
 .management-reservation-list-table {
-  margin: 30px auto;
+  margin: 10px auto 30px auto;
 }
 
 .management-reservation-list-table tr {
@@ -1632,8 +1665,46 @@ footer {
   font-weight: bold;
 }
 
+.management-user .search-container {
+  width: 800px;
+  height: 150px;
+  margin: 20px auto;
+}
+
+.management-user .search-container .item {
+  margin: 10px 0;
+}
+
+.management-user .search-container label {
+  width: 150px;
+  text-align: left;
+}
+
+.management-user .search-container input {
+  width: 300px;
+}
+
+.management-user .search-container .right-container {
+  margin: auto 0 auto 20px;
+}
+
+.management-user .search-container .btn {
+  width: 150px;
+  height: 50px;
+}
+
+.management-user .inner-container {
+  width: 800px;
+  margin: 20px auto 30px auto;
+}
+
+.management-user .query {
+  margin: 5px 0;
+}
+
 .management-user-table {
-  margin: 30px auto;
+  width: 800px;
+  margin: 10px auto 30px auto;
 }
 
 .management-user-table .name {

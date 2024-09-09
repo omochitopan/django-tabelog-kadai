@@ -4,7 +4,7 @@
 <div class="reservation">
 	<div class="outer-container">
 		<h2 class="center">予約一覧</h2>
-		{% if not target_reservations %}
+		{% if not object_list %}
 		<p>現在の予約はありません。</p>
 		{% else %}
 		<div class="flex-container top-container">
@@ -16,29 +16,32 @@
 				<p class="right-align">＊キャンセルは予約日の3日前まで可能です</p>
 			</div>
 		</div>
-		<table class="reservation-table">
-			<tr>
-				<th class="restaurant-name">店舗名</th>
-				<th class="reserved-date">予約日</th>
-				<th class="reserved-time">時間</th>
-				<th class="reserved-people">人数</th>
-				<th class="reservation-cancel"></th>
-			</tr>
-			{% for reservation in target_reservations %}
-			<tr>
-				<td class="restaurant-name"><a href="{% url 'detail' reservation.restaurant.id %}" class="restaurant-ref">{{ reservation.restaurant }}</a></td>
-				<td class="reserved-date">{{ reservation.reserved_date }}</td>
-				<td class="reserved-time">{{ reservation.reserved_time }}</td>
-				<td class="reserved-people">{{ reservation.number_of_people }}</td>
-				<td>
-					{% if reservation.reserved_date >= cancel_date %}
-					<a href="{% url 'reservationdelete' reservation.pk %}" class="btn nonactive-btn">キャンセル</a></td>
-					{% endif %}
-				</td>
-			</tr>
-			{% endfor %}
-		</table>
-		{% endif %}
+		<div class="inner-container">
+			{% include "pagination.html" %}
+			<table class="reservation-table">
+				<tr>
+					<th class="restaurant-name">店舗名</th>
+					<th class="reserved-date">予約日</th>
+					<th class="reserved-time">時間</th>
+					<th class="reserved-people">人数</th>
+					<th class="reservation-cancel"></th>
+				</tr>
+				{% for reservation in object_list %}
+				<tr>
+					<td class="restaurant-name"><a href="{% url 'detail' reservation.restaurant.id %}" class="restaurant-ref">{{ reservation.restaurant }}</a></td>
+					<td class="reserved-date">{{ reservation.reserved_date }}</td>
+					<td class="reserved-time">{{ reservation.reserved_time }}</td>
+					<td class="reserved-people">{{ reservation.number_of_people }}</td>
+					<td>
+						{% if reservation.reserved_date >= cancel_date %}
+						<a href="{% url 'reservationdelete' reservation.pk %}" class="btn nonactive-btn">キャンセル</a></td>
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
+	{% endif %}
 </div>
 {% endblock %}

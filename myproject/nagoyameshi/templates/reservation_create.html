@@ -17,31 +17,31 @@
 		</div>
 		<div class="inner-container">
 			{% if restaurant.is_active %}		
-			<p class="crimson">以下の情報で予約しますか？</p>
+			<p class="bold">以下の情報で予約しますか？</p>
 			<table class="reservation-confirm-table">
 				<tr>
-					<th>{{ form.reserved_date.label_tag }}</th>
-					<td>{{ reserved_date }} ({{ week_day }})</td>
+					<th>予約日</th>
+					<td >{{ reserved_date }} ({{ week_day }})</td>
 				</tr>
 				<tr>
-					<th>{{ form.reserved_time.label_tag }}</th>
+					<th>時間</th>
 					<td>{{ reserved_time }}</td>
 				</tr>
 				<tr>
-					<th>{{ form.number_of_people.label_tag }}</th>
-					<td>{{ form.number_of_people.value }}</td>
+					<th>人数</th>
+					<td>{{ form.number_of_people.value }}名</td>
 				</tr>
 			</table>
 		</div>
 		<div class="flex-container btn-container">
 			<form method="post" action="{% url 'reservationcreate' restaurant.pk %}">
 				{% csrf_token %}
-					<button type="submit" class="btn strong-btn two-btn">予約確定</button>
+					<button type="submit" class="btn strong-btn two-btn">予約を確定する</button>
 					{% for field in form %}{{ field.as_hidden }}{% endfor %}
 			</form>
 			<form method="post" action="{% url 'reservationform' restaurant.pk %}">
 				{% csrf_token %}
-				<button type="submit" class="btn nonactive-btn two-btn">再入力</button>
+				<button type="submit" class="btn nonactive-btn two-btn">情報を修正する</button>
 				{% for field in form %}{{ field.as_hidden }}{% endfor %}
 			</form>
 		</div> 
