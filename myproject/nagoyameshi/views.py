@@ -1023,6 +1023,7 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
         email = self.request.GET.get('email')
         tel = self.request.GET.get('tel')
         address = self.request.GET.get('address')
+        status = self.request.GET.get('status')
         if name:
             self.queryset = self.queryset.filter(
                 Q(name__icontains = name) | Q(kana_name__icontains = name) | Q(nick_name__icontains = name)
@@ -1032,7 +1033,13 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
         if tel:
             self.queryset = self.queryset.filter(tel_number = tel.replace("-", ""))
         if address:
-            self.queryset = self.queryset.filter(Q(postal_code = address) | Q(address__icontains = address))
+            self.queryset = self.queryset.filter(is_active = True).filter(Q(postal_code = address) | Q(address__icontains = address))
+        if status == "True":
+            status = True
+            self.queryset = self.queryset.filter(is_active = status)
+        elif status == "Flase":
+            status = False
+            self.queryset = self.queryset.filter(is_active = status)
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
         try:

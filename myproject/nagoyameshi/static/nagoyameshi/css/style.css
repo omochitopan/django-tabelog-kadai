@@ -1675,22 +1675,35 @@ footer {
   margin: 10px 0;
 }
 
-.management-user .search-container label {
-  width: 150px;
+.management-user .left-container label {
+  width: 180px;
   text-align: left;
 }
 
-.management-user .search-container input {
+.management-user .search-container .search-box {
   width: 300px;
 }
 
 .management-user .search-container .right-container {
-  margin: auto 0 auto 20px;
+  margin: auto 0 auto 40px;
+}
+
+.management-user .right-container label {
+  width: 80px;
+  text-align: left;
+}
+
+.management-user .search-container .radio-container {
+  margin-bottom: 15px;
+}
+
+.management-user .search-container .radio {
+  width: 50px;
 }
 
 .management-user .search-container .btn {
   width: 150px;
-  height: 50px;
+  height: 40px;
 }
 
 .management-user .inner-container {
