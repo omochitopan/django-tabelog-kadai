@@ -861,6 +861,7 @@ class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
         self.queryset = Reservation.objects.filter(restaurant = target_restaurant, reserved_date__gte = date.today()).order_by("reserved_date", "reserved_time")
         query = self.request.GET.get('query')
         if query:
+            query = query.replace("-", "")
             self.queryset = self.queryset.filter(
                 Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
             )
@@ -898,6 +899,7 @@ class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
         self.queryset = Reservation.objects.filter(restaurant = target_restaurant).order_by("reserved_date", "reserved_time")
         query = self.request.GET.get('query')
         if query:
+            query = query.replace("-", "")
             self.queryset = self.queryset.filter(
                 Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
             )
@@ -1028,7 +1030,7 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
         if email:
             self.queryset = self.queryset.filter(email__icontains = email)
         if tel:
-            self.queryset = self.queryset.filter(tel_number = tel)
+            self.queryset = self.queryset.filter(tel_number = tel.replace("-", ""))
         if address:
             self.queryset = self.queryset.filter(Q(postal_code = address) | Q(address__icontains = address))
         paginator = Paginator(self.queryset, self.paginate_by)
