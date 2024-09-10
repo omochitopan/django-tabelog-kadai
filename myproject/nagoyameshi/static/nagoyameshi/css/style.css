@@ -852,10 +852,15 @@ footer {
   margin-top: 30px;
 }
 
+.reviewlist .noreview-table {
+  width: 500px;
+  margin-top: 30px;
+}
+
 .reviewlist .noreview {
   text-align: center;
-  background-color: whitesmoke;
-  margin: 30px 0;
+  background-color: #f2efe6;
+  border: solid #999 1px;
   padding: 5px 0;
 }
 
@@ -866,7 +871,7 @@ footer {
 .review-table {
   width: 500px;
   margin: 10px auto 30px auto;
-  border: solid 1px gray;
+  border: solid 1px #999;
 }
 
 .reviewlist  .middle-btn {
