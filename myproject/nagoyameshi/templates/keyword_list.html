@@ -17,7 +17,7 @@
 		<div class="inner-container">
 			<div class="search-count">
 				{% if object_list %}
-				<p>[キーワード：{{ query }}] {{ count }}件の店舗が見つかりました</p>
+				<p>[キーワード：{{ request.GET.query }}] {{ count }}件の店舗が見つかりました</p>
 				{% elif not request.GET.query %}
 				<p>キーワードを入力してください</p>
 				{% else %}
