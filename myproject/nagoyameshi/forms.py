@@ -293,7 +293,7 @@ class UserSearch(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'placeholder': '漢字・カナ・ニックネーム',})
+        self.fields['name'].widget.attrs.update({'placeholder': '漢字・フリガナ',})
         self.fields['address'].widget.attrs.update({'placeholder': '郵便番号（ハイフンなし）・住所',})
 
 class ReservedUserSearch(forms.Form):

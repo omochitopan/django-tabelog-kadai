@@ -1091,7 +1091,7 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
             status = form_value[4]
             if name:
                 self.queryset = self.queryset.filter(
-                    Q(name__icontains = name) | Q(kana_name__icontains = name) | Q(nick_name__icontains = name)
+                    Q(name__icontains = name) | Q(kana_name__icontains = name)
                 )
             if email:
                 self.queryset = self.queryset.filter(email__icontains = email)
