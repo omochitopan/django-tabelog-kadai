@@ -5,52 +5,49 @@
 	<div class="outer-container">
 		<h2 class="center">管理店舗に予約履歴のある会員一覧</h2>
 		<div class="search-container">
-			<form method="get" action="{% url 'managementuser' user.pk %}" class="flex-container">
+			<form method="post" action="{% url 'managementuser' user.pk %}" class="flex-container">
+				{% csrf_token %}
 				<div class="left-container">
 					<div class="item">
-						<label>名前検索</label>
-						<input class="search-box" type="text" name="name" value="{{ request.GET.name }}" placeholder="漢字・カナ・ニックネーム">
+						<label>{{ form.name.label }}</label>{{ form.name }}
 					</div>
 					<div class="item">
-						<label>メールアドレス検索</label>
-						<input class="search-box" type="text" name="email" value="{{ request.GET.email }}">
+						<label>{{ form.email.label }}</label>{{ form.email }}
 					</div>
 					<div class="item">
-						<label>電話番号検索</label>
-						<input class="search-box" type="text" name="tel" value="{{ request.GET.tel }}">
+						<label>{{ form.tel.label }}</label>{{ form.tel }}
 					</div>
 					<div class="item">
-						<label>住所検索（会員のみ）</label>
-						<input class="search-box" type="text" name="address" value="{{ request.GET.address }}" placeholder="郵便番号（ハイフンなし）・住所">
+						<label>{{ form.address.label }}</label>{{ form.address }}
 					</div>
 				</div>
 				<div class="right-container">
 					<div class="radio-container">
-						<label>会員継続中</label><input type="radio" name="status" value="True" class="radio"><br>
-						<label>退会済</label><input type="radio" name="status" value="False" class="radio"><br>
-						<label>未選択</label><input type="radio" name="status" value="None" class="radio">
+						{% for radio in form.status %}
+						<label>{{ radio.choice_label }}</label>{{ radio.tag }}<br>
+						{% endfor %}
 					</div>
 					<button type="submit" class="btn strong-btn">検索</button>
 				</div>
 			</form>
 		</div>
 		<div class="inner-container">
-			{% if request.GET.name %}
-            <p class="query">[名前：{{ request.GET.name }}]</p>
+			{% if request.session.form_value.0 %}
+            <p class="query">[名前：{{ request.session.form_value.0 }}]</p>
 			{% endif %}
-			{% if request.GET.email %}
-            <p class="query">[メールアドレス：{{ request.GET.email }}]</p>
+			{% if request.session.form_value.1 %}
+            <p class="query">[メールアドレス：{{ request.session.form_value.1 }}]</p>
 			{% endif %}
-			{% if request.GET.tel %}
-            <p class="query">[電話番号：{{ request.GET.tel }}]</p>
+			{% if request.session.form_value.2 %}
+            <p class="query">[電話番号：{{ request.session.form_value.2 }}]</p>
 			{% endif %}
-			{% if request.GET.address %}
-            <p class="query">[住所：{{ request.GET.addres }}]</p>
+			{% if request.session.form_value.3 %}
+            <p class="query">[住所：{{ request.session.form_value.3 }}]</p>
             {% endif %}
-			{% if request.GET.status == "True" %}
-            <p class="query">[状態：会員継続中]</p>
-			{% elif  request.GET.status == "False" %}
-            <p class="query">[状態：退会済]</p>
+			{% if request.session.form_value.4 == "1" %}
+            <p class="query">[状態：会員]</p>
+			{% elif  request.session.form_value.4 == "2" %}
+            <p class="query">[状態：退会]</p>
             {% endif %}
 			{% include "pagination.html" %}
 			<table class="management-user-table">
@@ -58,6 +55,7 @@
 					<th class="name">氏名</th>
 					<th class="kana-name">フリガナ</th>
 					<th class="email">メールアドレス</th>
+					<th class="status">状態</th>
 					<th class="detail"></th>
 				</tr>
 				{% if object_list %}
@@ -66,6 +64,11 @@
 					<td>{{ target_user.name }}</td>
 					<td>{{ target_user.kana_name }}</td>
 					<td>{{ target_user.email }}</td>
+					{% if target_user.is_active %}
+					<td>会員</td>
+					{% else %}
+					<td>退会</td>
+					{% endif %}
 					<td class="center"><a href="{% url 'managementuserdetail' user.pk target_user.pk %}" class="btn strong-btn">詳細</a></td>
 				</tr>
 				{% endfor %}

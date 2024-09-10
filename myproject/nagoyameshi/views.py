@@ -15,8 +15,8 @@ from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from typing import Any, Dict
-from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, CategoryRestaurantRelation, HolidayRestaurantRelation, ManagerRestaurantRelation
-from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm
+from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, CategoryRestaurantRelation, ManagerRestaurantRelation
+from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm, UserSearch, ReservedUserSearch, RestaurantSearch
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
 from .utils.pagination import pagination
 from datetime import date, time
@@ -673,14 +673,20 @@ class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
     model = ManagerRestaurantRelation
     template_name = "management/management_open_restaurant.html"
     paginate_by = 15
+
+    def post(self, request, *args, **kwargs):
+        request.session['restaurant_search'] = [self.request.POST.get('query', None),]
+        return redirect("managementopenrestaurant", self.request.user.pk)    
     
     def get_queryset(self):
         self.queryset = ManagerRestaurantRelation.objects.filter(restaurant__is_active = True, managers = self.request.user)
-        query = self.request.GET.get('query')
-        if query:
-            self.queryset = self.queryset.filter(
-                Q(restaurant__restaurant_name__icontains = query) | Q(restaurant__postal_code = query) | Q(restaurant__address__icontains=query)
-            )
+        if 'restaurant_search' in self.request.session:
+            form_value = self.request.session['restaurant_search']
+            query = form_value[0]
+            if query:
+                self.queryset = self.queryset.filter(
+                    Q(restaurant__restaurant_name__icontains = query) | Q(restaurant__postal_code = query) | Q(restaurant__address__icontains = query)
+                )
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
         try:
@@ -694,10 +700,17 @@ class ManagementOpenRestaurantView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        query = ''
+        if 'restaurant_search' in self.request.session:
+            form_value = self.request.session['restaurant_search']
+            query = form_value[0]
+        default_data = {'query': query,}
+        form = RestaurantSearch(initial=default_data)
         current_page = self.page_obj
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
+        context["form"] = form
         context["page_list"] = page_list
         context["user"] = self.request.user
         return context
@@ -707,13 +720,19 @@ class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
     template_name = "management/management_closed_restaurant.html"
     paginate_by = 15
     
+    def post(self, request, *args, **kwargs):
+        request.session['restaurant_search'] = [self.request.POST.get('query', None),]
+        return redirect("managementclosedrestaurant", self.request.user.pk)    
+    
     def get_queryset(self):
         self.queryset = ManagerRestaurantRelation.objects.filter(restaurant__is_active = False, managers = self.request.user)
-        query = self.request.GET.get('query')
-        if query:
-            self.queryset = self.queryset.filter(
-                Q(restaurant__restaurant_name__icontains = query) | Q(restaurant__postal_code = query) | Q(restaurant__address__icontains=query)
-            )
+        if 'restaurant_search' in self.request.session:
+            form_value = self.request.session['restaurant_search']
+            query = form_value[0]
+            if query:
+                self.queryset = self.queryset.filter(
+                    Q(restaurant__restaurant_name__icontains = query) | Q(restaurant__postal_code = query) | Q(restaurant__address__icontains = query)
+                )
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
         try:
@@ -727,10 +746,17 @@ class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        query = ''
+        if 'restaurant_search' in self.request.session:
+            form_value = self.request.session['restaurant_search']
+            query = form_value[0]
+        default_data = {'query': query,}
+        form = RestaurantSearch(initial=default_data)
         current_page = self.page_obj
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
+        context["form"] = form
         context["page_list"] = page_list
         context["user"] = self.request.user
         return context
@@ -856,15 +882,21 @@ class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
     template_name = "management/management_reservation_restaurant.html"
     paginate_by = 15
     
+    def post(self, request, *args, **kwargs):
+        request.session['reserved_user_search'] = [self.request.POST.get('query', None),]
+        return redirect("managementreservationrestaurant", self.request.user.pk, self.kwargs.get("restaurant_id"))    
+    
     def get_queryset(self):
         target_restaurant = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
         self.queryset = Reservation.objects.filter(restaurant = target_restaurant, reserved_date__gte = date.today()).order_by("reserved_date", "reserved_time")
-        query = self.request.GET.get('query')
-        if query:
-            query = query.replace("-", "")
-            self.queryset = self.queryset.filter(
-                Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
-            )
+        if 'reserved_user_search' in self.request.session:
+            form_value = self.request.session['reserved_user_search']
+            query = form_value[0]
+            if query:
+                query = query.replace("-", "")
+                self.queryset = self.queryset.filter(
+                    Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
+                )
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
         try:
@@ -878,12 +910,19 @@ class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        query = ''
+        if 'reserved_user_search' in self.request.session:
+            form_value = self.request.session['reserved_user_search']
+            query = form_value[0]
+        default_data = {'query': query,}
+        form = ReservedUserSearch(initial=default_data)
         current_page = self.page_obj
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
         restaurant_id = self.kwargs.get("restaurant_id")
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
+        context['form'] = form
         context["page_list"] = page_list
         context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
@@ -894,15 +933,21 @@ class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
     template_name = "management/management_reservation_restaurant_all.html"
     paginate_by = 15
 
+    def post(self, request, *args, **kwargs):
+        request.session['reserved_user_search'] = [self.request.POST.get('query', None),]
+        return redirect("managementreservationrestaurantall", self.request.user.pk, self.kwargs.get("restaurant_id"))    
+    
     def get_queryset(self):
         target_restaurant = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
         self.queryset = Reservation.objects.filter(restaurant = target_restaurant).order_by("reserved_date", "reserved_time")
-        query = self.request.GET.get('query')
-        if query:
-            query = query.replace("-", "")
-            self.queryset = self.queryset.filter(
-                Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
-            )
+        if 'reserved_user_search' in self.request.session:
+            form_value = self.request.session['reserved_user_search']
+            query = form_value[0]
+            if query:
+                query = query.replace("-", "")
+                self.queryset = self.queryset.filter(
+                    Q(user__name__icontains = query) | Q(user__kana_name__icontains = query) | Q(user__tel_number = query)
+                )
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
         try:
@@ -916,12 +961,19 @@ class ManagementReservationRestaurantAllView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        query = ''
+        if 'reserved_user_search' in self.request.session:
+            form_value = self.request.session['reserved_user_search']
+            query = form_value[0]
+        default_data = {'query': query,}
+        form = ReservedUserSearch(initial=default_data)
         current_page = self.page_obj
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
         restaurant_id = self.kwargs.get("restaurant_id")
         target_restaurant = Restaurant.objects.get(pk = restaurant_id)
+        context['form'] = form
         context["page_list"] = page_list
         context["restaurant_id"] = restaurant_id
         context['target_restaurant'] = target_restaurant
@@ -1013,33 +1065,44 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
     model = User
     template_name = "management/management_user.html"
     paginate_by = 15
+
+    def post(self, request, *args, **kwargs):
+        form_value = [
+            self.request.POST.get('name', None),
+            self.request.POST.get('email', None),
+            self.request.POST.get('tel', None),
+            self.request.POST.get('address', None),
+            self.request.POST.get('status', None),
+        ]
+        request.session['form_value'] = form_value
+        return redirect("managementuser", self.request.user.pk)
     
     def get_queryset(self):
         managed_restaurants = [object.restaurant for object in ManagerRestaurantRelation.objects.filter(managers = self.request.user)]
         target_reservations = Reservation.objects.filter(restaurant__in = managed_restaurants)
         target_user_id = set(reservation.user.pk for reservation in target_reservations)
         self.queryset = User.objects.filter(pk__in=target_user_id)
-        name = self.request.GET.get('name')
-        email = self.request.GET.get('email')
-        tel = self.request.GET.get('tel')
-        address = self.request.GET.get('address')
-        status = self.request.GET.get('status')
-        if name:
-            self.queryset = self.queryset.filter(
-                Q(name__icontains = name) | Q(kana_name__icontains = name) | Q(nick_name__icontains = name)
-            )
-        if email:
-            self.queryset = self.queryset.filter(email__icontains = email)
-        if tel:
-            self.queryset = self.queryset.filter(tel_number = tel.replace("-", ""))
-        if address:
-            self.queryset = self.queryset.filter(is_active = True).filter(Q(postal_code = address) | Q(address__icontains = address))
-        if status == "True":
-            status = True
-            self.queryset = self.queryset.filter(is_active = status)
-        elif status == "Flase":
-            status = False
-            self.queryset = self.queryset.filter(is_active = status)
+        if 'form_value' in self.request.session:
+            form_value = self.request.session['form_value']
+            name = form_value[0]
+            email = form_value[1]
+            tel = form_value[2]
+            address = form_value[3]
+            status = form_value[4]
+            if name:
+                self.queryset = self.queryset.filter(
+                    Q(name__icontains = name) | Q(kana_name__icontains = name) | Q(nick_name__icontains = name)
+                )
+            if email:
+                self.queryset = self.queryset.filter(email__icontains = email)
+            if tel:
+                self.queryset = self.queryset.filter(tel_number = tel.replace("-", ""))
+            if address:
+                self.queryset = self.queryset.filter(is_active = True).filter(Q(postal_code = address) | Q(address__icontains = address))
+            if status == "1":
+                self.queryset = self.queryset.filter(is_active = True)
+            elif status == "2":
+                self.queryset = self.queryset.filter(is_active = False)
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
         try:
@@ -1053,10 +1116,30 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        name = ''
+        email = ''
+        tel = ''
+        address = ''
+        status = ''
+        if 'form_value' in self.request.session:
+            form_value = self.request.session['form_value']
+            name = form_value[0]
+            email = form_value[1]
+            tel = form_value[2]
+            address = form_value[3]
+            status = form_value[4]
+        default_data = {'name': name,
+                        'email': email,
+                        'tel': tel,
+                        'address': address,
+                        'status': status,
+                        }
+        form = UserSearch(initial=default_data)
         current_page = self.page_obj
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
+        context['form'] = form
         context["page_list"] = page_list
         context["user"] = self.request.user
         return context

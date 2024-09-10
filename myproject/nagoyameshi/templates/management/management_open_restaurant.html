@@ -7,9 +7,9 @@
 	<div class="outer-container">
         <h2 class="center">管理店舗一覧</h2>
         <div class="search-container">
-            <form method="get" action="{% url 'managementopenrestaurant' user.pk %}">
-                <label>キーワード検索</label>
-				<input class="search-box" type="text" name="query" placeholder="店舗名・郵便番号(ハイフンなし)・住所" value="{{ request.GET.query }}">
+            <form method="post" action="{% url 'managementopenrestaurant' user.pk %}">
+				{% csrf_token %}
+				<label>{{ form.query.label }}</label>{{ form.query }}
                 <button type="submit" class="btn strong-btn">検索</button>
             </form>
         </div>
@@ -23,8 +23,8 @@
             </div>
         </div>
         <div class="inner-container">
-            {% if request.GET.query %}
-            <p>[キーワード：{{ request.GET.query }}]</p>
+            {% if request.session.restaurant_search.0 %}
+            <p>[キーワード：{{ request.session.restaurant_search.0 }}]</p>
             {% endif %}
             {% include "pagination.html" %}
             <table class="management-restaurant-table">
@@ -53,7 +53,7 @@
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td>管理店舗はありません</td>
+                    <td colspan="6">管理店舗はありません</td>
                 </tr>
                 {% endif %}
             </table>

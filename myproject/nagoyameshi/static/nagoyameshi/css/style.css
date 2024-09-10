@@ -1330,6 +1330,7 @@ footer {
 
 .management-restaurant .search-container input {
   width: 400px;
+  margin: 0 20px;
 }
 
 .management-restaurant .upper {
@@ -1503,8 +1504,13 @@ footer {
 }
 
 .management-reservation-list .outer-container {
-  width: 550px;
+  width: 650px;
   margin: 90px auto 30px auto;
+}
+
+.management-reservation-list .search-container input {
+  width: 250px;
+  margin: 0 20px;
 }
 
 .management-reservation-list .flex-container {
@@ -1527,7 +1533,6 @@ footer {
 
 .management-reservation-list-table tr {
   height: 40px;
-  padding: 3px 0;
 }
 
 .management-reservation-list-table th {
@@ -1540,19 +1545,19 @@ footer {
 }
 
 .management-reservation-list-table .date {
-  width: 150px;
+  width: 180px;
 }
 
 .management-reservation-list-table .time {
-  width: 60px;
+  width: 90px;
 }
 
 .management-reservation-list-table .people {
-  width: 50px;
+  width: 70px;
 }
 
 .management-reservation-list-table .user {
-  width: 180px;
+  width: 200px;
 }
 
 .management-reservation-list-table .edit {
@@ -1668,7 +1673,7 @@ footer {
 }
 
 .management-user .search-container {
-  width: 800px;
+  width: 880px;
   height: 150px;
   margin: 20px auto;
 }
@@ -1678,11 +1683,11 @@ footer {
 }
 
 .management-user .left-container label {
-  width: 180px;
+  width: 200px;
   text-align: left;
 }
 
-.management-user .search-container .search-box {
+.management-user .left-container input {
   width: 300px;
 }
 
@@ -1691,7 +1696,7 @@ footer {
 }
 
 .management-user .right-container label {
-  width: 80px;
+  width: 60px;
   text-align: left;
 }
 
@@ -1699,8 +1704,8 @@ footer {
   margin-bottom: 15px;
 }
 
-.management-user .search-container .radio {
-  width: 50px;
+.management-user .right-container input {
+  width: 30px;
 }
 
 .management-user .search-container .btn {
@@ -1709,7 +1714,7 @@ footer {
 }
 
 .management-user .inner-container {
-  width: 800px;
+  width: 880px;
   margin: 20px auto 30px auto;
 }
 
@@ -1718,7 +1723,7 @@ footer {
 }
 
 .management-user-table {
-  width: 800px;
+  width: 880px;
   margin: 10px auto 30px auto;
 }
 
@@ -1732,6 +1737,10 @@ footer {
 
 .management-user-table .email {
   width: 350px;
+}
+
+.management-user-table .status {
+  width: 80px;
 }
 
 .management-user-table .detail {

@@ -5,9 +5,9 @@
 	<div class="outer-container">
 		<h2 class="center">{{ target_restaurant.restaurant_name }} 予約一覧</h2>
 		<div class="search-container">
-            <form method="get" action="{% url 'managementreservationrestaurant' user.pk restaurant_id %}">
-                <label>キーワード検索</label>
-				<input class="search-box" type="text" name="query" placeholder="氏名（漢字・カナ）・電話番号" value="{{ request.GET.query }}">
+            <form method="post" action="{% url 'managementreservationrestaurant' user.pk restaurant_id %}">
+				{% csrf_token %}
+				<label>{{ form.query.label }}</label>{{ form.query }}
                 <button type="submit" class="btn strong-btn">検索</button>
             </form>
         </div>
@@ -16,8 +16,8 @@
 			<a href="{% url 'managementreservationrestaurantall' user.pk restaurant_id %}" class="btn nonfocus-btn left-align">全て</a>
 		</div>
 		<div class="inner-container">
-			{% if request.GET.query %}
-            <p>[キーワード：{{ request.GET.query }}]</p>
+			{% if request.session.reserved_user_search.0 %}
+            <p>[キーワード：{{ request.session.reserved_user_search.0 }}]</p>
             {% endif %}
 			{% include "pagination.html" %}
 			<table class="management-reservation-list-table">
@@ -42,12 +42,7 @@
 				{% endfor %}
 				{% else %}
 				<tr>
-					<td>予約はありません</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td colspan="6">予約はありません</td>
 				</tr>
 				{% endif %}		
 			</table>

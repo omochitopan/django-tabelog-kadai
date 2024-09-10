@@ -277,3 +277,35 @@ class RestaurantEditForm(forms.ModelForm):
         if lowest_price >= highest_price:
             raise forms.ValidationError("最高価格は最低価格以上に設定してください")
         return cleaned_data
+
+class UserSearch(forms.Form):
+    status_choice = [
+        (1, "会員"),
+        (2, "退会"),
+        (3, "未選択"),
+    ]
+    
+    name = forms.CharField(required=False, label="名前で検索")
+    email = forms.CharField(required=False, label="メールアドレスで検索")
+    tel = forms.CharField(required=False, label="電話番号で検索")
+    address = forms.CharField(required=False, label="住所で検索（会員のみ）")
+    status = forms.ChoiceField(required=False, widget=forms.RadioSelect, choices=status_choice)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'placeholder': '漢字・カナ・ニックネーム',})
+        self.fields['address'].widget.attrs.update({'placeholder': '郵便番号（ハイフンなし）・住所',})
+
+class ReservedUserSearch(forms.Form):
+    query = forms.CharField(required=False, label="予約者情報で検索")
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['query'].widget.attrs.update({'placeholder': '氏名（漢字・カナ）・電話番号',})
+
+class RestaurantSearch(forms.Form):
+    query = forms.CharField(required=False, label="キーワード検索")
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['query'].widget.attrs.update({'placeholder': '店舗名・郵便番号（ハイフンなし）・住所',})
