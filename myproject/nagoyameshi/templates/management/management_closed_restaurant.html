@@ -34,7 +34,6 @@
                     <th class="address">住所</th>
                     <th class="manager">店舗管理者</th>
                     <th class="reservationlist"></th>
-                    <th class="sales"></th>
                 </tr>
                 {% if object_list %}
                 {% for object in object_list %}
@@ -48,7 +47,6 @@
                         {% endfor %}
                     </td>
                     <td class="center"><a href="{% url 'managementreservationrestaurant' user.pk object.restaurant.pk %}" class="btn strong-btn">予約一覧</a></td>
-                    <td class="center"><a href="" class="btn strong-btn">売上</a></td>
                 </tr>
                 {% endfor %}
                 {% else %}

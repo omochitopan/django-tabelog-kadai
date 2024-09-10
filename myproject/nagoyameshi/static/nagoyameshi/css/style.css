@@ -715,6 +715,10 @@ footer {
   border-bottom-style: solid;
 }
 
+.detail .nonactive-btn:hover {
+  font-weight: bold;
+}
+
 .detail .three-btn:hover {
   font-weight: bold;
 }

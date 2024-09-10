@@ -50,6 +50,11 @@
                 <label class="label">{{ form.closing_time.label }}</label>
                 {{ form.closing_time }}
             </div>
+            <div class="cluster const">
+                <label class="label">{{ form.seating_capacity.label }}</label>
+                {{ form.seating_capacity }}
+                {{ form.seating_capacity.errors }}
+            </div>
             <div class="cluster">
                 <div>
                     {% for error in form.holiday.errors %}
@@ -60,11 +65,6 @@
                     <label class="label">{{ form.holiday.label_tag }}</label>
                     {{ form.holiday }}
                 </div>
-            </div>
-            <div class="cluster const">
-                <label class="label">{{ form.seating_capacity.label }}</label>
-                {{ form.seating_capacity }}
-                {{ form.seating_capacity.errors }}
             </div>
             <div class="cluster">
                 <div>

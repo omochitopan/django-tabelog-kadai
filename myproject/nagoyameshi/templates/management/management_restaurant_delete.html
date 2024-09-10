@@ -56,8 +56,8 @@
         <form method="post">
             {% csrf_token %}
             <div class="flex-container btn-container">
-                <button type="submit" class="btn resign-btn">閉店処理を行う</button>
-                <a href="{% url 'managementrestaurantdetail' user.pk object.pk %}" class="btn cancel-btn">店舗情報に戻る</a>
+                <button type="submit" class="btn nonactive-btn two-btn">閉店処理を行う</button>
+                <a href="{% url 'managementrestaurantdetail' user.pk object.pk %}" class="btn thin-btn two-btn">店舗情報に戻る</a>
             </div>
         </form>
 	</div>
