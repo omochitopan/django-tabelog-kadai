@@ -277,6 +277,10 @@ header .nav-input {
   width: 350px;
 }
 
+.login .form-container {
+  margin: 40px 0;
+}
+
 .login .form-section {
   margin: 20px 0;
 }
@@ -290,7 +294,7 @@ header .nav-input {
 }
 
 .login .btn-container {
-  margin-bottom: 30px;
+  margin: 40px 0;
 }
 
 .login .ref-container {

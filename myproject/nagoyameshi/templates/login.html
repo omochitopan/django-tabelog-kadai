@@ -4,7 +4,7 @@
 <div class="login">
 	<div class="outer-container">
 		<h2 class="center">ログイン</h2>
-		<form method="post">
+		<form method="post" class="form-container">
 			{% csrf_token %}
 			<div class="form-section">
 				<label>メールアドレス</label>
@@ -13,10 +13,6 @@
 			<div class="form-section">
 				<label>{{ form.password.label }}</label>
 				{{ form.password }}
-			</div>
-			<div class="autologin">
-				<input class="login-check" name="login-check" type="checkbox">
-				<label  name="login-check" for="">次回から自動的にログインする</label>
 			</div>
 			<div class="flex-container btn-container">
 				<input type="submit" class="btn one-btn strong-btn" value="ログイン">
