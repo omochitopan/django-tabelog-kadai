@@ -48,7 +48,7 @@
 				<tr>
 					<th class="tableheader">定休日</th>
 					<td class="cell">
-						{% for holiday in object.holiday.all %}
+						{% for holiday in object.holiday.all|dictsort:"id" %}
 						<span>{{ holiday }} </span>
 						{% endfor %}
 					</td>

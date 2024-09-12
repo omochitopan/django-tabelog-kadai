@@ -52,6 +52,10 @@ h5 {
   border: none;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 .focus-btn {
   color: white;
   background-color: rgb(255, 174, 0);
