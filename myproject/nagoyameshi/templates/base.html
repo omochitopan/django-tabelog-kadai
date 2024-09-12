@@ -24,7 +24,7 @@
           <div class="flex-container upper">
             <p class="welcome left">ようこそ、{{user.nick_name}}さん</p>
             {% if user.role %}
-            <a href="{% url 'management' user.pk %}" class="nav-link">＊店舗運営者用ページ＊</a>
+            <a href="{% url 'management' user.pk %}" class="nav-link">＊店舗運営者ページ＊</a>
             {% endif %}
           </div>
           <div class="flex-container lower">
