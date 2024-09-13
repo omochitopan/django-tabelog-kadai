@@ -2,7 +2,7 @@ def pagination(per_page, current_num, total_num):
     page_list = []
     if current_num == 1:
         page_list.append(1)
-    elif current_num <= per_page + 2:
+    elif current_num <= per_page + 3:
         for num in range(1, current_num + 1):
             page_list.append(num)
     else:
@@ -10,7 +10,7 @@ def pagination(per_page, current_num, total_num):
         page_list.append("...")
         for num in range(current_num - per_page, current_num + 1):
             page_list.append(num)
-    if current_num >= total_num - per_page -1:
+    if current_num >= total_num - per_page -2:
         if current_num != total_num:
             for num in range(current_num + 1, total_num + 1):
                 page_list.append(num)
