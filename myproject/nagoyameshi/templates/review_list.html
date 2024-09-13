@@ -17,7 +17,7 @@
 		</div>
 		{% if restaurant.is_active %}
 		<div class="information">
-			<p class="center">平均：{{ average_score }}点（{{ object_list|length }}件）</p>
+			<p class="center">平均：{{ average_score }}点（{{ count }}件）</p>
 			{% if not writtenreview %}
 			<p class="reviewcheck">あなたはこのレストランに{% if restaurant.is_active %}まだ{% endif %}レビューしていません。</p>
 			{% if restaurant.is_active %}

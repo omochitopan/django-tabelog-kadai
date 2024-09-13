@@ -310,6 +310,8 @@ class ReviewListView(LoginRequiredMixin, ListView):
         context["restaurant"] = Restaurant.objects.get(pk = restaurant_id)
         context["average_score"] = average_score
         context["writtenreview"] = writtenreview
+        if self.queryset:
+            context['count'] = len(self.queryset)
         return context
     
 class ReviewCreateView(LoginRequiredMixin, CreateView):
