@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
-from .models import Reservation, Review, ManagerRestaurantRelation
+from .models import Reservation, Review, User
 
 class OnlyManagementUserMixin(UserPassesTestMixin):
     raise_exception = True
@@ -15,10 +15,8 @@ class OnlyManagedUserInformationMixin(UserPassesTestMixin):
     def test_func(self):
         user = self.request.user
         # 過去に予約したことのあるユーザーIDを取得
-        managed_restaurants = [object.restaurant for object in ManagerRestaurantRelation.objects.filter(managers = self.request.user)]
-        target_reservations = Reservation.objects.filter(restaurant__in = managed_restaurants)
-        target_user_id = set(reservation.user.pk for reservation in target_reservations)
-        return (user.role == 1 and user.pk == self.kwargs['user_id'] and self.kwargs['pk'] in target_user_id) or self.kwargs['pk'] == self.request.user.pk
+        user_ids = User.objects.filter(reservation__restaurant__managers=self.request.user).distinct().values_list("pk", flat=True)
+        return (user.role == 1 and user.pk == self.kwargs['user_id'] and self.kwargs['pk'] in user_ids) or self.kwargs['pk'] == self.request.user.pk
 
 class OnlyMyUserInformationMixin(UserPassesTestMixin):
     raise_exception = True
