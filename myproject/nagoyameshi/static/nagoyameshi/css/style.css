@@ -554,6 +554,11 @@ header .nav-input {
   font-size: 14px;
 }
 
+.top .score {
+  color: #a9894b;
+  font-size: 14px;
+}
+
 .top .category-name {
   color: gray;
   font-size: 12px;
