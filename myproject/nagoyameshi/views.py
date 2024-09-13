@@ -9,8 +9,8 @@ from django.contrib.auth.views import LoginView, PasswordResetView, PasswordRese
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout
-from django.urls import reverse_lazy, reverse
-from django.db.models import Q, Avg, Min, Max
+from django.urls import reverse_lazy
+from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

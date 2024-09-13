@@ -28,7 +28,7 @@
 						<a href="{% url 'detail' restaurant.pk %}">
 							<img src="{{ restaurant.image.url }}" class="restaurant-image" alt="店舗画像">
 							<p class="restaurant-name">{{ restaurant.restaurant_name }}</p>
-							<p class="score">評価：{{ restaurant.score }}</p>
+							<p class="score">評価：{{ restaurant.score|floatformat:2 }}</p>
 							{% for category in restaurant.category_name.all %}
 							<p class="category-name">{{ category }}</p>
 							{% endfor %}
