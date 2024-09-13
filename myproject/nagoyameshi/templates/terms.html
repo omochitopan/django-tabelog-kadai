@@ -4,7 +4,9 @@
 <div class="terms">
 	<div class="outer-container">
 		<h2 class="center">利用規約</h2>
-        {{ terms|linebreaksbr|safe }}
+		{% autoescape off %}
+        {{ terms|linebreaksbr }}
+   		{% endautoescape %}
 	</div>
 </div>
 {% endblock %}
