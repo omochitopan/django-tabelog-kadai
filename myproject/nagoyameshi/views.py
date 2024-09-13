@@ -656,7 +656,7 @@ class TermsView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        terms = Terms.objects.get(id = 1)
+        terms = Terms.objects.get(id = 1).content.replace('\\n', '\n')
         context['user_id'] = self.request.user.pk
         context["terms"] = terms
         return context
@@ -1177,7 +1177,7 @@ class ManagementTermsView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        terms = Terms.objects.get(id = 1)
+        terms = Terms.objects.get(id = 1).content.replace('\\n', '\n')
         context["user"] = self.request.user
         context["terms"] = terms
         return context

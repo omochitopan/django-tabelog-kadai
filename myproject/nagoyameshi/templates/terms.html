@@ -4,7 +4,12 @@
 <div class="terms">
 	<div class="outer-container">
 		<h2 class="center">利用規約</h2>
-        <p>{{ terms.content }}</p>
+		{% autoescape off %}
+        {{ terms|linebreaksbr }}
+   		{% endautoescape %}
 	</div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://taisukef.github.io/marked_md/marked.min.js">
 {% endblock %}

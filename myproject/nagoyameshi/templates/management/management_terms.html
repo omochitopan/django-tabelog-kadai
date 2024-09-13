@@ -3,8 +3,10 @@
 {% block contents %}
 <div class="terms">
 	<div class="outer-container">
-		<h4 class="title">利用規約</h4>
-        <p>{{ terms.content }}</p>
+		<h2 class="center">利用規約</h2>
+		{% autoescape off %}
+        {{ terms|linebreaksbr }}
+   		{% endautoescape %}
 	</div>
 </div>
 {% endblock %}

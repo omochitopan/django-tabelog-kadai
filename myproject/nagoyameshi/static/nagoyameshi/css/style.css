@@ -1318,6 +1318,22 @@ footer {
   border-bottom: solid #ececec 1px;
 }
 
+.terms {
+  font-size: 15px;
+}
+
+.terms .outer-container {
+  width: 700px;
+}
+
+.terms h3 {
+  margin-bottom: 5px;
+}
+
+.terms ol {
+  margin: 5px 0;
+}
+
 .management .outer-container {
   width: 600px;
 }
