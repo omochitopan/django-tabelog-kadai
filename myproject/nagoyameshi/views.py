@@ -1081,10 +1081,7 @@ class ManagementUserView(OnlyManagementUserMixin, ListView):
         return redirect("managementuser", self.request.user.pk)
     
     def get_queryset(self):
-        managed_restaurants = [object.restaurant for object in ManagerRestaurantRelation.objects.filter(managers = self.request.user)]
-        target_reservations = Reservation.objects.filter(restaurant__in = managed_restaurants)
-        target_user_id = set(reservation.user.pk for reservation in target_reservations)
-        self.queryset = User.objects.filter(pk__in=target_user_id)
+        self.queryset = User.objects.filter(reservation__restaurant__managers=self.request.user).distinct()
         if 'form_value' in self.request.session:
             form_value = self.request.session['form_value']
             name = form_value[0]
