@@ -10,8 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout
 from django.urls import reverse_lazy, reverse
-from django.db import models
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Min, Max
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -62,7 +61,7 @@ class TopView(TemplateView):
             id = (all_categories.get(category_name = category[0]).pk)
             category_information.append({'name': category[0], 'url': url, 'id': id})
         context['user'] = self.request.user
-        restaurants = restaurants.annotate(score = models.Avg("review__score"))
+        restaurants = restaurants.annotate(score = Avg("review__score"))
         context['evaluated_restaurants'] = restaurants.order_by('-score')[:6]
         context['new_restaurants'] = restaurants.order_by('-created_at')[:6]
         context['all_categories'] = all_categories.order_by('id')
