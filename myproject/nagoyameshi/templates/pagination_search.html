@@ -1,0 +1,35 @@
+{% if is_paginated %}
+<ul class="pagination">
+    {% for num in page_list %}
+    {% if num == page_obj.number %}
+    <li class="current">
+        {{ num }}
+        <span>&nbsp;</span>
+    </li>
+    {% elif num == "..." %}
+    <li class="dot">
+        {{ num }}
+        <span>&nbsp;</span>
+    </li>
+    {% elif num == "最初" %}
+    <li>
+        <a class="gray" href="?keyword={% if keyword %}{{ request.GET.keyword }}{% endif %}&category={{ request.GET.category }}{% if request.GET.all %}&all=True{% endif %}&order={{ request.GET.order }}&page=1">{{ num }}</a>
+        <span>&nbsp;</span>
+    </li>
+    {% elif num == "最後" %}
+    <li>
+        <a class="gray" href="?keyword={% if keyword %}{{ request.GET.keyword }}{% endif %}&category={{ request.GET.category }}{% if request.GET.all %}&all=True{% endif %}&order={{ request.GET.order }}&page={{ page_obj.paginator.num_pages }}">{{ num }}</a>
+        <span>&nbsp;</span>
+    </li>
+    {% else %}
+    <li>
+        <a class="gray" href="?keyword={% if keyword %}{{ request.GET.keyword }}{% endif %}&category={{ request.GET.category }}{% if request.GET.all %}&all=True{% endif %}&order={{ request.GET.order }}&page={{ num }}">{{ num }}</a>
+        <span>&nbsp;</span>
+    </li>
+    {% endif %}
+    {% endfor %}
+    <li class="">
+        ( {{ page_obj.number }}ページ / {{ page_obj.paginator.num_pages }}ページ中 )
+    </li>
+</ul>
+{% endif %}

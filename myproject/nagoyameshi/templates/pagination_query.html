@@ -13,17 +13,17 @@
     </li>
     {% elif num == "最初" %}
     <li>
-        <a class="gray" href="?page=1">{{ num }}</a>
+        <a class="gray" href="?query={{ request.GET.query }}&page=1">{{ num }}</a>
         <span>&nbsp;</span>
     </li>
     {% elif num == "最後" %}
     <li>
-        <a class="gray" href="?page={{ page_obj.paginator.num_pages }}">{{ num }}</a>
+        <a class="gray" href="?query={{ request.GET.query }}&page={{ page_obj.paginator.num_pages }}">{{ num }}</a>
         <span>&nbsp;</span>
     </li>
     {% else %}
     <li>
-        <a class="gray" href="?page={{ num }}">{{ num }}</a>
+        <a class="gray" href="?query={{ request.GET.query }}&page={{ num }}">{{ num }}</a>
         <span>&nbsp;</span>
     </li>
     {% endif %}

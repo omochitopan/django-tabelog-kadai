@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}キーワード検索ページ{% endblock %}
+{% block contents %}
+<div class="list">
+	<div class="outer-container">
+		<div class="back-container">
+			<form class="flex-container btn-container" method="get" action="{% url 'search' %}">
+				<div class="search-container">
+					<div class="cluster-top">
+						<label>キーワード</label>
+						<input class="search-box" type="text" name="keyword" placeholder="店舗名・エリア" {% if not request.GET.all %}value="{{ request.GET.keyword }}"{% endif %}>
+					</div>
+					<div>
+						<label>カテゴリ</label>
+						<select name="category">
+							<option value="0">（未選択）</option>
+							{% for category in categories %}
+							<option value="{{ category.pk }}" {% if not request.GET.all and request.GET.category == category.pk|stringformat:"s" %}selected{% endif %}>{{ category.category_name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div  class="cluster-bottom">
+						<label>全ての店舗</label>
+						<input type="checkbox" name="all" value="True" {% if request.GET.all %}checked{% endif %}>
+					</div>
+				</div>
+				<div class="cluster">
+					<h5 class="center">最低価格</h5>
+					<label>低い順</label><input type="radio" name="order" value="mincheap" {% if request.GET.order == "mincheap" %}checked{% endif %}><br>
+					<label>高い順</label><input type="radio" name="order" value="minexpensive" {% if request.GET.order == "minexpensive" %}checked{% endif %}>
+				</div>
+				<div class="cluster">
+					<h5 class="center">最高価格</h5>
+					<label>低い順</label><input type="radio" name="order" value="maxcheap" {% if request.GET.order == "maxcheap" %}checked{% endif %}><br>
+					<label>高い順</label><input type="radio" name="order" value="maxexpensive" {% if request.GET.order == "maxexpensive" %}checked{% endif %}>
+				</div>
+				<div class="cluster">
+					<h5 class="center">評価</h5>
+					<label>低い順</label><input type="radio" name="order" value="scorelow" {% if request.GET.order == "scorelow" %}checked{% endif %}><br>
+					<label>高い順</label><input type="radio" name="order" value="scorehigh" {% if request.GET.order == "scorehigh" %}checked{% endif %}>
+				</div>
+				<div class="cluster center">
+					<h5 class="center">未選択</h5>
+					<input type="radio" name="order" value="none" class="noselect">
+				</div>
+				<button type="submit" class="btn strong-btn">検索</button>
+			</form>
+		</div>
+		<div class="inner-container">
+			<div>
+				<div class="search-count">
+					{% if object_list %}
+					{% if request.GET.all %}
+					<p class="found">[全ての店舗] {{ count }}件の店舗が見つかりました</p>
+					{% elif request.GET.keyword and not category %}
+					<p class="found">[キーワード：{{ request.GET.keyword }}] {{ count }}件の店舗が見つかりました</p>
+					{% elif not request.GET.keyword and category %}
+					<p class="found">[カテゴリ：{{ category }}] {{ count }}件の店舗が見つかりました</p>
+					{% else %}
+					<p class="found">[キーワード：{{ request.GET.keyword }}, カテゴリ：{{ category }}] {{ count }}件の店舗が見つかりました</p>
+					{% endif %}
+					{% else %}
+					{% if request.GET.keyword and not category %}
+					<p class="found">[キーワード：{{ request.GET.keyword }}] お探しの店舗は見つかりませんでした</p>
+					{% elif not request.GET.keyword and category %}
+					<p class="found">[カテゴリ：{{ category }}] お探しの店舗は見つかりませんでした</p>
+					{% elif request.GET.keyword and category %}
+					<p class="found">[キーワード：{{ request.GET.keyword }}, カテゴリ：{{ category }}] お探しの店舗は見つかりませんでした</p>
+					{% else %}
+					<p class="found">キーワード、カテゴリ、全店舗を表示のいずれかを入力してください</p>
+					{% endif %}
+					{% endif %}
+					{% if request.GET.order == "mincheap" %}
+					<p class="order">---最低価格が低い順---</p>
+					{% elif request.GET.order == "minexpensive" %}
+					<p class="order">---最低価格が高い順---</p>
+					{% elif request.GET.order == "maxcheap" %}
+					<p class="order">---最高価格が低い順---</p>
+					{% elif request.GET.order == "maxexpensive" %}
+					<p class="order">---最高価格が高い順---</p>
+					{% elif request.GET.order == "scorelow" %}
+					<p class="order">---評価が低い順---</p>
+					{% elif request.GET.order == "scorehigh" %}
+					<p class="order">---評価が高い順---</p>
+					{% endif %}
+				</div>
+			</div>
+			{% include "pagination_search.html" %}
+			{% for restaurant in object_list %}
+			<a href="{% url 'detail' restaurant.pk %}" class="table-ref">
+				<table class="restaurant-table">
+					<tr>
+						<td rowspan="4" class="image-table">
+							<img src="{{ restaurant.image.url }}" class="restaurant-image" alt="店舗画像">
+						</td>
+						<td class="first-row restaurant-name">
+							{{ restaurant.restaurant_name }}
+						</td>
+					</tr>
+					<tr>
+						<td class="second-row category">
+							{% for category in restaurant.category_name.all %}
+							<span class="category">{{ category }}　</span>
+							{% endfor %}
+							<div></div>
+						</td>
+					</tr>
+					<tr>
+						<td class="third-row price">
+							{{ restaurant.lowest_price|intcomma }}~{{ restaurant.highest_price|intcomma }}円<br>
+						</td>
+					</tr>
+					<tr>
+						<td class="fourth-row description">
+							{{ restaurant.description}}</p>
+						</td>
+					</tr>
+				</table>
+			</a>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

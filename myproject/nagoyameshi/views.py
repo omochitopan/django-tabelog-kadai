@@ -68,19 +68,42 @@ class TopView(TemplateView):
         context['category_information'] = category_information
         return context
 
-class RestaurantKeywordListView(LoginRequiredMixin, ListView):
+class RestaurantSearchView(LoginRequiredMixin, ListView):
     model = Restaurant
-    template_name = "keyword_list.html"
+    template_name = "restaurant_search.html"
     paginate_by = 5
     
     def get_queryset(self):
-        query = self.request.GET.get('query')
-        if query:
-            self.queryset = Restaurant.objects.filter(is_active = True).filter(
-            Q(restaurant_name__icontains=query) | Q(address__icontains=query)
-            )
+        restaurants = Restaurant.objects.filter(is_active = True).annotate(score = Avg("review__score"))
+        all_restaurants = self.request.GET.get('all')
+        keyword = self.request.GET.get('keyword')
+        self.category = self.request.GET.get('category')
+        if self.category == "0":
+            self.category = None
+        if all_restaurants:
+            self.queryset = restaurants.all()
+        elif keyword or self.category:
+            if keyword:
+                self.queryset = restaurants.filter(restaurant_name__icontains = keyword)
+                if self.category:
+                    self.queryset = self.queryset.filter(category_name = self.category)
+            elif self.category:
+                self.queryset = restaurants.filter(category_name = self.category)
         else:
             self.queryset = Restaurant.objects.none()
+        if self.queryset:
+            if self.request.GET.get("order") == "mincheap":
+                self.queryset = self.queryset.order_by("lowest_price")
+            elif self.request.GET.get("order") == "minexpensive":
+                self.queryset = self.queryset.order_by("-lowest_price")
+            elif self.request.GET.get("order") == "maxcheap":
+                self.queryset = self.queryset.order_by("highest_price")
+            elif self.request.GET.get("order") == "maxexpensive":
+                self.queryset = self.queryset.order_by("-highest_price")
+            elif self.request.GET.get("order") == "scorelow":
+                self.queryset = self.queryset.order_by("score")
+            elif self.request.GET.get("order") == "scorehigh":
+                self.queryset = self.queryset.order_by("-score")
         # Paginator
         paginator = Paginator(self.queryset, self.paginate_by)
         page = self.request.GET.get('page')
@@ -100,47 +123,14 @@ class RestaurantKeywordListView(LoginRequiredMixin, ListView):
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
-        context['izakaya_id'] = Category.objects.get(category_name = "居酒屋").pk
         context['page_list'] = page_list
         if self.queryset:
             context['count'] = len(self.queryset)
+        context["categories"] = Category.objects.all()
+        if self.category:
+            context["category"] = Category.objects.get(pk = self.category).category_name
         return context
 
-class RestaurantCategoryListView(LoginRequiredMixin, ListView):
-    model = CategoryRestaurantRelation
-    template_name = "category_list.html"
-    paginate_by = 5
-    
-    def get_queryset(self):
-        query = self.kwargs.get('category_id')
-        self.queryset = CategoryRestaurantRelation.objects.filter(restaurant__is_active = True, category__pk = query).order_by("restaurant_id")
-        paginator = Paginator(self.queryset, self.paginate_by)
-        page = self.request.GET.get('page')
-        try:
-            self.page_obj = paginator.page(page)
-        except PageNotAnInteger:
-            self.page_obj = paginator.page(1)
-        except EmptyPage:
-            self.page_obj = paginator.page(paginator.num_pages)
-        messages.add_message(self.request, messages.INFO, self.page_obj)
-        return self.queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        current_page = self.page_obj
-        current_num = current_page.number
-        total_num = current_page.paginator.num_pages
-        page_list = pagination(5, current_num, total_num)
-        categories = Category.objects
-        target_category = categories.get(pk = self.kwargs.get("category_id"))
-        context["all_categories"] = categories.all()
-        context['target_category'] = target_category
-        if self.queryset:
-            context['count'] = len(self.queryset)
-        context['page_list'] = page_list
-        context["restaurants"] = self.queryset
-        return context
-    
 class RestaurantDetailView(LoginRequiredMixin, DetailView):
     model = Restaurant
     template_name = "restaurant_detail.html"
