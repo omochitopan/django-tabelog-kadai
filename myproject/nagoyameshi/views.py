@@ -84,7 +84,7 @@ class RestaurantSearchView(LoginRequiredMixin, ListView):
             self.queryset = restaurants.all()
         elif keyword or self.category:
             if keyword:
-                self.queryset = restaurants.filter(restaurant_name__icontains = keyword)
+                self.queryset = restaurants.filter(Q(restaurant_name__icontains = keyword) | Q(address__icontains = keyword))
                 if self.category:
                     self.queryset = self.queryset.filter(category_name = self.category)
             elif self.category:
