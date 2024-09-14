@@ -91,7 +91,7 @@
 			<a href="{% url 'detail' restaurant.pk %}" class="table-ref">
 				<table class="restaurant-table">
 					<tr>
-						<td rowspan="4" class="image-table">
+						<td rowspan="5" class="image-table">
 							<img src="{{ restaurant.image.url }}" class="restaurant-image" alt="店舗画像">
 						</td>
 						<td class="first-row restaurant-name">
@@ -103,16 +103,20 @@
 							{% for category in restaurant.category_name.all %}
 							<span class="category">{{ category }}　</span>
 							{% endfor %}
-							<div></div>
 						</td>
 					</tr>
 					<tr>
-						<td class="third-row price">
+						<td class="third-row score">
+							評価：{{ restaurant.score|floatformat:2 }}
+						</td>
+					</tr>
+					<tr>
+						<td class="fourth-row price">
 							{{ restaurant.lowest_price|intcomma }}~{{ restaurant.highest_price|intcomma }}円<br>
 						</td>
 					</tr>
 					<tr>
-						<td class="fourth-row description">
+						<td class="fifth-row description">
 							{{ restaurant.description}}</p>
 						</td>
 					</tr>

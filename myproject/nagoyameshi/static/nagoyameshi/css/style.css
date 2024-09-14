@@ -859,7 +859,7 @@ footer {
 }
 
 .restaurant-table .first-row {
-  height: 50px;
+  height: 40px;
   border-top: solid 1px #999;
   border-right: solid 1px #999;
   padding-left: 10px;
@@ -868,6 +868,7 @@ footer {
 .restaurant-table .second-row {
   height: 30px;
   border-right: solid 1px #999;
+  border-bottom: solid 1px #999;
   padding-left: 10px;
 }
 
@@ -878,12 +879,20 @@ footer {
 }
 
 .restaurant-table .third-row {
-  height: 40px;
+  color: #a9894b;
+  height: 30px;
   border-right: solid 1px #999;
+  padding-top: 5px;
   padding-left: 10px;
 }
 
 .restaurant-table .fourth-row {
+  height: 30px;
+  border-right: solid 1px #999;
+  padding-left: 10px;
+}
+
+.restaurant-table .fifth-row {
   border-bottom: solid 1px #999;
   border-right: solid 1px #999;
   padding-left: 10px;
