@@ -824,6 +824,11 @@ footer {
 
 .list .found {
   margin: 5px 0;
+  font-weight: bold;
+}
+
+.list .normal {
+  font-weight: normal;
 }
 
 .list .order {

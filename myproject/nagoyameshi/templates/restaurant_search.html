@@ -52,23 +52,23 @@
 				<div class="search-count">
 					{% if object_list %}
 					{% if request.GET.all %}
-					<p class="found">[全ての店舗] {{ count }}件の店舗が見つかりました</p>
+					<p class="found">全ての店舗&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
 					{% elif request.GET.keyword and not category %}
-					<p class="found">[キーワード：{{ request.GET.keyword }}] {{ count }}件の店舗が見つかりました</p>
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
 					{% elif not request.GET.keyword and category %}
-					<p class="found">[カテゴリ：{{ category }}] {{ count }}件の店舗が見つかりました</p>
+					<p class="found">カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
 					{% else %}
-					<p class="found">[キーワード：{{ request.GET.keyword }}, カテゴリ：{{ category }}] {{ count }}件の店舗が見つかりました</p>
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;&&nbsp;カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
 					{% endif %}
 					{% else %}
 					{% if request.GET.keyword and not category %}
-					<p class="found">[キーワード：{{ request.GET.keyword }}] お探しの店舗は見つかりませんでした</p>
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;&nbsp;&nbsp;<span class="normal">お探しの店舗は見つかりませんでした</span></p>
 					{% elif not request.GET.keyword and category %}
-					<p class="found">[カテゴリ：{{ category }}] お探しの店舗は見つかりませんでした</p>
+					<p class="found">カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">お探しの店舗は見つかりませんでした</p>
 					{% elif request.GET.keyword and category %}
-					<p class="found">[キーワード：{{ request.GET.keyword }}, カテゴリ：{{ category }}] お探しの店舗は見つかりませんでした</p>
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;&&nbsp;カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">お探しの店舗は見つかりませんでした</span></p>
 					{% else %}
-					<p class="found">キーワード、カテゴリ、全ての店舗のいずれかを入力してください</p>
+					<p class="found"><span class="normal">キーワード、カテゴリ、全ての店舗のいずれかを入力してください</span></p>
 					{% endif %}
 					{% endif %}
 					{% if request.GET.order == "mincheap" %}
