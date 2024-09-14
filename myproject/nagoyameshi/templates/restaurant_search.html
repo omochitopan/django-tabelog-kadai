@@ -68,7 +68,7 @@
 					{% elif request.GET.keyword and category %}
 					<p class="found">[キーワード：{{ request.GET.keyword }}, カテゴリ：{{ category }}] お探しの店舗は見つかりませんでした</p>
 					{% else %}
-					<p class="found">キーワード、カテゴリ、全店舗を表示のいずれかを入力してください</p>
+					<p class="found">キーワード、カテゴリ、全ての店舗のいずれかを入力してください</p>
 					{% endif %}
 					{% endif %}
 					{% if request.GET.order == "mincheap" %}
