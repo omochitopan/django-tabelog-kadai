@@ -823,11 +823,13 @@ footer {
 }
 
 .list .found {
+  color: #5a0000;
   margin: 5px 0;
   font-weight: bold;
 }
 
 .list .normal {
+  color: #000;
   font-weight: normal;
 }
 
