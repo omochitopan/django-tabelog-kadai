@@ -13,7 +13,7 @@
             </div>
             <div class="flex-container btn-container">
                 <button type="submit" class="btn strong-btn two-btn">情報を更新する</button>
-                <a href="{% url 'managementreservationrestaurant' user.pk reservation.restaurant.pk %}" class="btn thin-btn two-btn">予約一覧に戻る</a>
+                <a href="{{ referer }}" class="btn thin-btn two-btn">予約一覧に戻る</a>
             </div>
         </form>
         </div>

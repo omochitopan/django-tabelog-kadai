@@ -30,7 +30,7 @@
 				{% else %}
 				<div class="btn nonactive-btn">キャンセル</div>
 				{% endif %}
-				<a href="{% url 'reservationlist' %}" class="btn thin-btn two-btn">予約一覧に戻る</a>
+				<a href="{{ referer }}" class="btn thin-btn two-btn">予約一覧に戻る</a>
 			</div>
 		</form>	
 	</div>

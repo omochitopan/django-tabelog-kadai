@@ -527,6 +527,10 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
     model = Reservation
     template_name = "reservation_delete.html"
     
+    def get(self, request, *args, **kwargs):
+        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
     def get_success_url(self):
         return reverse_lazy('reservationlist')
 
@@ -534,6 +538,7 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
         context["cancel_date"] = datetime.date.today() + relativedelta(days = 3)
+        context["referer"] = self.request.session["HTTP_REFERER"]
         return context
 
 class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,
@@ -819,10 +824,15 @@ class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
 class ManagementRestaurantDetailView(OnlyManagementUserMixin, DetailView):
     model = Restaurant
     template_name = "management/management_restaurant_detail.html"
-
+    
+    def get(self, request, *args, **kwargs):
+        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
+        context["referer"] = self.request.session["HTTP_REFERER"]
         return context
 
 class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
@@ -1032,6 +1042,7 @@ class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["referer"] = self.request.session["HTTP_REFERER"]
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
@@ -1042,8 +1053,8 @@ class ManagementReservationDeleteView(OnlyManagementUserMixin, DeleteView):
     template_name = "management/management_reservation_delete.html"
     
     def get_success_url(self):
-        referer = self.request.session['HTTP_REFERER']
-        return referer
+        restaurant_id = Reservation.objects.get(pk = self.kwargs.get("pk")).restaurant.pk
+        return reverse_lazy("managementreservationrestaurant", kwargs=dict(user_id = self.request.user.pk, restaurant_id = restaurant_id))
     
     def get(self, request, *args, **kwargs):
         request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
@@ -1052,6 +1063,7 @@ class ManagementReservationDeleteView(OnlyManagementUserMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
+        context["referer"] = self.request.session['HTTP_REFERER']
         return context
 
 class ManagementUserView(OnlyManagementUserMixin, ListView):
