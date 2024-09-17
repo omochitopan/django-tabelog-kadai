@@ -135,19 +135,12 @@ class RestaurantDetailView(LoginRequiredMixin, DetailView):
     model = Restaurant
     template_name = "restaurant_detail.html"
     
-    def get(self, request, *args, **kwargs):
-        request.session["restaurant_id"] = self.get_object().pk
-        request.session["restaurant_name"] = self.get_object().restaurant_name        
-        return super().get(request, *args, **kwargs)
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        restaurant_id = self.request.session["restaurant_id"]
-        restaurant = get_object_or_404(Restaurant, pk = restaurant_id)
+        restaurant = get_object_or_404(Restaurant, pk = self.kwargs.get("pk"))
         isFavorite = Favorite.objects.filter(user = user, restaurant = restaurant).exists()
         context['user_id'] = user.pk
-        context['restaurant_id'] = restaurant_id
         context['isFavorite'] = isFavorite
         return context
 
@@ -310,7 +303,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     
     def get_success_url(self):
-        return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
+        return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.kwargs.get("restaurant_id")))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -533,10 +526,6 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
     model = Reservation
     template_name = "reservation_delete.html"
     
-    def get(self, request, *args, **kwargs):
-        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
-        return super().get(request, *args, **kwargs)
-    
     def get_success_url(self):
         return reverse_lazy('reservationlist')
 
@@ -544,7 +533,7 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
         context["cancel_date"] = datetime.date.today() + relativedelta(days = 3)
-        context["referer"] = self.request.session["HTTP_REFERER"]
+        context["referer"] = self.request.META.get("HTTP_REFERER")
         return context
 
 class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,
@@ -831,9 +820,15 @@ class ManagementRestaurantDetailView(OnlyManagementUserMixin, DetailView):
     model = Restaurant
     template_name = "management/management_restaurant_detail.html"
     
+    def get(self, request, *args, **kwargs):
+        if "open" in self.request.META.get("HTTP_REFERER") or "closed" in self.request.META.get("HTTP_REFERER"):
+            self.request.session["HTTP_REFERER"] = self.request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
+        context['referer'] = self.request.session["HTTP_REFERER"]
         return context
 
 class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
@@ -990,8 +985,7 @@ class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
     template_name = "management/management_reservation_edit.html"
     
     def get_success_url(self):
-        referer = self.request.session['HTTP_REFERER']
-        return referer
+        return self.request.session['HTTP_REFERER']
     
     def get(self, request, *args, **kwargs):
         request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
@@ -1043,7 +1037,7 @@ class ManagementReservationEditView(OnlyManagementUserMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
-        context["referer"] = self.request.session["HTTP_REFERER"]
+        context["referer"] = self.request.META.get('HTTP_REFERER')
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
@@ -1057,14 +1051,10 @@ class ManagementReservationDeleteView(OnlyManagementUserMixin, DeleteView):
         restaurant_id = Reservation.objects.get(pk = self.kwargs.get("pk")).restaurant.pk
         return reverse_lazy("managementreservationrestaurant", kwargs=dict(user_id = self.request.user.pk, restaurant_id = restaurant_id))
     
-    def get(self, request, *args, **kwargs):
-        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
-        return super().get(request, *args, **kwargs)
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
-        context["referer"] = self.request.session['HTTP_REFERER']
+        context["referer"] = self.request.META.get('HTTP_REFERER')
         return context
 
 class ManagementUserView(OnlyManagementUserMixin, ListView):

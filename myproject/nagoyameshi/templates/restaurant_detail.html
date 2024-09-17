@@ -72,10 +72,10 @@
 				{% csrf_token %}
 				<!-- 以下のbuttonをtype="button"に設定することでリロードされなくなった -->
 				{% if isFavorite %}
-				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn favorite-btn favorite">
+				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ object.pk }}" class="btn favorite-btn favorite">
 					&#9829; お気に入り解除
 				{% else %}
-				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ restaurant_id }}" class="btn nonfocus-btn favorite">
+				<button type="button" id="favorite-btn" data-favorite="{{ isFavorite }}" data-restaurant-id="{{ object.pk }}" class="btn nonfocus-btn favorite">
 					&#9825; お気に入り追加
 				{% endif %}
 				</button>
@@ -85,6 +85,6 @@
 </div>	
 {% endblock %}
 {% block extra_js %}
-<script> let url2 = "{% url 'favoritecreate' restaurant_id %}"; </script>
+<script> let url2 = "{% url 'favoritecreate' object.pk %}"; </script>
 <script src="{% static 'nagoyameshi/js/favorite.js' %}"></script>
 {% endblock %}
