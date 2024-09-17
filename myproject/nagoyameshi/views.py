@@ -315,8 +315,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
-        context["restaurant_id"] = self.request.session["restaurant_id"]
-        context["restaurant_name"] = self.request.session["restaurant_name"]
+        context["restaurant"] = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
         return context
 
     def form_valid(self, form):
@@ -333,13 +332,16 @@ class ReviewUpdateView(OnlyMyReviewMixin, LoginRequiredMixin, UpdateView):
     template_name = "review_update.html"
     
     def get_success_url(self):
-        return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
+        return reverse_lazy(self.request.session["HTTP_REFERER"])
     
+    def get(self, request, *args, **kwargs):
+        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
-        context["restaurant_id"] = self.request.session["restaurant_id"]
-        context["restaurant_name"] = self.request.session["restaurant_name"]
+        context['referer'] = self.request.session["HTTP_REFERER"]
         return context
 
 class ReviewDeleteView(OnlyMyReviewMixin, LoginRequiredMixin, DeleteView):
@@ -347,13 +349,17 @@ class ReviewDeleteView(OnlyMyReviewMixin, LoginRequiredMixin, DeleteView):
     template_name = "review_delete.html"
     
     def get_success_url(self):
-        return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = self.request.session['restaurant_id']))
+        review = Review.objects.get(pk = self.kwargs.get("pk"))
+        return reverse_lazy('reviewlist', kwargs=dict(restaurant_id = review.restaurant.pk))
+
+    def get(self, request, *args, **kwargs):
+        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
-        context["restaurant_name"] = self.request.session["restaurant_name"]
-        context["restaurant_id"] = self.request.session["restaurant_id"]
+        context["referer"] = self.request.session["HTTP_REFERER"]
         return context
 
 class ReservationFormView(LoginRequiredMixin, FormView):
