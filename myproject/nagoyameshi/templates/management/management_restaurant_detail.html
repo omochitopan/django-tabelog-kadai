@@ -57,9 +57,9 @@
 			{% if object.is_active %}
 			<a href="{% url 'managementrestaurantedit' user_id object.pk %}" class= "btn strong-btn three-btn">店舗情報を編集</a>
 			<a href="{% url 'managementrestaurantdelete' user_id object.pk %}" class= "btn nonactive-btn three-btn">店舗を閉店処理</a>
-			<a href="{{ referer }}" class= "btn thin-btn three-btn">店舗一覧に戻る</a>
+			<a href="{% url 'managementopenrestaurant' user_id %}" class= "btn thin-btn three-btn">店舗一覧に戻る</a>
 			{% else %}
-			<a href="{{ referer }}" class= "btn thin-btn one-btn">店舗一覧に戻る</a>
+			<a href="{% url 'managementopenrestaurant' user_id %}" class= "btn thin-btn one-btn">店舗一覧に戻る</a>
 			{% endif %}
 		</div>
 	</div>

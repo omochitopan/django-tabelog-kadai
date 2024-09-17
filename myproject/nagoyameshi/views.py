@@ -332,7 +332,8 @@ class ReviewUpdateView(OnlyMyReviewMixin, LoginRequiredMixin, UpdateView):
     template_name = "review_update.html"
     
     def get_success_url(self):
-        return reverse_lazy(self.request.session["HTTP_REFERER"])
+        referer = self.request.session['HTTP_REFERER']
+        return referer
     
     def get(self, request, *args, **kwargs):
         request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
@@ -831,14 +832,9 @@ class ManagementRestaurantDetailView(OnlyManagementUserMixin, DetailView):
     model = Restaurant
     template_name = "management/management_restaurant_detail.html"
     
-    def get(self, request, *args, **kwargs):
-        request.session["HTTP_REFERER"] = request.META.get('HTTP_REFERER')
-        return super().get(request, *args, **kwargs)
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.request.user.pk
-        context["referer"] = self.request.session["HTTP_REFERER"]
         return context
 
 class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
