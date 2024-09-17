@@ -230,6 +230,15 @@ header .own-link:hover {
   margin-right: 10px;
 }
 
+header .logo-container {
+  display: flex;
+  text-decoration: none;
+}
+
+header .logo-container:hover {
+  opacity: 0.8;
+}
+
 header .flex-container {
   width: 550px;
   justify-content: space-between;
@@ -641,18 +650,27 @@ footer {
 .footer-logo-wrap {
   display: flex;
   justify-content: center;
+  margin-bottom: 15px;
+}
+
+footer .logo-container {
+  color: #000;
+  display: flex;
+  text-decoration: none;
+}
+
+footer .logo-container:hover {
+  opacity: 0.8;
 }
 
 .footer-logo {
   height: 25px;
   margin-right: 10px;
-  margin-bottom: 10px;
 }
 
 .footer-logo-ref {
-  color: black;
   font-size: 18px;
-  text-decoration: none;
+  margin: 0;
 }
 
 .footer-ref > a {

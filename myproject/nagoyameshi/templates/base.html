@@ -14,8 +14,10 @@
   <div class="contents">
     <header>
       <div class="header-logo-wrap">
-        <a href="{% url 'top' %}"><img class="header-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ"></a>
-        <a href="{% url 'top' %}" class="header-logo-ref">Nagoyameshi</a>
+        <a href="{% url 'top' %}" class="logo-container">
+          <img class="header-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ">
+          <h4 class="header-logo-ref">Nagoyameshi</h4>
+        </a>
       </div>
       <!-- PC用メニューボタン -->
       <nav class="nav-pc">
@@ -55,8 +57,10 @@
   <footer>
     <div class="footer-container">
       <div class="footer-logo-wrap">
-        <a href="{% url 'top' %}"><img class="footer-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ"></a>
-        <a href="{% url 'top' %}" class="footer-logo-ref">Nagoyameshi</a>
+        <a href="{% url 'top' %}" class="logo-container">
+          <img class="footer-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ">
+          <h5 class="footer-logo-ref">Nagoyameshi</h5>
+        </a>
       </div>
       <div class="footer-ref">
         <a href="{% url 'company' %}">会社概要</a>
