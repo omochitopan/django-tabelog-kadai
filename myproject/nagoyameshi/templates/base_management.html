@@ -14,7 +14,7 @@
   <div class="contents">
     <header>
       <div class="header-logo-wrap">
-        <a href="{% url 'top' %}" class="logo-container">
+        <a href="{% url 'management' user.pk %}" class="logo-container">
           <img class="header-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ">
           <h4 class="header-logo-ref">Nagoyameshi</h4>
         </a>
@@ -46,7 +46,7 @@
   <footer>
     <div class="footer-container">
       <div class="footer-logo-wrap">
-        <a href="{% url 'top' %}" class="logo-container">
+        <a href="{% url 'management' user.pk %}" class="logo-container">
           <img class="footer-logo" src="{% static "nagoyameshi/images/misosoup.svg" %}" alt="トップページ">
           <h5 class="footer-logo-ref">Nagoyameshi</h5>
         </a>
