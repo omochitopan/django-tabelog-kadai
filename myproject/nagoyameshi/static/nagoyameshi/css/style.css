@@ -1306,6 +1306,18 @@ footer .logo-container:hover {
   padding: 5px 2px;
 }
 
+.user .negative-btn {
+  background-color: rgb(190, 190, 190);
+}
+
+.user .top-ref {
+  width: 150px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 15px;
+  padding: 5px 2px;
+}
+
 .user form {
   text-align: right;
 }

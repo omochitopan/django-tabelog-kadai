@@ -6,11 +6,11 @@
 		<h2 class="center">会員情報</h2>
 		<div class="top-container">
 			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" %}
-			<div class="btn nonactive-btn top-ref">プロフィール編集</div>
-			<div class="btn nonactive-btn top-ref">パスワード変更</div>
+			<div class="btn negative-btn top-ref">プロフィール編集</div>
+			<div class="btn negative-btn top-ref">パスワード変更</div>
 			{% else %}
-			<a href="{% url 'userupdate' user_id %}" class="btn new-btn top-ref">プロフィール編集</a>
-			<a href="{% url 'password_change' %}" class="btn new-btn top-ref">パスワード変更</a>
+			<a href="{% url 'userupdate' user.pk %}" class="btn new-btn">プロフィール編集</a>
+			<a href="{% url 'password_change' %}" class="btn new-btn">パスワード変更</a>
 			{% endif %}
 		</div>
         <table class="user-table">
@@ -57,9 +57,9 @@
 		</table>
 		<div class="flex-container btn-container">
 			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" %}
-			<div class="btn nonactive-btn one-btn">NAGOYAMESHI退会</a>
+			<div class="btn negative-btn one-btn">NAGOYAMESHI退会</a>
 			{% else %}
-			<a href="{% url 'resign' user_id %}" class="btn nonactive-btn one-btn">NAGOYAMESHI退会</a>
+			<a href="{% url 'resign' user.pk %}" class="btn nonactive-btn one-btn">NAGOYAMESHI退会</a>
 			{% endif %}
 		</div>
 	</div>
