@@ -321,8 +321,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         qryset = form.save(commit=False)
         qryset.user = self.request.user
-        restaurant_id = self.request.session['restaurant_id']
-        qryset.restaurant = Restaurant.objects.get(id = restaurant_id)
+        qryset.restaurant = Restaurant.objects.get(id = self.kwargs.get('restaurant_id'))
         qryset.save()
         return  super().form_valid(form)
     
