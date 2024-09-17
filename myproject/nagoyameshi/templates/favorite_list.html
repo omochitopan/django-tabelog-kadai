@@ -19,7 +19,7 @@
 			{% for favorite in object_list %}
 			<tr>
 				<td class="restaurant-name">{% if not favorite.restaurant.is_active %}[閉店] {% endif %}<a href="{% url 'detail' favorite.restaurant.id %}" class="restaurant-ref">{{ favorite.restaurant }}</a></td>
-				<td>{{ favorite.restaurant.postal_code }}</td>
+				<td>{{ favorite.restaurant.postal_code|slice:":3" }}-{{ favorite.restaurant.postal_code|slice:"3:" }}</td>
 				<td>{{ favorite.restaurant.address }}</td>
 				<td>
 					<form method="post" action="{% url 'favoritedelete' favorite.restaurant.pk %}" class="center">
