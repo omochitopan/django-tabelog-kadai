@@ -518,6 +518,11 @@ header .nav-input {
   margin: 0 15px;
 }
 
+.top .strong-btn {
+  width: 150px;
+  height: 30px;
+}
+
 .top .restaurants-container {
   max-width: 840px;
   margin: 30px auto;
