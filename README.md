@@ -29,10 +29,28 @@ https://nagoyameshi.omochi-mochimental.net/
 ## サンプル画像
 ### 一般ユーザー用画面
 ![トップ画面](image/nagoyameshi_top.png)
+
+
+
 ![店舗検索画面](image/nagoyameshi_category.png)
+
+
+
 ![店舗詳細画面](image/nagoyameshi_detail.png)
+
+
+
 ### 店舗運営者用画面
 ![店舗運営者画面](image/nagoyameshi_management.png)
+
+
+
 ![店舗管理画面](image/nagoyameshi_management_restaurant.png)
+
+
+
 ![予約管理画面](image/nagoyameshi_management_reservation.png)
+
+
+
 ![会員情報画面](image/nagoyameshi_management_user.png)
