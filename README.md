@@ -17,21 +17,21 @@ https://nagoyameshi.omochi-mochimental.net/
 - **予約情報管理機能**: 管理店舗の予約情報の閲覧、編集、削除が可能です。
 - **会員情報閲覧機能**: 店舗に予約をした顧客の情報を確認できます。
 
-### 使用技術
+## 使用技術
 - フレームワーク: Django
 - データベース: MySQL (AWS RDS)
 - サーバー: AWS EC2
 - フロントエンド: HTML, CSS, JavaScript
 
-### サイトツリー
+## サイトツリー
 ![サイトツリー](image/nagoyameshi_tree.png)
 
-### サンプル画像
-#### 一般ユーザー用画面
+## サンプル画像
+### 一般ユーザー用画面
 ![トップ画面](image/nagoyameshi_top.png)
 ![店舗検索画面](image/nagoyameshi_category.png)
 ![店舗詳細画面](image/nagoyameshi_detail.png)
-#### 店舗運営者用画面
+### 店舗運営者用画面
 ![店舗運営者画面](image/nagoyameshi_management.png)
 ![店舗管理画面](image/nagoyameshi_management_restaurant.png)
 ![予約管理画面](image/nagoyameshi_management_reservation.png)
