@@ -679,10 +679,8 @@ def webhook_received(request):
         client_reference_id = session.get('client_reference_id')
         stripe_customer_id = session.get('customer')
         stripe_subscription_id = session.get('subscription')
-        print(f"client_reference_id: {client_reference_id}")
-        print(f"stripe_customer_id: {stripe_customer_id}")
         try:
-            user = User.objects.get(pk = 1) # client_reference_id
+            user = User.objects.get(pk = client_reference_id)
             user.is_subscribed = True
             user.save()
             subscription = Subscription.objects.create(
