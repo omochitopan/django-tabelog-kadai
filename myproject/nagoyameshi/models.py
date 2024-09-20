@@ -86,6 +86,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 class Subscription(models.Model):
+    class Meta:
+        db_table = 'nagoyameshi_subscription'
+        verbose_name = verbose_name_plural = '有料会員登録'
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.DateTimeField(verbose_name="アップグレード日時", auto_now_add=True)
     end_time = models.DateTimeField(verbose_name="ダウングレード日時", blank=True, null=True)

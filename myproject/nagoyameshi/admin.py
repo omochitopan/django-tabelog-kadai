@@ -1,10 +1,8 @@
 from django.contrib import admin
 from .forms import RestaurantAdminForm
-from .models import Restaurant, User, UserActivateTokens, Terms, Review, Reservation, Company, Category, RegularHoliday, ManagerRestaurantRelation, CategoryRestaurantRelation, HolidayRestaurantRelation
+from .models import Restaurant, User, UserActivateTokens, Terms, Review, Reservation, Company, Category, RegularHoliday, ManagerRestaurantRelation, CategoryRestaurantRelation, HolidayRestaurantRelation, Subscription
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from import_export.fields import Field
-
 
 # Register your models here.
 class RestaurantResource(resources.ModelResource):
@@ -80,6 +78,9 @@ class CategoryRestaurantRelationAdmin(admin.ModelAdmin):
 
 class HolidayRestaurantRelationAdmin(admin.ModelAdmin):
     list_display = ('restaurant', 'holiday',)
+    
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'stripe_subscription_id', 'start_time', 'end_time')
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)
@@ -93,3 +94,4 @@ admin.site.register(Company, CompanyAdmin)
 admin.site.register(ManagerRestaurantRelation, ManagerRestaurantRelationAdmin)
 admin.site.register(CategoryRestaurantRelation, CategoryRestaurantRelationAdmin)
 admin.site.register(HolidayRestaurantRelation, HolidayRestaurantRelationAdmin)
+admin.site.register(Subscription, SubscriptionAdmin)

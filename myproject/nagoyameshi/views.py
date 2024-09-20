@@ -646,7 +646,26 @@ def create_checkout_session(request):
         return redirect(checkout_session.url)
     except Exception as e:
         return HttpResponse(f"Error: {str(e)}")
-    
+
+def cancel_subscription(request):
+    user = request.user
+    subscription = Subscription.objects.filter(end_time = None).get(user__pk = user.pk)
+    stripe_subscription_id = subscription.stripe_subscription_id
+    try:
+        stripe.Subscription.delete(stripe_subscription_id)
+
+        # サブスクリプションステータスを更新
+        user.is_subscribed = False
+        user.save()
+        subscription.end_time = datetime.datetime.now()
+        subscription.save()
+
+        # 解約完了ページにリダイレクト
+        return redirect('subscription_cancelled')  # 'subscription_cancelled'は解約完了ページのURL名
+    except stripe.error.StripeError as e:
+        # Stripe APIでエラーが発生した場合
+        return HttpResponse(f"Error cancelling subscription: {str(e)}", status=500)
+
 @csrf_exempt
 def webhook_received(request):
     endpoint_secret = env("STRIPE_WEBHOOK_SECRET")
@@ -705,6 +724,12 @@ class SuccessView(LoginRequiredMixin, TemplateView):
     
 class CancelView(LoginRequiredMixin, TemplateView):
     template_name = "cancel.html"
+    
+class SubscriptionResignConfirmView(LoginRequiredMixin, TemplateView):
+    template_name = "subscription_resign_confirm.html"
+    
+class SubscriptionResignDoneView(LoginRequiredMixin, TemplateView):
+    template_name = "subscription_resign_done.html"
 
 class ResignView(OnlyMyUserInformationMixin, UpdateView):
     model = User
