@@ -598,7 +598,7 @@ class UserView(OnlyMyUserInformationMixin, LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["user"] = User.objects.get(pk = 1) # self.request.user
+        context["user"] = User.objects.get(pk = self.request.user)
         return context
 
 class UserUpdateView(OnlyMyUserInformationMixin, UpdateView):

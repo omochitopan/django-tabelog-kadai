@@ -5,9 +5,9 @@
   <div class="outer-container">
     <p class="center bold">有料会員を解約すると以下のサービスを利用できなくなります。</p>
     <ul class="list">
-        <li>お気に入り店舗登録機能</li>
-        <li>レビュー投稿機能</li>
-        <li>店舗予約機能</li>
+      <li>お気に入り店舗登録機能</li>
+      <li>店舗予約機能</li>
+      <li>レビュー投稿機能</li>
     </ul>
     <form action="{% url 'subscriptionresign' %}" method="POST" class="flex-container btn-container">
       {% csrf_token %}

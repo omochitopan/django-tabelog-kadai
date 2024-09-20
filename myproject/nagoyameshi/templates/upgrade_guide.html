@@ -6,8 +6,8 @@
         <p class="center bold">有料会員に登録すると以下のサービスを利用できます。</p>
         <ul class="list">
             <li>お気に入り店舗登録機能</li>
-            <li>レビュー投稿機能</li>
             <li>店舗予約機能</li>
+            <li>レビュー投稿機能</li>
         </ul>
         <form action="{% url 'checkoutsession' %}" method="POST" class="flex-container btn-container">
             {% csrf_token %}
