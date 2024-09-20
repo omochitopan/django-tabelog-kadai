@@ -715,6 +715,26 @@ def webhook_received(request):
             return HttpResponse("Subscription not found", status=404)
     return HttpResponse(status=200)
 
+def create_customer_portal_session(request):
+    user = request.user
+    try:
+        # ユーザーのStripeカスタマーIDを取得
+        subscription = Subscription.objects.get(user=user, end_time=None)
+        stripe_customer_id = subscription.stripe_customer_id
+        
+        # カスタマーポータルセッションを作成
+        session = stripe.billing_portal.Session.create(
+            customer=stripe_customer_id,
+            return_url=f"https://nagoyameshi.omochi-mochimental.net/subscription/"  # ポータルから戻る際のURL
+        )
+
+        # 作成したポータルのURLにリダイレクト
+        return redirect(session.url)
+    except Subscription.DoesNotExist:
+        return HttpResponse("No active subscription found.", status=400)
+    except stripe.error.StripeError as e:
+        return HttpResponse(f"Error creating customer portal session: {str(e)}", status=500)
+
 class SuccessView(LoginRequiredMixin, TemplateView):
     template_name = "success.html"
     

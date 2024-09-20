@@ -3,7 +3,9 @@
 {% block contents %}
 <div class="downgrade">
 	<div class="outer-container">
-		<a href="" class="btn strong-btn one-btn">有料会員情報詳細</a>
+		<form action="customerportal" method="post">
+			<button type="submit" class="btn strong-btn two-btn">有料会員情報を確認する</button>
+		</form>
 		<a href="{% url 'subscriptionresignconfirm' %}" class="btn nonactive-btn one-btn">有料会員登録を解約する</a>
 		<a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
 	</div>

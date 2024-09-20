@@ -5,7 +5,10 @@
   <div class="outer-container">
     <h4>有料会員のご登録ありがとうございます！</h4>
     <p>サブスクリプションが開始されました。</p>
-    <a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
+    <form action="customerportal" method="post">
+      <button type="submit" class="btn strong-btn two-btn">有料会員情報を確認する</button>
+      <a href="{% url 'user' request.user.pk %}" class="btn thin-btn two-btn">会員情報に戻る</a>
+    </form>
   </div>
 </div>
 {% endblock %}
