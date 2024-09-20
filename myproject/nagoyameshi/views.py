@@ -659,9 +659,7 @@ def cancel_subscription(request):
         user.save()
         subscription.end_time = datetime.datetime.now()
         subscription.save()
-
-        # 解約完了ページにリダイレクト
-        return redirect('subscription_cancelled')  # 'subscription_cancelled'は解約完了ページのURL名
+        return redirect('subscriptionresigndone')
     except stripe.error.StripeError as e:
         # Stripe APIでエラーが発生した場合
         return HttpResponse(f"Error cancelling subscription: {str(e)}", status=500)
