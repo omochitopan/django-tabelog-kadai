@@ -724,12 +724,12 @@ def create_customer_portal_session(request):
         
         # カスタマーポータルセッションを作成
         session = stripe.billing_portal.Session.create(
-            customer=stripe_customer_id,
-            return_url=f"https://nagoyameshi.omochi-mochimental.net/subscription/"  # ポータルから戻る際のURL
+            customer = stripe_customer_id,
+            return_url = "https://nagoyameshi.omochi-mochimental.net/subscription/"  # ポータルから戻る際のURL
         )
 
         # 作成したポータルのURLにリダイレクト
-        return redirect(session.url)
+        return redirect(f'{session.url}/')
     except Subscription.DoesNotExist:
         return HttpResponse("No active subscription found.", status=400)
     except stripe.error.StripeError as e:
