@@ -273,8 +273,9 @@ header .nav-link {
   text-decoration: none;
 }
 
-header .nav-link:hover {
+header a.nav-link:hover, input.nav-link:hover {
   color: rgb(0, 0, 0);
+  cursor: pointer;
 }
 
 header .nav-input {
@@ -1087,6 +1088,10 @@ footer .logo-container:hover {
   width: 500px;
 }
 
+.reservationcreate .comment {
+  margin-top: 40px;
+}
+
 .reservationcreate .inner-container {
   width: 300px;
   margin: 30px auto 0 auto;
@@ -1393,6 +1398,61 @@ footer .logo-container:hover {
 
 .user-update .btn-container {
   margin-top: 40px;
+}
+
+.subscription form {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.subscription .btn {
+  margin: 15px 0;
+}
+
+.subscription .nonactive-btn:hover {
+  font-weight: bold;
+}
+
+.upgrade .outer-container {
+  width: 500px;
+}
+
+.upgrade .list {
+  margin: 0 0 30px 130px;
+}
+
+.upgrade li {
+  margin-bottom: 10px;
+}
+
+.upgrade .lower-container {
+  margin-top: 80px;
+}
+
+.success .outer-container,
+.cancel .outer-container {
+  width: 500px;
+}
+
+.success .btn-container,
+.cancel .btn-container {
+  margin-top: 30px;
+}
+
+.subsc-resign .outer-container {
+  width: 500px;
+}
+
+.subsc-resign .list {
+  margin: 0 0 30px 130px;
+}
+
+.subsc-resign li {
+  margin-bottom: 10px;
+}
+
+.subsc-resign .nonactive-btn:hover {
+  font-weight: bold;
 }
 
 .resign .outer-container {

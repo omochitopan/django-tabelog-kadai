@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block title %}有料会員情報を管理{% endblock %}
 {% block contents %}
-<div class="downgrade">
+<div class="subscription">
 	<div class="outer-container">
+		<h2 class="center">有料会員情報を管理</h2>
 		<form action="{% url 'customerportal' %}" method="post">
 			{% csrf_token %}
-			<button type="submit" class="btn strong-btn two-btn">有料会員情報を確認する</button>
+			<button type="submit" class="btn strong-btn one-btn">有料会員情報を確認する</button><br>
+			<a href="{% url 'subscriptionresignconfirm' %}" class="btn nonactive-btn one-btn">有料会員登録を解約する</a><br>
+			<a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
 		</form>
-		<a href="{% url 'subscriptionresignconfirm' %}" class="btn nonactive-btn one-btn">有料会員登録を解約する</a>
-		<a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
 	</div>
 </div>
 {% endblock %}

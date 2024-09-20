@@ -18,6 +18,7 @@
 		{% if restaurant.is_active %}
 		<div class="information">
 			<p class="center">平均：{{ average_score }}点（{{ count }}件）</p>
+			{% if request.user.is_subscribed %}
 			{% if not writtenreview %}
 			<p class="reviewcheck">あなたはこのレストランに{% if restaurant.is_active %}まだ{% endif %}レビューしていません。</p>
 			{% if restaurant.is_active %}
@@ -33,6 +34,7 @@
 				{% endif %}
 				<a href="{% url 'reviewdelete' writtenreview.pk %}" class= "btn nonfocus-btn two-btn">レビューを削除</a>
 			</div>
+			{% endif %}
 			{% endif %}
 			{% if not object_list %}
 			<table class="noreview-table">

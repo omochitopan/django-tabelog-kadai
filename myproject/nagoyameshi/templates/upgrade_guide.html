@@ -3,12 +3,23 @@
 {% block contents %}
 <div class="upgrade">
 	<div class="outer-container">
-        <form action="{% url 'checkoutsession' %}" method="POST">
+        <p class="center bold">有料会員に登録すると以下のサービスを利用できます。</p>
+        <ul class="list">
+            <li>お気に入り店舗登録機能</li>
+            <li>レビュー投稿機能</li>
+            <li>店舗予約機能</li>
+        </ul>
+        <form action="{% url 'checkoutsession' %}" method="POST" class="flex-container btn-container">
             {% csrf_token %}
             <input type="hidden" name="lookup_key" value="{{ lookup_key }}">
-            <button type="submit" class="btn strong-btn two-btn">有料会員になる</button>
+            <button type="submit" class="btn strong-btn two-btn">有料会員登録をする</button>
             <a href="{% url 'user' request.user.pk %}" class="btn thin-btn two-btn">会員情報に戻る</a>
         </form>
+        <div class="lower-container">
+            <p>＊以下のカード情報を利用して有料会員に登録できます＊</p>
+            <p>&nbsp;&nbsp;&nbsp;カード番号：4242424242424242</p>
+            <p>&nbsp;&nbsp;&nbsp;その他の項目：任意</p>
+        </div>
     </div>
 </div>
 {% endblock %}

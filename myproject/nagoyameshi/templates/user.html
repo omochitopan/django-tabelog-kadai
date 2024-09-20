@@ -54,19 +54,25 @@
                     {{ user.occupation|default:"" }}
                 </td>
 			</tr>
+			<tr>
+				<th>会員区分</th>
+				{% if user.is_subscribed %}
+				<td>有料会員</td>
+				{% else %}
+				<td>無料会員</td>
+				{% endif %}
+			</tr>
 		</table>
 		<div class="flex-container btn-container">
 			{% if user.is_subscribed %}
-			<a href="{% url 'subscription' %}" class="btn strong-btn one-btn">有料会員情報を管理</a>
+			<a href="{% url 'subscription' %}" class="btn strong-btn two-btn">有料会員情報を管理</a>
 			{% else %}
-			<a href="{% url 'upgradeguide' %}" class="btn strong-btn one-btn">有料会員へアップグレード</a>
+			<a href="{% url 'upgradeguide' %}" class="btn strong-btn two-btn">有料会員へ登録</a>
 			{% endif %}
-		</div>
-		<div class="flex-container btn-container">
 			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" %}
-			<div class="btn negative-btn one-btn">NAGOYAMESHI退会</a>
+			<div class="btn negative-btn two-btn">NAGOYAMESHI退会</a>
 			{% else %}
-			<a href="{% url 'resign' user.pk %}" class="btn nonactive-btn one-btn">NAGOYAMESHI退会</a>
+			<a href="{% url 'resign' user.pk %}" class="btn nonactive-btn two-btn">NAGOYAMESHI退会</a>
 			{% endif %}
 		</div>
 	</div>

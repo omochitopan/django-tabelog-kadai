@@ -67,6 +67,7 @@
 				</tr>
 			</table>
 		</div>
+		{% if request.user.is_subscribed %}
 		<div class="flex-container btn-container">
 			<form action="">
 				{% csrf_token %}
@@ -81,6 +82,7 @@
 				</button>
 			</form>
 		</div>
+		{% endif %}
 	</div>
 </div>	
 {% endblock %}

@@ -15,21 +15,24 @@
 			<div class="btn nonactive-btn upper-btn">レビュー</div>
 			{% endif %}
 		</div>
-			{% if restaurant.is_active %}
-			<div class="inner-container">
-				<p class="bold">予約情報を入力してください。</p>
-				<form method="post" action="{% url 'reservationconfirm' restaurant.pk %}" class="reservation-form">
-					{% csrf_token %}
-					{{ form.as_p }}
-					<div class="flex-container btn-container">
-						<button type="submit" class="btn favorite-btn">予約確認</button>
-					</div>
-				</form>
-				{% else %}
-				<p class="center">閉店しています。</p>
-			</div>
-			{% endif %}
+		{% if not request.user.is_subscribed %}
+		<p class="center comment">店舗予約機能は有料会員登録後に利用可能となります。</p>
+		{% else %}
+		{% if restaurant.is_active %}
+		<div class="inner-container">
+			<p class="bold">予約情報を入力してください。</p>
+			<form method="post" action="{% url 'reservationconfirm' restaurant.pk %}" class="reservation-form">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<div class="flex-container btn-container">
+					<button type="submit" class="btn favorite-btn">予約確認</button>
+				</div>
+			</form>
+			{% else %}
+			<p class="center">閉店しています。</p>
 		</div>
+		{% endif %}
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

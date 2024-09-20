@@ -3,9 +3,11 @@
 {% block contents %}
 <div class="cancel">
   <div class="outer-container">
-    <h4>有料会員登録がキャンセルされました。</h4>
-    <p>引き続きNagoyameshiのサービスをお楽しみください。</p>
-    <a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
+    <h4 class="center">有料会員登録がキャンセルされました。</h4>
+    <p class="center">引き続きNagoyameshiのサービスをお楽しみください。</p>
+    <div class="flex-container btn-container">
+      <a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
+    </div>
   </div>
 </div>
 {% endblock %}
