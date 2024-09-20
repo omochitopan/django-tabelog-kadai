@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}有料会員登録成功{% endblock %}
+{% block contents %}
+<div class="success">
+  <div class="outer-container">
+    <h4>有料会員のご登録ありがとうございます！</h4>
+    <p>サブスクリプションが開始されました。</p>
+    <a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
+  </div>
+</div>
+{% endblock %}

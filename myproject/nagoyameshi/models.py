@@ -73,6 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     birthday = models.DateField(verbose_name="誕生日", blank=True, null=True)
     occupation = models.CharField(verbose_name='職業', max_length=20, blank=True, null=True)
     role = models.PositiveIntegerField(choices=Role.choices, default=Role.GENERAL)
+    is_subscribed = models.BooleanField(verbose_name="有料会員", default=False)
     is_staff = models.BooleanField(verbose_name="スタッフ", default=False)
     is_superuser = models.BooleanField(verbose_name="スーパーユーザー", default=False)
     is_active = models.BooleanField(default=False)
@@ -83,6 +84,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    start_time = models.DateTimeField(verbose_name="アップグレード日時", auto_now_add=True)
+    end_time = models.DateTimeField(verbose_name="ダウングレード日時", blank=True, null=True)
+    stripe_customer_id = models.CharField(max_length=200)
+    stripe_subscription_id = models.CharField(max_length=200)
+    created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
 class UserActivateTokensManager(models.Manager):
     def activate_user_by_token(self, activate_token):

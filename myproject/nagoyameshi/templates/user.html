@@ -56,6 +56,13 @@
 			</tr>
 		</table>
 		<div class="flex-container btn-container">
+			{% if user.is_subscribed %}
+			<a href="{% url 'subscription' %}" class="btn thin-btn one-btn">有料会員情報を管理</a>
+			{% else %}
+			<a href="{% url 'upgradeguide' %}" class="btn strong-btn one-btn">有料会員へアップグレード</a>
+			{% endif %}
+		</div>
+		<div class="flex-container btn-container">
 			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" %}
 			<div class="btn negative-btn one-btn">NAGOYAMESHI退会</a>
 			{% else %}

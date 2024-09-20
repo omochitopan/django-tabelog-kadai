@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}有料会員へアップグレード{% endblock %}
+{% block contents %}
+<div class="upgrade">
+	<div class="outer-container">
+        <form action="{% url 'checkoutsession' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="lookup_key" value="{{ lookup_key }}">
+            <button type="submit" class="btn strong-btn two-btn">有料会員になる</button>
+            <a href="{% url 'user' request.user.pk %}" class="btn thin-btn two-btn">会員情報に戻る</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

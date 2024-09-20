@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -14,19 +15,21 @@ from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 from typing import Any, Dict
-from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, CategoryRestaurantRelation, ManagerRestaurantRelation
+from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, ManagerRestaurantRelation, Subscription
 from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm, UserSearch, ReservedUserSearch, RestaurantSearch
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
 from .utils.pagination import pagination
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
-import datetime
-import environ
+import datetime, environ, stripe
 
 env = environ.Env()
 ip_port = env('IP_PORT')
-login_url = f'http://{ip_port}/login/'
+login_url = f'{ip_port}/login/'
+
+stripe.api_key = env("STRIPE_SECRET_KEY")
 
 # Create your views here.
 class LoginView(LoginView):
@@ -595,7 +598,7 @@ class UserView(OnlyMyUserInformationMixin, LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["user"] = self.request.user
+        context["user"] = User.objects.get(pk = 1) # self.request.user
         return context
 
 class UserUpdateView(OnlyMyUserInformationMixin, UpdateView):
@@ -613,6 +616,95 @@ class UserUpdateView(OnlyMyUserInformationMixin, UpdateView):
         for v in form.fields.values():
             v.label_suffix = ""
         return context
+
+class UpgradeGuideView(LoginRequiredMixin, TemplateView):
+    template_name = "upgrade_guide.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["lookup_key"] = env("STRIPE_LOOKUP_KEY")
+        return context
+
+class SubscriptionView(LoginRequiredMixin, TemplateView):
+    template_name = "subscription.html"
+
+def create_checkout_session(request):
+    DOMAIN = ip_port
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            client_reference_id = request.user.pk,
+            line_items=[
+                {
+                    'price': env("STRIPE_PRICE_ID"),
+                    'quantity': 1,
+                },
+            ],
+            mode='subscription',
+            success_url = DOMAIN + '/success/',
+            cancel_url = DOMAIN + '/cancel/',
+        )
+        return redirect(checkout_session.url)
+    except Exception as e:
+        return HttpResponse(f"Error: {str(e)}")
+    
+@csrf_exempt
+def webhook_received(request):
+    endpoint_secret = env("STRIPE_WEBHOOK_SECRET")
+    print(endpoint_secret)
+    payload = request.body.decode('utf-8')
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        return HttpResponse(status=400) # Invalid payload
+    except stripe.error.SignatureVerificationError as e:
+        return HttpResponse(status=400) # Invalid signature
+    event_type = event['type']
+    if event_type == 'checkout.session.completed':
+        # チェックアウト成功時のアクション
+        session = event['data']['object']
+        client_reference_id = session.get('client_reference_id')
+        stripe_customer_id = session.get('customer')
+        stripe_subscription_id = session.get('subscription')
+        print(f"client_reference_id: {client_reference_id}")
+        print(f"stripe_customer_id: {stripe_customer_id}")
+        try:
+            user = User.objects.get(pk = 1) # client_reference_id
+            user.is_subscribed = True
+            user.save()
+            subscription = Subscription.objects.create(
+                user = user,
+                start_time = datetime.datetime.now(),
+                stripe_customer_id = stripe_customer_id,
+                stripe_subscription_id = stripe_subscription_id,
+            )
+            subscription.save()
+        except Exception as e:
+            return HttpResponse(f"Error creating profile: {str(e)}", status=500)
+        print('支払いが完了しました！')
+    elif event_type == 'customer.subscription.created':
+        print('有料会員登録が開始されました。', event.id)
+    elif event_type == 'customer.subscription.deleted':
+        session = event['data']['object']
+        client_reference_id = session.get('client_reference_id')
+        stripe_subscription_id = session.get('subscription')
+        user = User.objects.get(pk = client_reference_id)
+        user.is_subscribed = False
+        user.save()
+        subscription = Subscription.objects.get(stripe_subscription_id = stripe_subscription_id)
+        subscription.end_time = datetime.datetime.now()
+        subscription.save()
+        print('有料会員登録を解約しました。', event.id)
+    return HttpResponse(status=200)
+
+class SuccessView(LoginRequiredMixin, TemplateView):
+    template_name = "success.html"
+    
+class CancelView(LoginRequiredMixin, TemplateView):
+    template_name = "cancel.html"
 
 class ResignView(OnlyMyUserInformationMixin, UpdateView):
     model = User
