@@ -3,7 +3,7 @@
 {% block contents %}
 <div class="downgrade">
 	<div class="outer-container">
-		<form action="customerportal" method="post">
+		<form action="{% url 'customerportal' %}" method="post">
 			{% csrf_token %}
 			<button type="submit" class="btn strong-btn two-btn">有料会員情報を確認する</button>
 		</form>

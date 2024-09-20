@@ -728,7 +728,7 @@ def create_customer_portal_session(request):
             return_url = "https://nagoyameshi.omochi-mochimental.net/subscription/" # ポータルから戻る際のURL
         )
         # 作成したポータルのURLにリダイレクト
-        return redirect('customerportal')
+        return redirect(session.url)
     except Subscription.DoesNotExist:
         return HttpResponse("No active subscription found.", status=400)
     except stripe.error.StripeError as e:
