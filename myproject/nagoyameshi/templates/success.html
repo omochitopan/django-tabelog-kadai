@@ -6,6 +6,7 @@
     <h4 class="center">有料会員のご登録ありがとうございます！</h4>
     <p class="center">サブスクリプションが開始されました。</p>
     <form action="{% url 'customerportal' %}" method="post" class="flex-container btn-container">
+      {% csrf_token %}
       <button type="submit" class="btn strong-btn two-btn">有料会員情報を確認する</button>
       <a href="{% url 'user' request.user.pk %}" class="btn thin-btn two-btn">会員情報に戻る</a>
     </form>
