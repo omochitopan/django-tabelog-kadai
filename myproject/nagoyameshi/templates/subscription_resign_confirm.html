@@ -13,6 +13,7 @@
 			{% csrf_token %}
 			<input type="hidden" name="lookup_key" value="＜商品のlookup_key＞" />
 			<button class="btn nonactive-btn one-btn" id="checkout-and-portal-button" type="submit">有料会員登録を解約する</button>
+            <a href="{% url 'subscription' %}">有料会員情報に戻る</a>
 		</form>
     </div>
   </div>

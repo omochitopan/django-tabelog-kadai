@@ -653,12 +653,6 @@ def cancel_subscription(request):
     stripe_subscription_id = subscription.stripe_subscription_id
     try:
         stripe.Subscription.delete(stripe_subscription_id)
-
-        # サブスクリプションステータスを更新
-        user.is_subscribed = False
-        user.save()
-        subscription.end_time = datetime.datetime.now()
-        subscription.save()
         return redirect('subscriptionresigndone')
     except stripe.error.StripeError as e:
         # Stripe APIでエラーが発生した場合
@@ -667,7 +661,6 @@ def cancel_subscription(request):
 @csrf_exempt
 def webhook_received(request):
     endpoint_secret = env("STRIPE_WEBHOOK_SECRET")
-    print(endpoint_secret)
     payload = request.body.decode('utf-8')
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
@@ -706,15 +699,20 @@ def webhook_received(request):
         print('有料会員登録が開始されました。', event.id)
     elif event_type == 'customer.subscription.deleted':
         session = event['data']['object']
-        client_reference_id = session.get('client_reference_id')
-        stripe_subscription_id = session.get('subscription')
-        user = User.objects.get(pk = client_reference_id)
-        user.is_subscribed = False
-        user.save()
-        subscription = Subscription.objects.get(stripe_subscription_id = stripe_subscription_id)
-        subscription.end_time = datetime.datetime.now()
-        subscription.save()
-        print('有料会員登録を解約しました。', event.id)
+        stripe_customer_id = session.get('customer')  # stripe_customer_idを取得
+        stripe_subscription_id = session.get('id')
+        try:
+            subscription = Subscription.objects.get(stripe_subscription_id=stripe_subscription_id)
+            user = subscription.user
+            
+            # ユーザーとサブスクリプション情報を更新
+            user.is_subscribed = False
+            user.save()
+            subscription.end_time = datetime.datetime.now()
+            subscription.save()
+            print('有料会員登録を解約しました。', event.id)
+        except Subscription.DoesNotExist:
+            return HttpResponse("Subscription not found", status=404)
     return HttpResponse(status=200)
 
 class SuccessView(LoginRequiredMixin, TemplateView):

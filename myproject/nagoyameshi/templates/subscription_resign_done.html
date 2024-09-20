@@ -6,7 +6,7 @@
     <p>ありがとうございました！</p>
     <p class="crimson">またのご利用をお待ちしております！</p>
     <div class="flex-container btn-container">
-        <a href="" class="btn thin-btn one-btn">会員情報に戻る</a>
+        <a href="{% url 'user' request.user.pk %}" class="btn thin-btn one-btn">会員情報に戻る</a>
     </div>
   </div>
 </div>
