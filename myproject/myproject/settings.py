@@ -134,6 +134,8 @@ NUMBER_GROUPING = 3
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
+APPEND_SLASH = False
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
