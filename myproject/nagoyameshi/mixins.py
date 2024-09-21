@@ -46,3 +46,9 @@ class OnlyMyReservationMixin(UserPassesTestMixin):
     def test_func(self):
         reservation = Reservation.objects.get(pk = self.kwargs["pk"])
         return reservation.user.pk == self.request.user.pk
+
+class OnlyPayingMemberMixin(UserPassesTestMixin):
+    raise_exception = True
+
+    def test_func(self):
+        return self.request.user.is_subscribed

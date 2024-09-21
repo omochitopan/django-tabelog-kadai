@@ -1,0 +1,3 @@
+{% load humanize %}
+<span class="found">{% if request.GET.minormax == "min" %}最低価格：{{ request.GET.price|intcomma }}円{% if request.GET.upordown == "down" %}以下{% else %}以上{% endif %}
+{% else %}最高価格：{{ request.GET.price|intcomma }}円{% if request.GET.upordown == "down" %}以下{% else %}以上{% endif %}{% endif %}</span>

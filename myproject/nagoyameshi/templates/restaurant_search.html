@@ -3,86 +3,84 @@
 {% block title %}キーワード検索ページ{% endblock %}
 {% block contents %}
 <div class="list">
-	<div class="outer-container">
-		<div class="back-container">
-			<form class="flex-container btn-container" method="get" action="{% url 'search' %}">
+	<div class="outer-container flex-container">
+		<div class="left-container">
+			<form class="" method="get" action="{% url 'search' %}">
 				<div class="search-container">
-					<div class="cluster-top">
-						<label>キーワード</label>
-						<input class="search-box" type="text" name="keyword" placeholder="店舗名・エリア" {% if not request.GET.all %}value="{{ request.GET.keyword }}"{% endif %}>
-					</div>
-					<div>
-						<label>カテゴリ</label>
-						<select name="category">
-							<option value="0">（未選択）</option>
-							{% for category in categories %}
-							<option value="{{ category.pk }}" {% if not request.GET.all and request.GET.category == category.pk|stringformat:"s" %}selected{% endif %}>{{ category.category_name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div  class="cluster-bottom">
-						<label>全ての店舗</label>
-						<input type="checkbox" name="all" value="True">
-					</div>
+					<label>キーワードから探す</label><br>
+					<input class="search-box" type="text" name="keyword" placeholder="店舗名・エリア" {% if request.GET.keyword %}value="{{ request.GET.keyword }}"{% endif %}>
 				</div>
-				<div class="cluster">
-					<h5 class="center">最低価格</h5>
-					<label>低い順</label><input type="radio" name="order" value="mincheap" {% if request.GET.order == "mincheap" %}checked{% endif %}><br>
-					<label>高い順</label><input type="radio" name="order" value="minexpensive" {% if request.GET.order == "minexpensive" %}checked{% endif %}>
+				<div class="search-container">
+					<label>カテゴリから探す</label><br>
+					<select name="category">
+						<option value="0">（未選択）</option>
+						{% for category in categories %}
+						<option value="{{ category.pk }}" {% if not request.GET.all and request.GET.category == category.pk|stringformat:"s" %}selected{% endif %}>{{ category.category_name }}</option>
+						{% endfor %}
+					</select>
 				</div>
-				<div class="cluster">
-					<h5 class="center">最高価格</h5>
-					<label>低い順</label><input type="radio" name="order" value="maxcheap" {% if request.GET.order == "maxcheap" %}checked{% endif %}><br>
-					<label>高い順</label><input type="radio" name="order" value="maxexpensive" {% if request.GET.order == "maxexpensive" %}checked{% endif %}>
+				<div class="search-container">
+					<label>予算で絞り込む</label><br>
+					<select name="minormax">
+						<option value="min" {% if not request.GET.minormax or request.GET.minormax == "min" %}selected{% endif %}>最低価格</option>
+						<option value="max" {% if request.GET.minormax == "max" %}selected{% endif %}>最高価格</option>
+					</select>
+					<select name="price">
+						<option value="" {% if not request.GET.price or request.GET.price == "empty" %}selected{% endif %}>（未選択）</option>
+						{% for price in price_list %}
+						<option value="{{ price }}" {% if request.GET.price == price|stringformat:"s" %}selected{% endif %}>{{ price|intcomma }}円</option>
+						{% endfor %}
+					</select>
+					<select name="upordown">
+						<option value="down" {% if not request.GET.upordown or request.GET.upordown == "down" %}selected{% endif %}>以下</option>
+						<option value="up" {% if request.GET.upordown == "up" %}selected{% endif %}>以上</option>
+					</select>
 				</div>
-				<div class="cluster">
-					<h5 class="center">評価</h5>
-					<label>低い順</label><input type="radio" name="order" value="scorelow" {% if request.GET.order == "scorelow" %}checked{% endif %}><br>
-					<label>高い順</label><input type="radio" name="order" value="scorehigh" {% if request.GET.order == "scorehigh" %}checked{% endif %}>
-				</div>
-				<div class="cluster center">
-					<h5 class="center">未選択</h5>
-					<input type="radio" name="order" value="none" class="noselect">
+				<div class="search-container">
+					<label>並び替える</label><br>
+					<select name="order">
+						<option value="" {% if not request.GET.order %}selected{% endif %}>（未選択）</option>
+						<option value="new" {% if request.GET.order == "new" %}selected{% endif %}>掲載日が新しい順</option>
+						<option value="old" {% if request.GET.order == "old" %}selected{% endif %}>掲載日が古い順</option>
+						<option value="mincheap" {% if request.GET.order == "mincheap" %}selected{% endif %}>最低価格が低い順</option>
+						<option value="minexpensive" {% if request.GET.order == "minexpensive" %}selected{% endif %}>最低価格が高い順</option>
+						<option value="highcheap" {% if request.GET.order == "highcheap" %}selected{% endif %}>最高価格が低い順</option>
+						<option value="highexpensive" {% if request.GET.order == "highexpensive" %}selected{% endif %}>最高価格が高い順</option>
+						<option value="scorehigh" {% if request.GET.order == "scorehigh" %}selected{% endif %}>評価が高い順</option>
+						<option value="scorelow" {% if request.GET.order == "scorelow" %}selected{% endif %}>評価が低い順</option>
+					</select>
 				</div>
 				<button type="submit" class="btn strong-btn">検索</button>
 			</form>
 		</div>
-		<div class="inner-container">
+		<div class="right-container">
 			<div>
 				<div class="search-count">
+					{% if not request.GET.keyword and not category and not request.GET.price %}
+					<p class="found">全ての店舗</p>
+					{% elif request.GET.keyword %}
+					{% if category and request.GET.price %}
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}&nbsp;<span class="normal">&</span>{% include "price_range.html" %}</p>
+					{% elif category %}
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}</p>
+					{% elif request.GET.price %}
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>{% include "price_range.html" %}</p>
+					{% else %}
+					<p class="found">キーワード：{{ request.GET.keyword }}</p>
+					{% endif %}
+					{% elif category %}
+					{% if request.GET.price %}
+					<p class="found">カテゴリ：{{ category }}&nbsp;<span class="normal">&</span>{% include "price_range.html" %}</p>
+					{% else %}
+					<p class="found">カテゴリ：{{ category }}</p>
+					{% endif %}
+					{% else %}
+					{% include "price_range.html" %}
+					{% endif %}
 					{% if object_list %}
-					{% if request.GET.all %}
-					<p class="found">全ての店舗&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
-					{% elif request.GET.keyword and not category %}
-					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
-					{% elif not request.GET.keyword and category %}
-					<p class="found">カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
+					<p class="count">{{ count }}件の店舗が見つかりました。{% include "search_order.html" %}</p>
 					{% else %}
-					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">{{ count }}件の店舗が見つかりました</span></p>
-					{% endif %}
-					{% else %}
-					{% if request.GET.keyword and not category %}
-					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;&nbsp;&nbsp;<span class="normal">お探しの店舗は見つかりませんでした</span></p>
-					{% elif not request.GET.keyword and category %}
-					<p class="found">カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">お探しの店舗は見つかりませんでした</p>
-					{% elif request.GET.keyword and category %}
-					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}&nbsp;&nbsp;&nbsp;<span class="normal">お探しの店舗は見つかりませんでした</span></p>
-					{% else %}
-					<p class="found"><span class="normal">キーワード、カテゴリ、全ての店舗のいずれかを入力してください</span></p>
-					{% endif %}
-					{% endif %}
-					{% if request.GET.order == "mincheap" %}
-					<p class="order">---最低価格が低い順---</p>
-					{% elif request.GET.order == "minexpensive" %}
-					<p class="order">---最低価格が高い順---</p>
-					{% elif request.GET.order == "maxcheap" %}
-					<p class="order">---最高価格が低い順---</p>
-					{% elif request.GET.order == "maxexpensive" %}
-					<p class="order">---最高価格が高い順---</p>
-					{% elif request.GET.order == "scorelow" %}
-					<p class="order">---評価が低い順---</p>
-					{% elif request.GET.order == "scorehigh" %}
-					<p class="order">---評価が高い順---</p>
+					<p class="count">お探しの店舗は見つかりませんでした。{% include "search_order.html" %}</p>
 					{% endif %}
 				</div>
 			</div>

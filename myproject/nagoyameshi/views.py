@@ -19,7 +19,7 @@ from django.conf import settings
 from typing import Any, Dict
 from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, ManagerRestaurantRelation, Subscription
 from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm, UserSearch, ReservedUserSearch, RestaurantSearch
-from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin
+from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin, OnlyPayingMemberMixin
 from .utils.pagination import pagination
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
@@ -77,35 +77,44 @@ class RestaurantSearchView(LoginRequiredMixin, ListView):
     paginate_by = 5
     
     def get_queryset(self):
-        restaurants = Restaurant.objects.filter(is_active = True).annotate(score = Avg("review__score"))
-        all_restaurants = self.request.GET.get('all')
+        self.queryset = Restaurant.objects.filter(is_active = True).annotate(score = Avg("review__score"))
         keyword = self.request.GET.get('keyword')
         self.category = self.request.GET.get('category')
+        price = self.request.GET.get('price')
+        order = self.request.GET.get('order')
         if self.category == "0":
             self.category = None
-        if all_restaurants:
-            self.queryset = restaurants.all()
-        elif keyword or self.category:
-            if keyword:
-                self.queryset = restaurants.filter(Q(restaurant_name__icontains = keyword) | Q(address__icontains = keyword))
-                if self.category:
-                    self.queryset = self.queryset.filter(category_name = self.category)
-            elif self.category:
-                self.queryset = restaurants.filter(category_name = self.category)
-        else:
-            self.queryset = Restaurant.objects.none()
+        if keyword:
+            self.queryset = self.queryset.filter(Q(restaurant_name__icontains = keyword) | Q(address__icontains = keyword))
+        if self.category:
+            self.queryset = self.queryset.filter(category_name = self.category)
+        if price:
+            if self.request.GET.get('minormax') == "min":
+                if self.request.GET.get('upordown') == "down":
+                    self.queryset = self.queryset.filter(lowest_price__lte = price)
+                else:
+                    self.queryset = self.queryset.filter(lowest_price__gte = price)
+            else:
+                if self.request.GET.get('upordown') == "down":
+                    self.queryset = self.queryset.filter(highest_price__lte = price)
+                else:
+                    self.queryset = self.queryset.filter(highest_price__gte = price)
         if self.queryset:
-            if self.request.GET.get("order") == "mincheap":
+            if order == "new":
+                self.queryset = self.queryset.order_by("-created_at")
+            elif order == "old":
+                self.queryset = self.queryset.order_by("created_at")
+            elif order == "mincheap":
                 self.queryset = self.queryset.order_by("lowest_price")
-            elif self.request.GET.get("order") == "minexpensive":
+            elif order == "minexpensive":
                 self.queryset = self.queryset.order_by("-lowest_price")
-            elif self.request.GET.get("order") == "maxcheap":
+            elif order == "highcheap":
                 self.queryset = self.queryset.order_by("highest_price")
-            elif self.request.GET.get("order") == "maxexpensive":
+            elif order == "highexpensive":
                 self.queryset = self.queryset.order_by("-highest_price")
-            elif self.request.GET.get("order") == "scorelow":
+            elif order == "scorelow":
                 self.queryset = self.queryset.order_by("score")
-            elif self.request.GET.get("order") == "scorehigh":
+            elif order == "scorehigh":
                 self.queryset = self.queryset.order_by("-score")
         # Paginator
         paginator = Paginator(self.queryset, self.paginate_by)
@@ -127,11 +136,14 @@ class RestaurantSearchView(LoginRequiredMixin, ListView):
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
         context['page_list'] = page_list
+        context["price_list"] = [1000, 2000, 3000, 4000, 5000, 10000, 30000]
         if self.queryset:
             context['count'] = len(self.queryset)
         context["categories"] = Category.objects.all()
         if self.category:
             context["category"] = Category.objects.get(pk = self.category).category_name
+        else:
+            context["category"] = None
         return context
 
 class RestaurantDetailView(LoginRequiredMixin, DetailView):
@@ -625,7 +637,7 @@ class UpgradeGuideView(LoginRequiredMixin, TemplateView):
         context["lookup_key"] = env("STRIPE_LOOKUP_KEY")
         return context
 
-class SubscriptionView(LoginRequiredMixin, TemplateView):
+class SubscriptionView(OnlyPayingMemberMixin, TemplateView):
     template_name = "subscription.html"
 
 def create_checkout_session(request):
@@ -732,13 +744,13 @@ def create_customer_portal_session(request):
     except stripe.error.StripeError as e:
         return HttpResponse(f"Error creating customer portal session: {str(e)}", status=500)
 
-class SuccessView(LoginRequiredMixin, TemplateView):
+class SuccessView(OnlyPayingMemberMixin, TemplateView):
     template_name = "success.html"
     
 class CancelView(LoginRequiredMixin, TemplateView):
     template_name = "cancel.html"
     
-class SubscriptionResignConfirmView(LoginRequiredMixin, TemplateView):
+class SubscriptionResignConfirmView(OnlyPayingMemberMixin, TemplateView):
     template_name = "subscription_resign_confirm.html"
     
 class SubscriptionResignDoneView(LoginRequiredMixin, TemplateView):

@@ -13,17 +13,17 @@
     </li>
     {% elif num == "最初" %}
     <li>
-        <a class="gray" href="?keyword={% if keyword %}{{ request.GET.keyword }}{% endif %}&category={{ request.GET.category }}{% if request.GET.all %}&all=True{% endif %}&order={{ request.GET.order }}&page=1">{{ num }}</a>
+        <a class="gray" href="?{% if request.GET.keyword %}keyword={{ request.GET.keyword }}&{% endif %}category={{ request.GET.category }}&{% if request.GET.price %}minormax={% if request.GET.minormax == "min" %}min{% else %}max{% endif %}&price={{ request.GET.price }}&upordown={% if request.GET.upordown == "downw" %}down{% else %}up{% endif %}&{% endif %}{% if request.GET.order %}order={{ request.GET.order }}&{% endif %}page=1">{{ num }}</a>
         <span>&nbsp;</span>
     </li>
     {% elif num == "最後" %}
     <li>
-        <a class="gray" href="?keyword={% if keyword %}{{ request.GET.keyword }}{% endif %}&category={{ request.GET.category }}{% if request.GET.all %}&all=True{% endif %}&order={{ request.GET.order }}&page={{ page_obj.paginator.num_pages }}">{{ num }}</a>
+        <a class="gray" href="?{% if request.GET.keyword %}keyword={{ request.GET.keyword }}&{% endif %}category={{ request.GET.category }}&{% if request.GET.price %}minormax={% if request.GET.minormax == "min" %}min{% else %}max{% endif %}&price={{ request.GET.price }}&upordown={% if request.GET.upordown == "downw" %}down{% else %}up{% endif %}&{% endif %}{% if request.GET.order %}order={{ request.GET.order }}&{% endif %}page={{ page_obj.paginator.num_pages }}">{{ num }}</a>
         <span>&nbsp;</span>
     </li>
     {% else %}
     <li>
-        <a class="gray" href="?keyword={% if keyword %}{{ request.GET.keyword }}{% endif %}&category={{ request.GET.category }}{% if request.GET.all %}&all=True{% endif %}&order={{ request.GET.order }}&page={{ num }}">{{ num }}</a>
+        <a class="gray" href="?{% if request.GET.keyword %}keyword={{ request.GET.keyword }}&{% endif %}category={{ request.GET.category }}&{% if request.GET.price %}minormax={% if request.GET.minormax == "min" %}min{% else %}max{% endif %}&price={{ request.GET.price }}&upordown={% if request.GET.upordown == "downw" %}down{% else %}up{% endif %}&{% endif %}{% if request.GET.order %}order={{ request.GET.order }}&{% endif %}page={{ num }}">{{ num }}</a>
         <span>&nbsp;</span>
     </li>
     {% endif %}
