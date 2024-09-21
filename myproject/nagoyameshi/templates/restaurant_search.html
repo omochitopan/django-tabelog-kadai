@@ -55,29 +55,31 @@
 		</div>
 		<div class="right-container">
 			<div>
-				<div class="search-count">
+				<div class="search-count flex-container">
 					{% if not request.GET.keyword and not category and not request.GET.price %}
 					<p class="found">全ての店舗</p>
 					{% elif request.GET.keyword %}
 					{% if category and request.GET.price %}
-					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}&nbsp;<span class="normal">&</span>{% include "price_range.html" %}</p>
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}&nbsp;<span class="normal">&</span>&nbsp;</p>{% include "price_order.html" %}
 					{% elif category %}
 					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;カテゴリ：{{ category }}</p>
 					{% elif request.GET.price %}
-					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>{% include "price_range.html" %}</p>
+					<p class="found">キーワード：{{ request.GET.keyword }}&nbsp;<span class="normal">&</span>&nbsp;</p>{% include "price_order.html" %}
 					{% else %}
 					<p class="found">キーワード：{{ request.GET.keyword }}</p>
 					{% endif %}
 					{% elif category %}
 					{% if request.GET.price %}
-					<p class="found">カテゴリ：{{ category }}&nbsp;<span class="normal">&</span>{% include "price_range.html" %}</p>
+					<p class="found">カテゴリ：{{ category }}&nbsp;<span class="normal">&</span>&nbsp;</p>{% include "price_order.html" %}
 					{% else %}
 					<p class="found">カテゴリ：{{ category }}</p>
 					{% endif %}
 					{% else %}
-					{% include "price_range.html" %}
+					{% include "price_order.html" %}
 					{% endif %}
 					{% if object_list %}
+				</div>
+				<div>
 					<p class="count">{{ count }}件の店舗が見つかりました。{% include "search_order.html" %}</p>
 					{% else %}
 					<p class="count">お探しの店舗は見つかりませんでした。{% include "search_order.html" %}</p>

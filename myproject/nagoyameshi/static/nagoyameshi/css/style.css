@@ -769,10 +769,6 @@ footer .logo-container:hover {
   width: 700px;
 }
 
-.list .flex-container {
-  margin-bottom: 15px;
-}
-
 .list .btn {
   width: 250px;
   height: 50px;
@@ -836,7 +832,7 @@ footer .logo-container:hover {
 }
 
 .list .count {
-  margin: 5px 0;
+  margin: 0 0 5px 0;
 }
 
 .list .table-ref {
