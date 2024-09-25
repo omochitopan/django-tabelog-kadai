@@ -8,7 +8,7 @@
             {% csrf_token %}
             <div class="flex-container btn-container">
                 <button type="submit" class="btn nonactive-btn two-btn">退会する</button>
-                <a href="{% url 'user' user_id %}" class="btn thin-btn two-btn">会員情報に戻る</a>
+                <a href="{% url 'user' request.user.pk %}" class="btn thin-btn two-btn">会員情報に戻る</a>
             </div>
         </form>
     </div>

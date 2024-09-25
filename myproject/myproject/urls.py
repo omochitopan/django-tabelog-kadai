@@ -86,6 +86,10 @@ urlpatterns = [
     path('management/<int:user_id>/manager_information/<int:pk>/', views.ManagementManagerDetailView.as_view(), name="managementmanagerdetail"),
     path('management/<int:user_id>/company/', views.ManagementCompanyView.as_view(), name="managementcompany"),
     path('management/<int:user_id>/terms/', views.ManagementTermsView.as_view(), name="managementterms"),
+    path('administration/user/', views.AdministrationUserView.as_view(), name="administrationuser"),
+    path('administration/restaurant/', views.AdministrationRestaurantView.as_view(), name="administrationrestaurant"),
+    path('administration/reservation/', views.AdministrationReservationView.as_view(), name="administrationreservation"),
+    path('administration/sales/', views.AdministrationSalesView.as_view(), name="administrationsales"),
     path('.well-known/acme-challenge/', views.TestView.as_view(), name="test"),
 ]
 

@@ -77,6 +77,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(verbose_name="スタッフ", default=False)
     is_superuser = models.BooleanField(verbose_name="スーパーユーザー", default=False)
     is_active = models.BooleanField(default=False)
+    register_time = models.DateTimeField(verbose_name="入会日時", blank=True, null=True)
+    resign_time = models.DateTimeField(verbose_name="退会日時", blank=True, null=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
@@ -91,8 +93,10 @@ class Subscription(models.Model):
         verbose_name = verbose_name_plural = '有料会員登録'
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    start_time = models.DateTimeField(verbose_name="アップグレード日時", auto_now_add=True)
-    end_time = models.DateTimeField(verbose_name="ダウングレード日時", blank=True, null=True)
+    registration_time = models.DateTimeField(verbose_name="有料会員登録日時", auto_now_add=True)
+    registration_date = models.DateField(verbose_name="有料会員登録日", auto_now_add=True)
+    cancel_time = models.DateTimeField(verbose_name="有料会員キャンセル日時", blank=True, null=True)
+    lapse_date = models.DateField(verbose_name="有料会員失効日", blank=True, null=True)
     stripe_customer_id = models.CharField(max_length=200)
     stripe_subscription_id = models.CharField(max_length=200)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
@@ -127,10 +131,10 @@ def publish_activate_token(sender, instance, **kwargs):
     if not instance.is_active:
         user_activate_token = UserActivateTokens.objects.create(
             user=instance,
-            expired_at=datetime.now()+timedelta(days=settings.ACTIVATION_EXPIRED_DAYS),
+            expired_at=datetime.now()+timedelta(days = settings.ACTIVATION_EXPIRED_DAYS),
         )
         subject = 'Please Activate Your Account'
-        message = f'URLにアクセスして本登録を行なってください。\nhttp://{ip_port}/users/{user_activate_token.activate_token}/activation\nこのメールに心当たりが無い方はお手数ですが削除して頂くようお願い致します。'
+        message = f'URLにアクセスして本登録を行なってください。\n{ip_port}/users/{user_activate_token.activate_token}/activation/\nこのメールに心当たりが無い方はお手数ですが削除して頂くようお願い致します。'
 
 #    以下は本登録が完了した後にメールを送る設定だが、
 #    ログイン時にもメールが送られてしまったため実装断念。
@@ -176,7 +180,7 @@ class Restaurant(models.Model):
     class Meta:
         db_table = 'nagoyameshi_restaurant'
         verbose_name = verbose_name_plural = 'レストラン'
-
+    
     restaurant_name = models.CharField(verbose_name="店舗名", max_length=50)
     image = models.ImageField(verbose_name='店舗画像', default='noImage.png')
     description = models.TextField(verbose_name="説明", max_length=1000)
@@ -191,6 +195,8 @@ class Restaurant(models.Model):
     category_name = models.ManyToManyField(Category, through="CategoryRestaurantRelation", verbose_name='カテゴリ（3つまで選択可）', blank=True)
     managers = models.ManyToManyField(User, through="ManagerRestaurantRelation", verbose_name="店舗管理ユーザー", blank=False)
     is_active = models.BooleanField(default=True)
+    open_date = models.DateField(verbose_name="開店日")
+    closed_date = models.DateField(verbose_name="閉店日", blank=True, null="True")
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     

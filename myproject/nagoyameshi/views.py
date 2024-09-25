@@ -23,7 +23,7 @@ from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, On
 from .utils.pagination import pagination
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
-import datetime, environ, stripe
+import datetime, environ, stripe, calendar
 
 env = environ.Env()
 ip_port = env('IP_PORT')
@@ -39,15 +39,6 @@ class LoginView(LoginView):
 def logout_view(request):
     logout(request)
     return redirect('top')
-
-class UserCreatedView(TemplateView):
-    template_name = 'user_created.html'
-    
-    # user_created.htmlに変数を書き出し
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
-        return context
 
 class TopView(TemplateView):
     template_name = "top.html"
@@ -203,9 +194,14 @@ class SignupView(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('usercreated')
 
-class SignupConfirmationView(CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy("usercreated")
+class UserCreatedView(TemplateView):
+    template_name = 'user_created.html'
+    
+    # user_created.htmlに変数を書き出し
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
+        return context
 
 class PasswordReset(PasswordResetView):
     # パスワード変更URL付きメールのカスタマイズ
@@ -222,7 +218,6 @@ class PasswordResetDone(PasswordResetDoneView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["domain"] = ip_port
-        #context["uuid_token"] = 
         return context
 
 class PasswordResetConfirm(PasswordResetConfirmView):
@@ -262,6 +257,8 @@ def activate_user(request, activate_token):
     activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
     if hasattr(activated_user, 'is_active'):
         if activated_user.is_active:
+            activated_user.register_time = datetime.datetime.now()
+            activated_user.save()
             message = f'本登録が完了しました！<br><a href={login_url}>ログインページ</a>'
         if not activated_user.is_active:
             message = '本登録に失敗しました。'
@@ -305,12 +302,22 @@ class ReviewListView(LoginRequiredMixin, ListView):
         except self.model.DoesNotExist:
             writtenreview = None
         context["page_list"] = page_list
-        context['user'] = self.request.user
         context["restaurant"] = Restaurant.objects.get(pk = restaurant_id)
         context["average_score"] = average_score
         context["writtenreview"] = writtenreview
         if self.queryset:
             context['count'] = len(self.queryset)
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = self.request.user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > datetime.date.today():
+                    is_subscribed = True
+                    break
+        context["is_subscribed"] = is_subscribed
         return context
     
 class ReviewCreateView(LoginRequiredMixin, CreateView):
@@ -422,6 +429,17 @@ class ReservationFormView(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
         context["restaurant"] = Restaurant.objects.get(pk = self.kwargs.get("restaurant_id"))
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = self.request.user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > datetime.date.today():
+                    is_subscribed = True
+                    break
+        context["is_subscribed"] = is_subscribed
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
@@ -476,6 +494,22 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         qryset.restaurant = Restaurant.objects.get(id = self.kwargs.get('restaurant_id'))
         qryset.save()
         return  super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > datetime.date.today():
+                    is_subscribed = True
+                    break
+        context["is_subscribed"] = is_subscribed
+        return context
         
 class ReservationListView(LoginRequiredMixin, ListView):
     model = Reservation
@@ -503,9 +537,21 @@ class ReservationListView(LoginRequiredMixin, ListView):
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
-        cancel_date = datetime.date.today() + relativedelta(days = 3)
+        cancel_limit = datetime.date.today() + relativedelta(days = 3)
+        user = self.request.user
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > datetime.date.today():
+                    is_subscribed = True
+                    break
         context["page_list"] = page_list
-        context["cancel_date"] = cancel_date
+        context["cancel_limit"] = cancel_limit
+        context["is_subscribed"] = is_subscribed
         return context
 
 class ReservationListAllView(LoginRequiredMixin, ListView):
@@ -532,12 +578,24 @@ class ReservationListAllView(LoginRequiredMixin, ListView):
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
-        cancel_date = datetime.date.today() + relativedelta(days = 3)
+        cancel_limit = datetime.date.today() + relativedelta(days = 3)
+        user = self.request.user
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > datetime.date.today():
+                    is_subscribed = True
+                    break
         context["page_list"] = page_list
-        context["cancel_date"] = cancel_date
+        context["cancel_limit"] = cancel_limit
+        context["is_subscribed"] = is_subscribed
         return context
 
-class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteView):
+class ReservationDeleteView(OnlyMyReservationMixin, DeleteView):
     model = Reservation
     template_name = "reservation_delete.html"
     
@@ -551,7 +609,7 @@ class ReservationDeleteView(OnlyMyReservationMixin, LoginRequiredMixin, DeleteVi
         context["referer"] = self.request.META.get("HTTP_REFERER")
         return context
 
-class FavoriteCreateView(LoginRequiredMixin, View): # LoginRequiredMixin,
+class FavoriteCreateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         user = request.user
         restaurant = get_object_or_404(Restaurant, pk=self.kwargs.get("restaurant_id"))
@@ -601,7 +659,19 @@ class FavoriteListView(LoginRequiredMixin, ListView):
         current_num = current_page.number
         total_num = current_page.paginator.num_pages
         page_list = pagination(5, current_num, total_num)
+        user = self.request.user
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > datetime.date.today():
+                    is_subscribed = True
+                    break
         context["page_list"] = page_list
+        context["is_subscribed"] = is_subscribed
         return context
 
 class UserView(OnlyMyUserInformationMixin, LoginRequiredMixin, DetailView):
@@ -610,7 +680,22 @@ class UserView(OnlyMyUserInformationMixin, LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["user"] = User.objects.get(pk = self.request.user.pk)
+        user = self.request.user
+        is_subscribed = False
+        is_cancelled = False
+        subscriptions = Subscription.objects.filter(user = user)
+        if subscriptions.exists():
+            for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+                if lapse_date == None:
+                    is_subscribed = True
+                    break
+                elif lapse_date > date.today():
+                    context["expired_date"] = lapse_date - relativedelta(days = 1)
+                    is_subscribed = True
+                    is_cancelled = True
+                    break
+        context["is_subscribed"] = is_subscribed
+        context["is_cancelled"] = is_cancelled
         return context
 
 class UserUpdateView(OnlyMyUserInformationMixin, UpdateView):
@@ -639,6 +724,25 @@ class UpgradeGuideView(LoginRequiredMixin, TemplateView):
 
 class SubscriptionView(OnlyPayingMemberMixin, TemplateView):
     template_name = "subscription.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        is_cancelled = False
+        subscriptions = Subscription.objects.filter(user = user)
+        for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+            if lapse_date == None:
+                is_subscribed = True
+                break
+            elif lapse_date > date.today():
+                context["expired_date"] = lapse_date - relativedelta(days = 1)
+                is_subscribed = True
+                is_cancelled = True
+                break
+        context["is_subscribed"] = is_subscribed
+        context["is_cancelled"] = is_cancelled
+        return context
+
 
 def create_checkout_session(request):
     DOMAIN = ip_port
@@ -712,13 +816,18 @@ def webhook_received(request):
         stripe_customer_id = session.get('customer')  # stripe_customer_idを取得
         stripe_subscription_id = session.get('id')
         try:
-            subscription = Subscription.objects.get(stripe_subscription_id=stripe_subscription_id)
+            subscription = Subscription.objects.get(stripe_subscription_id = stripe_subscription_id)
             user = subscription.user
-            
             # ユーザーとサブスクリプション情報を更新
             user.is_subscribed = False
             user.save()
-            subscription.end_time = datetime.datetime.now()
+            subscription.cancel_time = datetime.datetime.now()
+            registration_date = subscription.registration_date
+            i = 1
+            while date.today() > (registration_date + relativedelta(months = 1) * i):
+                i += 1
+            cancel_date = registration_date + relativedelta(months = 1) * i
+            subscription.cancel_date = cancel_date
             subscription.save()
             print('有料会員登録を解約しました。', event.id)
         except Subscription.DoesNotExist:
@@ -729,7 +838,7 @@ def create_customer_portal_session(request):
     user = request.user
     try:
         # ユーザーのStripeカスタマーIDを取得
-        subscription = Subscription.objects.get(user=user, end_time=None)
+        subscription = Subscription.objects.get(user = user, cancel_time = None)
         stripe_customer_id = subscription.stripe_customer_id
         
         # カスタマーポータルセッションを作成
@@ -753,6 +862,16 @@ class CancelView(LoginRequiredMixin, TemplateView):
 class SubscriptionResignConfirmView(OnlyPayingMemberMixin, TemplateView):
     template_name = "subscription_resign_confirm.html"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        registration_date = Subscription.objects.get(user = self.request.user, cancel_time = None).registration_date
+        i = 1
+        while date.today() > (registration_date + relativedelta(months = 1) * i):
+            i += 1
+        cancel_date = registration_date + relativedelta(months = 1) * i - relativedelta(days = 1)
+        context["cancel_date"] = cancel_date
+        return context
+    
 class SubscriptionResignDoneView(LoginRequiredMixin, TemplateView):
     template_name = "subscription_resign_done.html"
 
@@ -762,14 +881,15 @@ class ResignView(OnlyMyUserInformationMixin, UpdateView):
     success_url = reverse_lazy("resigndone")
     fields = ("is_active",)
     
-    def update(request, pk):
-        user = User.objects.get(pk = request.user.pk)
+    def form_valid(self, form):
+        user = form.save(commit=False)
         user.is_active = False
+        user.resign_time = datetime.datetime.now()
         user.save()
-    
+        return super().form_valid(form)
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
         return context
 
 class ResignDoneView(TemplateView):
@@ -1317,5 +1437,243 @@ class ManagementTermsView(TemplateView):
         context["terms"] = terms
         return context
 
+class AdministrationUserView(TemplateView):
+    template_name = "administration/administration_user.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year_range = [year for year in (range(2020, date.today().year + 1) if date.today().month >= 4 else range(2020, date.today().year))]
+        context["year_range"] = year_range
+        context["month_range"] = [month for month in range(1, 13)]
+        today = datetime.date.today()
+        this_year = today.year
+        this_month = today.month
+        method = self.request.GET.get("method", "1")
+        s_year = int(self.request.GET.get("s_year", this_year - 1))
+        s_month = int(self.request.GET.get("s_month", (this_month + 1) if this_month < 12 else 1))
+        e_year = int(self.request.GET.get("e_year", this_year))
+        e_month = int(self.request.GET.get("e_month", this_month))
+        context.update({
+            "method": method,
+            "s_year": s_year,
+            "e_year": e_year,
+            "s_month": s_month,
+            "e_month": e_month,
+        })
+        # 月末で集計
+        s_before = datetime.date(year = s_year, month = s_month, day=1)
+        start = s_before + relativedelta(months = 1) - relativedelta(days = 1)
+        end = datetime.date(year = e_year, month = e_month, day=1) + relativedelta(months = 1) - relativedelta(days = 1)
+        if end > today:
+            end = datetime.date(year = this_year, month = this_month, day = 1) + relativedelta(months = 1)
+        if end >= start:
+            months = []
+            if method == "1":
+                context["active_counts"] = self.calculate_active_users(start, end, months)
+            elif method == "2":
+                context["subscriber_counts"], context["free_counts"] = self.calculate_subscriber_free_users(start, end, months)
+            elif method == "3":
+                context["join_counts"], context["leave_counts"] = self.calculate_join_leave_users(start, end, months, s_before)
+            context["months"] = months
+        return context
+
+    def calculate_active_users(self, start, end, months):
+        active_counts = []
+        while end >= start:
+            total_users = User.objects.filter(register_time__lte=start).count()
+            resigned_users = User.objects.filter(resign_time__lte=start).count()
+            active_counts.append(total_users - resigned_users)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return active_counts
+
+    def calculate_join_leave_users(self, start, end, months, s_before):
+        join_counts, leave_counts = [], []
+        while end >= start:
+            join_users = User.objects.filter(register_time__lt=start, register_time__gte=s_before).count()
+            leave_users = User.objects.filter(resign_time__lt=start, resign_time__gte=s_before).count()
+            join_counts.append(join_users)
+            leave_counts.append(leave_users)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return join_counts, leave_counts
+
+    def calculate_subscriber_free_users(self, start, end, months):
+        subscriber_counts, free_counts = [], []
+        while end >= start:
+            total_users = User.objects.filter(register_time__lte=start).count()
+            resigned_users = User.objects.filter(resign_time__lte=start).count()
+            active_users = total_users - resigned_users
+            subscribers = Subscription.objects.filter(registration_date__lte=start)
+            subscribers = subscribers.filter(lapse_date__isnull=True).count() + subscribers.filter(lapse_date__gt=start).count()
+            free_users = active_users - subscribers
+            subscriber_counts.append(subscribers)
+            free_counts.append(free_users)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return subscriber_counts, free_counts
+    
+class AdministrationRestaurantView(TemplateView):
+    template_name = "administration/administration_restaurant.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year_range = [year for year in (range(2020, date.today().year + 1) if date.today().month >= 4 else range(2020, date.today().year))]
+        context["year_range"] = year_range
+        context["month_range"] = [month for month in range(1, 13)]
+        today = datetime.date.today()
+        this_year = today.year
+        this_month = today.month
+        method = self.request.GET.get("method", "4")
+        s_year = int(self.request.GET.get("s_year", this_year - 1))
+        s_month = int(self.request.GET.get("s_month", (this_month + 1) if this_month < 12 else 1))
+        e_year = int(self.request.GET.get("e_year", this_year))
+        e_month = int(self.request.GET.get("e_month", this_month))
+        context.update({
+            "method": method,
+            "s_year": s_year,
+            "e_year": e_year,
+            "s_month": s_month,
+            "e_month": e_month,
+        })
+        # 月末で集計
+        s_before = datetime.date(year = s_year, month = s_month, day=1)
+        start = s_before + relativedelta(months = 1) - relativedelta(days = 1)
+        end = datetime.date(year = e_year, month = e_month, day=1) + relativedelta(months = 1) - relativedelta(days = 1)
+        if end > today:
+            end = datetime.date(year = this_year, month = this_month, day = 1) + relativedelta(months = 1)
+        if end >= start:
+            months = []
+            if method == "4":
+                context["open_counts"], context["closed_counts"] = self.calculate_open_closed_restaurants(start, end, months)
+            elif method == "5":
+                context["monthly_open_counts"], context["monthly_closed_counts"] = self.calculate_monthly_open_closed_restaurants(start, end, months, s_before)
+            context["months"] = months
+        return context
+
+    def calculate_open_closed_restaurants(self, start, end, months):
+        open_counts = []
+        closed_counts = []
+        while end >= start:
+            restaurants = Restaurant.objects.filter(open_date__lte = start)
+            open_restaurants_number = restaurants.filter(closed_date__isnull = True).count() + restaurants.filter(closed_date__gt = start).count()
+            closed_restaurants_number = Restaurant.objects.filter(closed_date__lte = start).count()
+            open_counts.append(open_restaurants_number)
+            closed_counts.append(closed_restaurants_number)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return open_counts, closed_counts
+    
+    def calculate_monthly_open_closed_restaurants(self, start, end, months, s_before):
+        monthly_open_counts, monthly_closed_counts = [], []
+        while end >= start:
+            open_restaurants = Restaurant.objects.filter(open_date__lt=start, open_date__gte=s_before).count()
+            closed_restaurants = Restaurant.objects.filter(closed_date__lt=start, closed_date__gte=s_before).count()
+            monthly_open_counts.append(open_restaurants)
+            monthly_closed_counts.append(closed_restaurants)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return monthly_open_counts, monthly_closed_counts
+
+class AdministrationReservationView(TemplateView):
+    template_name = "administration/administration_reservation.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year_range = [year for year in (range(2020, date.today().year + 1) if date.today().month >= 4 else range(2020, date.today().year))]
+        context["year_range"] = year_range
+        context["month_range"] = [month for month in range(1, 13)]
+        today = datetime.date.today()
+        this_year = today.year
+        this_month = today.month
+        method = "6"
+        restaurant_id = int(self.request.GET.get("restaurant", 0))
+        s_year = int(self.request.GET.get("s_year", this_year - 1))
+        s_month = int(self.request.GET.get("s_month", (this_month + 1) if this_month < 12 else 1))
+        e_year = int(self.request.GET.get("e_year", this_year))
+        e_month = int(self.request.GET.get("e_month", this_month))
+        context.update({
+            "restaurant_id": restaurant_id,
+            "method": method,
+            "s_year": s_year,
+            "e_year": e_year,
+            "s_month": s_month,
+            "e_month": e_month,
+        })
+        # 月末で集計
+        s_before = datetime.date(year = s_year, month = s_month, day=1)
+        start = s_before + relativedelta(months = 1) - relativedelta(days = 1)
+        end = datetime.date(year = e_year, month = e_month, day=1) + relativedelta(months = 1) - relativedelta(days = 1)
+        if end > today:
+            end = datetime.date(year = this_year, month = this_month, day = 1) + relativedelta(months = 1)
+        if end >= start:
+            months = []
+            context["reservation_counts"] = self.calculate_reservations(start, end, months, s_before)
+            context["months"] = months
+            context["restaurants"] = Restaurant.objects.all()
+            if restaurant_id:
+                context["restaurant_name"] = Restaurant.objects.get(pk = restaurant_id).restaurant_name
+            else:
+                context["restaurant_name"] = "全店舗"
+        return context
+    
+    def calculate_reservations(self, start, end, months, s_before):
+        reservation_counts = []
+        while end >= start:
+            if not self.request.GET.get("restaurant") or self.request.GET.get("restaurant") == "0":
+                reservations_number = Reservation.objects.filter(reserved_date__lt = start, reserved_date__gte = s_before).count()
+            else:
+                reservations_number = Reservation.objects.filter(restaurant__pk = self.request.GET.get("restaurant"), reserved_date__lt = start, reserved_date__gte = s_before).count()
+            reservation_counts.append(reservations_number)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return reservation_counts
+    
+class AdministrationSalesView(TemplateView):
+    template_name = "administration/administration_sales.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year_range = [year for year in (range(2020, date.today().year + 1) if date.today().month >= 4 else range(2020, date.today().year))]
+        context["year_range"] = year_range
+        context["month_range"] = [month for month in range(1, 13)]
+        today = datetime.date.today()
+        this_year = today.year
+        this_month = today.month
+        method = "7"
+        s_year = int(self.request.GET.get("s_year", this_year - 1))
+        s_month = int(self.request.GET.get("s_month", (this_month + 1) if this_month < 12 else 1))
+        e_year = int(self.request.GET.get("e_year", this_year))
+        e_month = int(self.request.GET.get("e_month", this_month))
+        context.update({
+            "method": method,
+            "s_year": s_year,
+            "e_year": e_year,
+            "s_month": s_month,
+            "e_month": e_month,
+        })
+        # 月末で集計
+        s_before = datetime.date(year = s_year, month = s_month, day=1)
+        start = s_before + relativedelta(months = 1) - relativedelta(days = 1)
+        s_after = start + relativedelta(months = 1)
+        end = datetime.date(year = e_year, month = e_month, day=1) + relativedelta(months = 1) - relativedelta(days = 1)
+        if end > today:
+            end = datetime.date(year = this_year, month = this_month, day = 1) + relativedelta(months = 1)
+        if end >= start:
+            months = []
+            context["sales_counts"] = self.calculate_sales(start, end, months, s_after)
+            context["months"] = months
+        return context
+    
+    def calculate_sales(self, start, end, months, s_after):
+        sales_counts = []
+        while end >= start:
+            sales = Subscription.objects.filter(registration_date__lt = start)
+            sales_number = sales.filter(lapse_date__isnull = True).count() + sales.filter(lapse_date__gt = s_after).count()
+            sales_counts.append(sales_number * 300)
+            months.append(int(f'{start.year}{start.month}'))
+            start += relativedelta(months=1)
+        return sales_counts
+    
 class TestView(View):
     template_name = "test.html"

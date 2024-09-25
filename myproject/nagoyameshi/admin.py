@@ -78,9 +78,9 @@ class CategoryRestaurantRelationAdmin(admin.ModelAdmin):
 
 class HolidayRestaurantRelationAdmin(admin.ModelAdmin):
     list_display = ('restaurant', 'holiday',)
-    
+
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'stripe_subscription_id', 'start_time', 'end_time')
+    list_display = ('user', 'stripe_subscription_id', 'registration_date', 'lapse_date')
 
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(User, UserAdmin)

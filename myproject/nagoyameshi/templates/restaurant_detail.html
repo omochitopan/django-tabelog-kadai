@@ -61,8 +61,13 @@
 					<th class="tableheader">カテゴリ</th>
 					<td class="cell">
 						{% for category in object.category_name.all %}
-						<span>{{ category }}　</span>
+						<span>{{ category }}&nbsp;</span>
 						{% endfor %}
+					</tr>
+				<tr>
+					<th class="tableheader">開店日</th>
+					<td class="cell">
+						{{ restaurant.open_date }}
 					</td>
 				</tr>
 			</table>

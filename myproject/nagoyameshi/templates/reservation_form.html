@@ -15,7 +15,7 @@
 			<div class="btn nonactive-btn upper-btn">レビュー</div>
 			{% endif %}
 		</div>
-		{% if not request.user.is_subscribed %}
+		{% if not is_subscribed %}
 		<p class="center comment">店舗予約機能は有料会員登録後に利用可能となります。</p>
 		{% else %}
 		{% if restaurant.is_active %}

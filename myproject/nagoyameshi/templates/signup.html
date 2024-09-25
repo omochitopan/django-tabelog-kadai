@@ -23,16 +23,16 @@
         {% endif %}
         {% endfor %}
       </table>
-      <div class="flex-container btn-container mt-3">
+      <div class="flex-container btn-container">
         <!-- メール認証参考URL: https://blog.narito.ninja/detail/38/ -->
         <form method="post" action="{% url 'signup' %}">
           {% csrf_token %}    
-          <button type="submit" class="btn strong-btn two-btn">仮登録</button>
+          <button type="submit" class="btn strong-btn two-btn">仮登録する</button>
           {% for field in form %}{{ field.as_hidden }}{% endfor %}
         </form>
         <form method="post" action="{% url 'signupform' %}">
           {% csrf_token %}    
-          <button type="submit" class="btn thin-btn two-btn">戻る</button>
+          <button type="submit" class="btn thin-btn two-btn">入力画面に戻る</button>
           {% for field in form %}{{ field.as_hidden }}{% endfor %}
         </form>
       </div>

@@ -4,7 +4,7 @@
 <div class="reservation">
 	<div class="outer-container">
 		<h2 class="center">予約一覧</h2>
-		{% if not request.user.is_subscribed %}
+		{% if not is_subscribed %}
 		<p class="center">---店舗予約機能は有料会員登録後に利用可能となります---</p>
 		{% endif %}
 		{% if not object_list %}
@@ -36,7 +36,7 @@
 					<td class="reserved-time">{{ reservation.reserved_time }}</td>
 					<td class="reserved-people">{{ reservation.number_of_people }}</td>
 					<td>
-						{% if reservation.reserved_date >= cancel_date %}
+						{% if reservation.reserved_date >= cancel_limit %}
 						<a href="{% url 'reservationdelete' reservation.pk %}" class="btn nonactive-btn">キャンセル</a></td>
 						{% endif %}
 					</td>

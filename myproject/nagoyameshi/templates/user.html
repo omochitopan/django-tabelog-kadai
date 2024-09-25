@@ -56,15 +56,15 @@
 			</tr>
 			<tr>
 				<th>会員区分</th>
-				{% if user.is_subscribed %}
-				<td>有料会員</td>
+				{% if is_subscribed %}
+				<td>有料会員{% if is_cancelled %}（{{ expired_date }}まで）{% endif %}</td>
 				{% else %}
 				<td>無料会員</td>
 				{% endif %}
 			</tr>
 		</table>
 		<div class="flex-container btn-container">
-			{% if user.is_subscribed %}
+			{% if is_subscribed %}
 			<a href="{% url 'subscription' %}" class="btn strong-btn two-btn">有料会員情報を管理</a>
 			{% else %}
 			<a href="{% url 'upgradeguide' %}" class="btn strong-btn two-btn">有料会員へ登録</a>

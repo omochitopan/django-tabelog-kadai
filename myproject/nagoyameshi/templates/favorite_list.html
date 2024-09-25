@@ -4,7 +4,7 @@
 <div class="favoritelist">
 	<div class="outer-container">
 		<h2 class="center">お気に入り店舗一覧</h2>
-		{% if not request.user.is_subscribed %}
+		{% if not is_subscribed %}
 		<p class="center">---お気に入り機能は有料会員登録後に利用可能となります---</p>
 		{% else %}
 		{% if not object_list %}

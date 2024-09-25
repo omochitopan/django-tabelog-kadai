@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
-from .models import Reservation, Review, User
+from .models import Reservation, Review, User, Subscription
+from datetime import date
 
 class OnlyManagementUserMixin(UserPassesTestMixin):
     raise_exception = True
@@ -51,4 +52,10 @@ class OnlyPayingMemberMixin(UserPassesTestMixin):
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_subscribed
+        is_subscribed = False
+        subscriptions = Subscription.objects.filter(user = self.request.user)
+        for cancel_date in subscriptions.values_list("lapse_date", flat=True):
+            if cancel_date == None or cancel_date >= date.today():
+                is_subscribed = True
+                break
+        return is_subscribed

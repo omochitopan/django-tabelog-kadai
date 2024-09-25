@@ -875,7 +875,6 @@ footer .logo-container:hover {
 }
 
 .restaurant-table .third-row {
-  color: #a9894b;
   height: 30px;
   border-right: solid 1px #999;
   padding-top: 5px;
@@ -902,6 +901,14 @@ footer .logo-container:hover {
 .restaurant-table .restaurant-name {
   color: black;
   font-size: 18px;
+}
+
+.restaurant-table .score {
+  color: #a9894b;
+}
+
+.restaurant-table .open-date {
+  color: #000;
 }
 
 .restaurant-table .category {
@@ -1405,7 +1412,7 @@ footer .logo-container:hover {
 }
 
 .subsc-resign .outer-container {
-  width: 500px;
+  width: 600px;
 }
 
 .subsc-resign .list {
@@ -1958,4 +1965,46 @@ footer .logo-container:hover {
   width: 300px;
   padding: 3px 0 3px 15px;
   border-bottom: solid #ececec 1px;
+}
+
+.administration .outer-container {
+  width: 900px;
+}
+
+.administration .upper-container {
+  margin: 30px 0;
+}
+
+.administration .upper-btn {
+  width: 150px;
+  height: 40px;
+  padding: 10px;
+  text-align: center;
+  display: inline-block;
+}
+
+.administration .form-container {
+  width: 800px;
+  margin: 20px auto;
+}
+
+.administration .totalization-form {
+  align-items: center;
+}
+
+.administration select {
+  height: 25px;
+}
+
+.administration .method {
+  width: 180px;
+}
+
+.administration .submit-btn {
+  width: 100px;
+  height: 30px;
+}
+
+.administration canvas {
+  margin-bottom: 50px;
 }

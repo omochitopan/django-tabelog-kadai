@@ -40,8 +40,8 @@
 					<label>並び替える</label><br>
 					<select name="order">
 						<option value="" {% if not request.GET.order %}selected{% endif %}>（未選択）</option>
-						<option value="new" {% if request.GET.order == "new" %}selected{% endif %}>掲載日が新しい順</option>
-						<option value="old" {% if request.GET.order == "old" %}selected{% endif %}>掲載日が古い順</option>
+						<option value="new" {% if request.GET.order == "new" %}selected{% endif %}>開店日が新しい順</option>
+						<option value="old" {% if request.GET.order == "old" %}selected{% endif %}>開店日が古い順</option>
 						<option value="mincheap" {% if request.GET.order == "mincheap" %}selected{% endif %}>最低価格が低い順</option>
 						<option value="minexpensive" {% if request.GET.order == "minexpensive" %}selected{% endif %}>最低価格が高い順</option>
 						<option value="highcheap" {% if request.GET.order == "highcheap" %}selected{% endif %}>最高価格が低い順</option>
@@ -99,20 +99,21 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="second-row category">
+						<td class="second-row">
 							{% for category in restaurant.category_name.all %}
-							<span class="category">{{ category }}　</span>
+							<span class="category">{{ category }}&nbsp;</span>
 							{% endfor %}
 						</td>
 					</tr>
 					<tr>
-						<td class="third-row score">
-							評価：{{ restaurant.score|floatformat:2 }}
+						<td class="third-row">
+							<span class="score">評価：{{ restaurant.score|floatformat:2 }}&nbsp;&nbsp;&nbsp;</span>
+							<span class="open-date">開店日：{{ restaurant.open_date }}</span>
 						</td>
 					</tr>
 					<tr>
 						<td class="fourth-row price">
-							{{ restaurant.lowest_price|intcomma }}~{{ restaurant.highest_price|intcomma }}円<br>
+							価格帯：{{ restaurant.lowest_price|intcomma }}~{{ restaurant.highest_price|intcomma }}円<br>
 						</td>
 					</tr>
 					<tr>

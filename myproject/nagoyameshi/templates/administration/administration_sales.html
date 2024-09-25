@@ -1,0 +1,59 @@
+{% extends "base_management.html" %}
+{% load static %}
+{% block title %}Nagoyameshi運営管理ページ{% endblock %}
+{% block contents %}
+<div class="administration administration-sales">
+	<div class="outer-container">
+        <h2 class="center">Nagoyameshi運営管理ページ</h2>
+        <div class="flex-container space-between upper-container">
+			<a href="{% url 'administrationuser' %}" class="btn nonfocus-btn upper-btn">会員数集計</a>
+			<a href="{% url 'administrationrestaurant' %}" class="btn nonfocus-btn upper-btn">店舗数集計</a>
+			<a href="{% url 'administrationreservation' %}" class="btn nonfocus-btn upper-btn">予約数集計</a>
+			<div class="btn focus-btn upper-btn">売上集計</div>
+		</div>
+		<div class="form-container">
+			<form method="get" action="{% url 'administrationsales' %}" class="flex-container space-between totalization-form">
+				<input type="hidden" name="method" value="7">
+				<div class="section">
+					<div class="method"></div>
+				</div>
+				<div class="section">
+					<label>集計開始</label>
+					<select name="s_year">
+						{% for year in year_range %}
+						<option value="{{ year }}" {% if s_year == year %}selected{% endif %}>{{ year }}年</option>
+						{% endfor %}
+					</select>
+					<select name="s_month">
+						{% for month in month_range %}
+						<option value="{{ month }}" {% if s_month == month %}selected{% endif %}>{{ month }}月</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="section">
+					<label>集計終了</label>
+					<select name="e_year">
+						{% for year in year_range %}
+						<option value="{{ year }}" {% if e_year == year %}selected{% endif %}>{{ year }}年</option>
+						{% endfor %}
+					</select>
+					<select name="e_month">
+						{% for month in month_range %}
+						<option value="{{ month }}" {% if e_month == month %}selected{% endif %}>{{ month }}月</option>
+						{% endfor %}
+					</select>
+				</div>
+				<button type="submit" class="btn strong-btn submit-btn">表示</button>
+			</form>
+		</div>
+		<canvas id="counts" width="400" height="200"></canvas>
+	</div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script> let months = {{ months }}; </script>
+<script> let sales_counts = {{ sales_counts }}; </script>
+<script> let method = {{ method }}; </script>
+<script src="{% static 'nagoyameshi/js/chart.js' %}"></script>
+{% endblock %}
