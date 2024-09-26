@@ -6,7 +6,7 @@
 <div class="management-restaurant-create">
 	<div class="outer-container">
         <p class="bold">登録する新規店舗の情報を入力してください</p>
-        <form method="post" action="{% url 'managementrestaurantconfirm' user.pk %}">
+        <form method="post" action="{% url 'managementrestaurantconfirm' user.pk %}" enctype="multipart/form-data">
             {% csrf_token %}
             {% for error in form.non_field_errors %}
             <p class="crimson">＊{{ error }}</p>
@@ -18,7 +18,15 @@
             <div class="cluster const">
                 <label class="label">{{ form.image.label }}</label>
                 {{ form.image }}
-            </div>
+                {% if uploaded_image %}
+                <div class="flex-container">
+                    <div class="right-space"></div>
+                    <div>
+                        <p>既にアップロードされた画像：<br>{{ uploaded_image }}</p>
+                        <img src="data:image/jpeg;base64,{{ uploaded_image_data }}" alt="Uploaded Image Preview" style="max-width: 200px;">
+                    </div>
+                </div>
+                {% endif %}
             <div class="cluster const">
                 <label class="label">{{ form.description.label }}</label>
                 {{ form.description }}
@@ -55,7 +63,7 @@
                 {{ form.seating_capacity }}
                 {{ form.seating_capacity.errors }}
             </div>
-            <div class="cluster">
+            <div class="cluster multi">
                 <div>
                     {% for error in form.holiday.errors %}
                     <p class="crimson">＊{{ error }}</p>
@@ -66,7 +74,7 @@
                     {{ form.holiday }}
                 </div>
             </div>
-            <div class="cluster">
+            <div class="cluster multi">
                 <div>
                     {% for error in form.category_name.errors %}
                     <p class="crimson">＊{{ error }}</p>
@@ -77,11 +85,16 @@
                     {{ form.category_name }}
                 </div>
             </div>
+            <div class="cluster const">
+                <label class="label">{{ form.open_date.label }}</label>
+                {{ form.open_date }}
+                {{ form.open_date.errors }}
+            </div>
             <div class="flex-container btn-container">
                 <button type="submit" class="btn strong-btn two-btn">入力情報を確認する</button>
                 <a href="{% url 'managementopenrestaurant' user.pk %}" class="btn thin-btn two-btn">管理店舗一覧に戻る</a>
             </div>
         </form>
-	</div>
+    </div>
 </div>
 {% endblock %}

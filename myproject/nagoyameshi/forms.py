@@ -103,7 +103,7 @@ class ReservationInputForm(forms.ModelForm):
         self.fields['number_of_people'].widget.attrs['max'] = seating_capacity
             
     class Meta:
-        model = Reservation                
+        model = Reservation
         fields = (
             "reserved_date",
             "reserved_time",
@@ -185,8 +185,15 @@ class RestaurantCreateForm(forms.ModelForm):
             "holiday",
             "seating_capacity",
             "category_name",
+            "open_date"
         )
-        
+        widgets = {
+            "open_date": forms.NumberInput(attrs={
+            "type": "date",
+            "max": datetime.date.today()
+            }),
+        }
+    
     def clean_holiday(self):
         holiday = self.cleaned_data["holiday"]
         if "8" in holiday or "9" in holiday:
@@ -203,6 +210,12 @@ class RestaurantCreateForm(forms.ModelForm):
         elif len(category_name) > 3:
             raise forms.ValidationError('カテゴリは3つまで選択可能です')
         return category_name
+    
+    def clean_open_date(self):
+        open_date = self.cleaned_data["open_date"]
+        if open_date > datetime.date.today():
+            raise forms.ValidationError("開店日は本日以前の日付に設定してください")
+        return open_date
 
     def clean(self):
         cleaned_data = super().clean()

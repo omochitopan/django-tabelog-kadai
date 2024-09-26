@@ -18,7 +18,7 @@
                     {{ form.image.label_tag }}
                 </th>
                 <td>
-                    {{ form.image.value }}
+                    {{ request.session.uploaded_image }}
                 </td>
             </tr>
             <tr>
@@ -101,9 +101,17 @@
                     {{ categories }}
                 </td>
             </tr>
+            <tr>
+                <th>
+                    {{ form.open_date.label_tag }}
+                </th>
+                <td>
+                    {{ form.open_date.value }}
+                </td>
+            </tr>
         </table>
         <div class="flex-container btn-container">
-            <form method="post" action={% url 'managementrestaurantcreate' user.pk %}>
+            <form method="post" action={% url 'managementrestaurantcreate' user.pk %} enctype="multipart/form-data">
                 {% csrf_token %}
                 <button type="submit" class="btn strong-btn two-btn">店舗情報を登録する</button>
                 {% for field in form %}{{ field.as_hidden }}{% endfor %}

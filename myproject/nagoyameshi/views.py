@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.http.response import JsonResponse
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from typing import Any, Dict
@@ -23,7 +24,7 @@ from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, On
 from .utils.pagination import pagination
 from datetime import date, time
 from dateutil.relativedelta import relativedelta
-import datetime, environ, stripe, calendar
+import base64, calendar, datetime, environ, io, stripe
 
 env = environ.Env()
 ip_port = env('IP_PORT')
@@ -1018,20 +1019,23 @@ class ManagementClosedRestaurantView(OnlyManagementUserMixin, ListView):
 class ManagementRestaurantFormView(OnlyManagementUserMixin, FormView):
     form_class = RestaurantCreateForm
     template_name = "management/management_restaurant_form.html"
-
+    
     def form_valid(self, form):
         context = {
             'form': form,
             'kwargs': self.kwargs,
         }
+        if 'uploaded_image' in self.request.session:
+            context['uploaded_image'] = self.request.session['uploaded_image']
+            context['uploaded_image_data'] = self.request.session['uploaded_image_data']
         form = context['form']
         for v in form.fields.values():
             v.label_suffix = ""
         return render(self.request, 'management/management_restaurant_form.html', context)
-    
+
 class ManagementRestaurantConfirmView(OnlyManagementUserMixin, FormView):
     form_class = RestaurantCreateForm
-
+    
     def form_valid(self, form):
         holiday_indices = [int(i) for i in form.cleaned_data.get("holiday")]
         holidays = []
@@ -1043,7 +1047,7 @@ class ManagementRestaurantConfirmView(OnlyManagementUserMixin, FormView):
         description = form.cleaned_data.get("description").rstrip('\r\n')
         for i in category_indices:
             categories.append(Category.objects.get(pk = i).category_name)
-        categories = "　".join(categories)
+        categories = "&nbsp;".join(categories)
         context = {
             'form': form,
             'kwargs': self.kwargs,
@@ -1054,6 +1058,9 @@ class ManagementRestaurantConfirmView(OnlyManagementUserMixin, FormView):
             'categories': categories,
         }
         form = context['form']
+        if 'image' in self.request.FILES:
+            self.request.session['uploaded_image'] = self.request.FILES['image'].name
+            self.request.session['uploaded_image_data'] = base64.b64encode(self.request.FILES['image'].read()).decode('utf-8')
         for v in form.fields.values():
             v.label_suffix = ""
         return render(self.request, 'management/management_restaurant_create.html', context)
@@ -1073,8 +1080,23 @@ class ManagementRestaurantCreateView(OnlyManagementUserMixin, CreateView):
 
     def form_valid(self, form):
         qryset = form.save(commit=False)
+        if 'uploaded_image' in self.request.session:
+            image_name = self.request.session.get('uploaded_image')
+            image_data = self.request.session.get('uploaded_image_data')
+            image_file = InMemoryUploadedFile(
+                io.BytesIO(base64.b64decode(image_data)),
+                None,
+                image_name,
+                'image/jpeg',
+                len(image_data),
+                None,
+            )
+            qryset.image = image_file
         qryset.save()
         qryset.managers.add(self.request.user)
+        if 'uploaded_image' in self.request.session:
+            del self.request.session['uploaded_image']
+            del self.request.session['uploaded_image_data']
         return  super().form_valid(form)
 
 class ManagementRestaurantDetailView(OnlyManagementUserMixin, DetailView):
@@ -1101,6 +1123,10 @@ class ManagementRestaurantEditView(OnlyManagementUserMixin, UpdateView):
         restaurant_id = self.kwargs["pk"]
         return reverse_lazy('managementrestaurantdetail', kwargs=dict(user_id = self.request.user.pk, pk = restaurant_id))
 
+    def form_valid(self, form):
+        form.save() # 画像をアップロードする場合、フォームのFILESを含めて保存
+        return super().form_valid(form)
+    
     #forms.pyに値を渡す
     def get_form_kwargs(self): 
         kwargs = super(ManagementRestaurantEditView, self).get_form_kwargs()

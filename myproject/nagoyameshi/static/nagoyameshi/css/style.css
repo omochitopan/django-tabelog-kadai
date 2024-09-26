@@ -1601,8 +1601,16 @@ footer .logo-container:hover {
   vertical-align: top;
 }
 
+.management-restaurant-create .right-space {
+  width: 230px;
+}
+
 .management-restaurant-create .const input {
   width: 362px;
+}
+
+.management-restaurant-create .multi input {
+  width: 20px;
 }
 
 .management-restaurant-confirm .outer-container {
