@@ -801,7 +801,6 @@ def webhook_received(request):
             user.save()
             subscription = Subscription.objects.create(
                 user = user,
-                start_time = datetime.datetime.now(),
                 stripe_customer_id = stripe_customer_id,
                 stripe_subscription_id = stripe_subscription_id,
             )
