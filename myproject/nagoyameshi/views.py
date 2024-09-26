@@ -1047,7 +1047,7 @@ class ManagementRestaurantConfirmView(OnlyManagementUserMixin, FormView):
         description = form.cleaned_data.get("description").rstrip('\r\n')
         for i in category_indices:
             categories.append(Category.objects.get(pk = i).category_name)
-        categories = "&nbsp;".join(categories)
+        categories = " ".join(categories)
         context = {
             'form': form,
             'kwargs': self.kwargs,
