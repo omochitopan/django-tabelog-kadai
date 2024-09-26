@@ -237,11 +237,11 @@ if (method === 1) {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 100
+                        stepSize: 500
                     },
                     title: {
                         display: true,
-                        text: '売上金額'
+                        text: '各月売上金額'
                     }
                 }
             },

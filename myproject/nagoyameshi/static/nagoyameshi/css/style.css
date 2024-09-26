@@ -1984,8 +1984,10 @@ footer .logo-container:hover {
 }
 
 .administration .form-container {
-  width: 800px;
-  margin: 20px auto;
+  width: 900px;
+  margin: 30px auto;
+  padding: 15px 50px;
+  background-color: rgb(255, 220, 180);
 }
 
 .administration .totalization-form {

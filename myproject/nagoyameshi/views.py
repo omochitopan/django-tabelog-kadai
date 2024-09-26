@@ -1674,7 +1674,8 @@ class AdministrationSalesView(TemplateView):
             sales_counts.append(sales_number * 300)
             months.append(int(f'{start.year}{start.month}'))
             start = datetime.date(start.year + (start.month == 12), (start.month % 12) + 1, calendar.monthrange(start.year + (start.month == 12), (start.month % 12) + 1)[1])
+            s_after = datetime.date(start.year + (start.month == 12), (start.month % 12) + 1, calendar.monthrange(start.year + (start.month == 12), (start.month % 12) + 1)[1])
         return sales_counts
-    
+
 class TestView(View):
     template_name = "test.html"
