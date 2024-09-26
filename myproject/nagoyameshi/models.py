@@ -77,8 +77,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(verbose_name="スタッフ", default=False)
     is_superuser = models.BooleanField(verbose_name="スーパーユーザー", default=False)
     is_active = models.BooleanField(default=False)
-    register_time = models.DateTimeField(verbose_name="入会日時", blank=True, null=True)
-    resign_time = models.DateTimeField(verbose_name="退会日時", blank=True, null=True)
+    registration_time = models.DateTimeField(verbose_name="入会日時", blank=True, null=True)
+    resignation_time = models.DateTimeField(verbose_name="退会日時", blank=True, null=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     
