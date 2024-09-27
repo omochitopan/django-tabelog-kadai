@@ -3,7 +3,7 @@
 Nagoyameshiは、名古屋市のグルメ情報を発信する架空のWebサイトです。ユーザーが店舗の情報を検索し、予約やレビューができる機能を提供しています。また、店舗運営者向けに店舗情報の管理や顧客情報の閲覧機能も実装しています。Djangoフレームワークを使用し、AWSのEC2とRDSを用いてクラウド環境にデプロイされています。
 
 ## URL
-[https://nagoyameshi.omochi-mochimental.net/](https://nagoyameshi.omochi-mochimental.net/){:target="_blank"}
+[侍エンジニアブログ](https://www.sejuku.net/blog/)
 
 ## 主な機能
 ### 一般会員向け
