@@ -78,6 +78,11 @@ https://nagoyameshi.omochi-mochimental.net/
 
 
 
+#### カテゴリ管理
+![カテゴリ画面](image/nagoyameshi_management_category.png)
+
+
+
 #### 予約管理
 ![予約管理画面](image/nagoyameshi_management_reservation.png)
 
