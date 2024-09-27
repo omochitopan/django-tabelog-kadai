@@ -66,7 +66,7 @@ class TopView(TemplateView):
 class RestaurantSearchView(LoginRequiredMixin, ListView):
     model = Restaurant
     template_name = "restaurant_search.html"
-    paginate_by = 5
+    paginate_by = 10
     
     def get_queryset(self):
         self.queryset = Restaurant.objects.filter(is_active = True).annotate(score = Avg("review__score"))
@@ -1047,7 +1047,7 @@ class ManagementRestaurantConfirmView(OnlyManagementUserMixin, FormView):
         description = form.cleaned_data.get("description").rstrip('\r\n')
         for i in category_indices:
             categories.append(Category.objects.get(pk = i).category_name)
-        categories = " ".join(categories)
+        categories = "  ".join(categories)
         context = {
             'form': form,
             'kwargs': self.kwargs,

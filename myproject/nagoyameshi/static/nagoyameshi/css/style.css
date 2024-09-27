@@ -154,6 +154,10 @@ h5 {
   flex-wrap: wrap;
 }
 
+.relative-container {
+  position: relative;
+}
+
 .space-between {
   justify-content: space-between;
 }
@@ -785,10 +789,13 @@ footer .logo-container:hover {
   background-color: rgb(255, 220, 180);
   border: solid 1px #aaa;
   border-radius: 10px;
+  position: fixed;
+  top: 95px;
 }
 
 .list .right-container {
   width: 650px;
+  margin-left: 330px;
 }
 
 .list .search-container {

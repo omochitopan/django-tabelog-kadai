@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from datetime import datetime, timedelta
@@ -125,10 +125,18 @@ class UserActivateTokens(models.Model):
     expired_at = models.DateTimeField()
 
     objects = UserActivateTokensManager()
+
+@receiver(pre_save, sender=settings.AUTH_USER_MODEL)
+def check_user_active_status(sender, instance, **kwargs):
+    if instance.pk:
+        previous_user = User.objects.get(pk=instance.pk)
+        instance._previous_is_active = previous_user.is_active
+    else:
+        instance._previous_is_active = False
     
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def publish_activate_token(sender, instance, **kwargs):
-    if not instance.is_active:
+def publish_activate_token(sender, instance, created, **kwargs):
+    if created and not instance.is_active:
         user_activate_token = UserActivateTokens.objects.create(
             user=instance,
             expired_at=datetime.now()+timedelta(days = settings.ACTIVATION_EXPIRED_DAYS),
@@ -136,19 +144,16 @@ def publish_activate_token(sender, instance, **kwargs):
         subject = 'Please Activate Your Account'
         message = f'URLにアクセスして本登録を行なってください。\n{ip_port}/users/{user_activate_token.activate_token}/activation/\nこのメールに心当たりが無い方はお手数ですが削除して頂くようお願い致します。'
 
-#    以下は本登録が完了した後にメールを送る設定だが、
-#    ログイン時にもメールが送られてしまったため実装断念。
-#    ログイン時にlast_login属性が更新されるため、
-#    post_saveで拾ってしまっていることが原因か？
-#    
-#    if instance.is_active:
-#        subject = 'Activated! Your Account!'
-#        message = '本登録が完了しました！'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [instance.email,]
+        send_mail(subject, message, from_email, recipient_list)
+
+    elif not created and instance.is_active and not instance._previous_is_active:
+        subject = 'Activated! Your Account!'
+        message = '本登録が完了しました！'
 
         from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [
-            instance.email,
-        ]
+        recipient_list = [instance.email]
         send_mail(subject, message, from_email, recipient_list)
 
 class RegularHoliday(models.Model):
