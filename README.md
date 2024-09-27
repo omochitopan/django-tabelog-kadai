@@ -16,6 +16,11 @@ https://nagoyameshi.omochi-mochimental.net/
 - **店舗情報管理機能**: 店舗情報の作成、閲覧、編集、削除が可能です。
 - **予約情報管理機能**: 管理店舗の予約情報の閲覧、編集、削除が可能です。
 - **会員情報閲覧機能**: 店舗に予約をした顧客の情報を確認できます。
+### Nagoyameshiサイト管理者向け
+- **会員数集計機能**: 会員数の集計が可能です。
+- **店舗数集計機能**: 登録店舗数の集計が可能です。
+- **予約数機能**: 全店舗または各店舗ごとの予約数の集計が可能です。
+- **Nagoyameshi売上集計機能**: Nagoyameshiのサイト売上金額の集計が可能です。
 
 ## 使用技術
 - フレームワーク: Django
@@ -80,3 +85,14 @@ https://nagoyameshi.omochi-mochimental.net/
 
 #### 会員情報
 ![会員情報画面](image/nagoyameshi_management_user.png)
+
+
+
+### Nagoyameshiサイト管理者用画面
+#### 会員数集計
+![会員数集計画面](image/nagoyameshi.administration_user.png)
+
+
+
+#### 店舗数集計
+![店舗数集計画面](image/nagoyameshi.administration_restaurant.png)
