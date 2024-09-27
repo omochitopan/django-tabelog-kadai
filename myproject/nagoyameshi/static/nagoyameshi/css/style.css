@@ -583,6 +583,17 @@ header .nav-input {
   font-size: 12px;
 }
 
+.top .more {
+  color: #999;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.top .more:hover {
+  color: #000;
+}
+
 .top .category-container {
   width: 130px;
   margin-right: 10px;

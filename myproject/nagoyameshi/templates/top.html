@@ -36,14 +36,17 @@
 					</li>
 					{% endfor %}
 				</ul>
-			</div>
+				<div class="right">
+					<a class="more" href="/restaurant/?order=scorehigh">もっと見る >></a>
+				</div>
+				</div>
 			<div class="middle-container">
 				<h2 class="title">カテゴリから探す</h2>
 				<div class="categoryContainer">
 					<ul class="flex-container wrap-container">
 						{% for information in category_information %}
 						<li class="category-container">
-							<a href="/restaurant/?category={{ information.id}}">
+							<a href="/restaurant/?category={{ information.id }}">
 								<img src="{{ information.url }}" class="category-img" alt="和食を検索">
 								<p class="category-text">{{ information.name }}</p>
 							</a>
@@ -72,6 +75,9 @@
 					</li>
 					{% endfor %}
 				</ul>
+				<div class="right">
+					<a class="more" href="/restaurant/?order=new">もっと見る >></a>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -58,7 +58,7 @@ class TopView(TemplateView):
         context['user'] = self.request.user
         restaurants = restaurants.annotate(score = Avg("review__score"))
         context['evaluated_restaurants'] = restaurants.order_by('-score')[:6]
-        context['new_restaurants'] = restaurants.order_by('-created_at')[:6]
+        context['new_restaurants'] = restaurants.order_by('-open_date')[:6]
         context['all_categories'] = all_categories.order_by('id')
         context['category_information'] = category_information
         return context
@@ -93,9 +93,9 @@ class RestaurantSearchView(LoginRequiredMixin, ListView):
                     self.queryset = self.queryset.filter(highest_price__gte = price)
         if self.queryset:
             if order == "new":
-                self.queryset = self.queryset.order_by("-created_at")
+                self.queryset = self.queryset.order_by("-open_date")
             elif order == "old":
-                self.queryset = self.queryset.order_by("created_at")
+                self.queryset = self.queryset.order_by("open_date")
             elif order == "mincheap":
                 self.queryset = self.queryset.order_by("lowest_price")
             elif order == "minexpensive":
