@@ -1,30 +1,30 @@
+import base64, calendar, datetime, environ, io, stripe
+from datetime import date, time
+from dateutil.relativedelta import relativedelta
+from django.contrib import messages
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth import logout
+from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q, Avg
+from django.http import HttpResponse
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
-from django.contrib import messages
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django.contrib.auth import logout
-from django.urls import reverse_lazy
-from django.db.models import Q, Avg
-from django.http import HttpResponse
-from django.http.response import JsonResponse
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.conf import settings
 from typing import Any, Dict
-from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, ManagerRestaurantRelation, Subscription
 from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm, UserSearch, ReservedUserSearch, RestaurantSearch
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin, OnlyPayingMemberMixin
+from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, ManagerRestaurantRelation, Subscription
 from .utils.pagination import pagination
-from datetime import date, time
-from dateutil.relativedelta import relativedelta
-import base64, calendar, datetime, environ, io, stripe
 
 env = environ.Env()
 ip_port = env('IP_PORT')
@@ -32,7 +32,6 @@ login_url = f'{ip_port}/login/'
 
 stripe.api_key = env("STRIPE_SECRET_KEY")
 
-# Create your views here.
 class LoginView(LoginView):
     form_class = AuthenticationForm
     template_name = 'login.html'
@@ -40,6 +39,119 @@ class LoginView(LoginView):
 def logout_view(request):
     logout(request)
     return redirect('top')
+
+class SignupFormView(FormView):
+    form_class = SignUpForm
+    template_name = "signup_form.html"
+    
+    def form_valid(self, form):
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'signup_form.html', context)
+
+class SignupConfirmView(FormView):
+    form_class = SignUpForm
+    
+    def form_valid(self, form):
+        passlength = len(form.cleaned_data.get("password1"))
+        password = "･" * passlength
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+            'password': password,
+        }
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return render(self.request, 'signup.html', context)
+    
+    def form_invalid(self, form):
+        context = {
+            'form': form,
+            'kwargs': self.kwargs,
+        }
+        return render(self.request, 'signup_form.html', context)
+
+class SignupView(CreateView):
+    form_class = SignUpForm
+    success_url = reverse_lazy('usercreated')
+
+class UserCreatedView(TemplateView):
+    template_name = 'user_created.html'
+    
+    # user_created.htmlに変数を書き出し
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
+        return context
+
+def activate_user(request, activate_token):
+    activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
+    if hasattr(activated_user, 'is_active'):
+        if activated_user.is_active:
+            activated_user.register_time = datetime.datetime.now()
+            activated_user.save()
+            message = f'本登録が完了しました！<br><a href={login_url}>ログインページ</a>'
+        if not activated_user.is_active:
+            message = '本登録に失敗しました。'
+    if not hasattr(activated_user, 'is_active'):
+        message = 'エラーが発生しました'
+    return HttpResponse(message)
+
+class PasswordReset(PasswordResetView):
+    # パスワード変更URL付きメールのカスタマイズ
+    subject_template_name = 'mail/subject.txt'
+    email_template_name = "mail/message.txt"
+    template_name = "password_reset.html"
+    # パスワードリセット用URLの送信ページ
+    success_url = reverse_lazy("passwordresetdone")
+
+class PasswordResetDone(PasswordResetDoneView):
+    # パスワード変更用URL送信完了ページ
+    template_name = "password_reset_done.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["domain"] = ip_port
+        return context
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    # 新パスワード入力用ページ
+    success_url = reverse_lazy("passwordresetcomplete")
+    template_name = "password_reset_confirm.html"
+
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    # 新パスワード設定完了ページ
+    template_name = "password_reset_complete.html"
+
+class PasswordChange(PasswordChangeView):
+    # パスワード変更ページ
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('password_change_done')
+    template_name = 'password_change.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        form = context['form']
+        for v in form.fields.values():
+            v.label_suffix = ""
+        return context
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    # パスワード変更完了ページ
+    template_name = 'password_change_done.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = self.request.user.pk
+        return context
 
 class TopView(TemplateView):
     template_name = "top.html"
@@ -150,122 +262,6 @@ class RestaurantDetailView(LoginRequiredMixin, DetailView):
         context['user_id'] = user.pk
         context['isFavorite'] = isFavorite
         return context
-
-class ServiceGuideView(FormView):
-    form_class = SignUpForm
-
-class SignupFormView(FormView):
-    form_class = SignUpForm
-    template_name = "signup_form.html"
-    
-    def form_valid(self, form):
-        context = {
-            'form': form,
-            'kwargs': self.kwargs,
-        }
-        form = context['form']
-        for v in form.fields.values():
-            v.label_suffix = ""
-        return render(self.request, 'signup_form.html', context)
-
-class SignupConfirmView(FormView):
-    form_class = SignUpForm
-    
-    def form_valid(self, form):
-        passlength = len(form.cleaned_data.get("password1"))
-        password = "･" * passlength
-        context = {
-            'form': form,
-            'kwargs': self.kwargs,
-            'password': password,
-        }
-        form = context['form']
-        for v in form.fields.values():
-            v.label_suffix = ""
-        return render(self.request, 'signup.html', context)
-    
-    def form_invalid(self, form):
-        context = {
-            'form': form,
-            'kwargs': self.kwargs,
-        }
-        return render(self.request, 'signup_form.html', context)
-
-class SignupView(CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy('usercreated')
-
-class UserCreatedView(TemplateView):
-    template_name = 'user_created.html'
-    
-    # user_created.htmlに変数を書き出し
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['register_URL'] = f'http://{ip_port}/users/{UserActivateTokens.activate_token}/activation/'
-        return context
-
-class PasswordReset(PasswordResetView):
-    # パスワード変更URL付きメールのカスタマイズ
-    subject_template_name = 'mail/subject.txt'
-    email_template_name = "mail/message.txt"
-    template_name = "password_reset.html"
-    # パスワードリセット用URLの送信ページ
-    success_url = reverse_lazy("passwordresetdone")
-
-class PasswordResetDone(PasswordResetDoneView):
-    # パスワード変更用URL送信完了ページ
-    template_name = "password_reset_done.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["domain"] = ip_port
-        return context
-
-class PasswordResetConfirm(PasswordResetConfirmView):
-    # 新パスワード入力用ページ
-    success_url = reverse_lazy("passwordresetcomplete")
-    template_name = "password_reset_confirm.html"
-
-
-class PasswordResetComplete(PasswordResetCompleteView):
-    # 新パスワード設定完了ページ
-    template_name = "password_reset_complete.html"
-
-class PasswordChange(PasswordChangeView):
-    # パスワード変更ページ
-    form_class = PasswordChangeForm
-    success_url = reverse_lazy('password_change_done')
-    template_name = 'password_change.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
-        form = context['form']
-        for v in form.fields.values():
-            v.label_suffix = ""
-        return context
-
-class PasswordChangeDone(PasswordChangeDoneView):
-    # パスワード変更完了ページ
-    template_name = 'password_change_done.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user_id'] = self.request.user.pk
-        return context
-
-def activate_user(request, activate_token):
-    activated_user = UserActivateTokens.objects.activate_user_by_token(activate_token)
-    if hasattr(activated_user, 'is_active'):
-        if activated_user.is_active:
-            activated_user.register_time = datetime.datetime.now()
-            activated_user.save()
-            message = f'本登録が完了しました！<br><a href={login_url}>ログインページ</a>'
-        if not activated_user.is_active:
-            message = '本登録に失敗しました。'
-    if not hasattr(activated_user, 'is_active'):
-        message = 'エラーが発生しました'
-    return HttpResponse(message)
 
 class ReviewListView(LoginRequiredMixin, ListView):
     model = Review
@@ -743,7 +739,6 @@ class SubscriptionView(OnlyPayingMemberMixin, TemplateView):
         context["is_subscribed"] = is_subscribed
         context["is_cancelled"] = is_cancelled
         return context
-
 
 def create_checkout_session(request):
     DOMAIN = ip_port
