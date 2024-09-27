@@ -174,7 +174,7 @@ class Category(models.Model):
         db_table = 'nagoyameshi_category'
         verbose_name = verbose_name_plural = 'カテゴリ'
     
-    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20)
+    category_name = models.CharField(verbose_name="カテゴリ名", max_length=20, unique=True)
     created_at = models.DateTimeField(verbose_name="登録日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True, blank=True, null=True)
     

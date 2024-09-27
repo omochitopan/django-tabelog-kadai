@@ -10,6 +10,9 @@
 				<a href="{% url 'managementopenrestaurant' user_id %}" class="btn strong-btn one-btn">店舗・予約管理</a>
 			</div>
 			<div class="ref-container">
+				<a href="{% url 'managementcategory' user_id %}" class="btn strong-btn one-btn">カテゴリ管理</a>
+			</div>
+			<div class="ref-container">
 				<a href="{% url 'managementuser' user_id %}" class="btn strong-btn one-btn">会員情報</a>
 			</div>
 			{% if request.user.is_superuser %}

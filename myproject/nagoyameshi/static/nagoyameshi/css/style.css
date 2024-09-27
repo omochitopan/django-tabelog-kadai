@@ -1875,6 +1875,66 @@ footer .logo-container:hover {
   font-weight: bold;
 }
 
+.management-category .outer-container {
+  width: 400px;
+}
+
+.management-category .strong-btn {
+  width: 70px;
+}
+
+.management-category .new-btn {
+  width: 100px;
+  text-align: center;
+}
+
+.management-category .count {
+  margin-bottom: 5px;
+}
+
+.management-category .inner-container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.management-category-table {
+  font-size: 16px;
+}
+
+.management-category-table th, td {
+  border-bottom: solid 1px #ccc;
+  padding: 3px;
+}
+
+.management-category-table .id {
+  width: 100px;
+}
+
+.management-category-table .name {
+  width: 300px;
+}
+
+.management-category .btn-container {
+  margin: 30px auto;
+}
+
+.management-category-create .outer-container {
+  width: 300px;
+}
+
+.management-category-create form {
+  margin-top: 40px;
+}
+
+.management-category-create .strong-btn {
+  width: 100px;
+  margin-left: 20px;
+}
+
+.management-category-create .thin-btn {
+  margin-top: 40px;
+}
+
 .management-user .search-container {
   width: 880px;
   height: 150px;

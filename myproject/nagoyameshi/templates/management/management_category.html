@@ -1,0 +1,33 @@
+{% extends "base_management.html" %}
+{% block title %}{{ target_restaurant.restaurant_name }} カテゴリ一覧ページ{% endblock %}
+{% block contents %}
+<div class="management-category">
+	<div class="outer-container">
+		<h2 class="center">カテゴリ一覧</h2>
+		<div class="flex-container space-between">
+            <form method="get" action="{% url 'managementcategory' request.user.pk %}">
+				<input type="text" name="query" placeholder="カテゴリ名">
+                <button type="submit" class="btn strong-btn">検索</button>
+            </form>
+			<a href="{% url 'managementcategorycreate' request.user.pk %}" class="btn new-btn">＋新規追加</a>
+        </div>
+		<p class="count">計{{ count }}件</p>
+		{% include "pagination.html" %}
+		<table class="management-category-table">
+			<tr>
+				<th class="id">id</th>
+				<th class="name">カテゴリ名</th>
+			</tr>
+			{% for category in object_list %}	
+			<tr>
+				<td>{{ category.pk }}</td>
+				<td>{{ category.category_name }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<div class="flex-container btn-container">
+			<a href="{% url 'management' user.pk %}" class="btn thin-btn one-btn">管理トップに戻る</a>
+		</div>	
+	</div>
+</div>
+{% endblock %}

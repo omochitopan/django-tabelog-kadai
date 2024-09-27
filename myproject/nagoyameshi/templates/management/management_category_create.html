@@ -1,0 +1,15 @@
+{% extends "base_management.html" %}
+{% block title %}{{ target_restaurant.restaurant_name }} カテゴリ作成ページ{% endblock %}
+{% block contents %}
+<div class="management-category-create">
+	<div class="outer-container">
+		<h2 class="center">カテゴリ新規作成</h2>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.category_name }}
+			<button type="submit" class="btn strong-btn">作成</button>
+		</form>
+		<a href="{% url 'managementcategory' request.user.pk %}" class="btn thin-btn one-btn">カテゴリ一覧に戻る</a>
+	</div>
+</div>
+{% endblock %}

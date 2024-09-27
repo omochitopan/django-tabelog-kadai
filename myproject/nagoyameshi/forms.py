@@ -322,3 +322,14 @@ class RestaurantSearch(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['query'].widget.attrs.update({'placeholder': '店舗名・郵便番号（ハイフンなし）・住所',})
+
+class CategoryCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category_name'].widget.attrs.update({'placeholder': 'カテゴリ名',})
+    
+    class Meta:
+        model = Category
+        fields = (
+            "category_name",
+        )

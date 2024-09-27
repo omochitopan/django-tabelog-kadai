@@ -21,7 +21,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from typing import Any, Dict
-from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm, UserSearch, ReservedUserSearch, RestaurantSearch
+from .forms import SignUpForm, ReviewForm, ReservationInputForm, ReservationConfirmForm, UserUpdateForm, RestaurantCreateForm, RestaurantEditForm, UserSearch, ReservedUserSearch, RestaurantSearch, CategoryCreateForm
 from .mixins import OnlyManagementUserMixin, OnlyManagedUserInformationMixin, OnlyMyUserInformationMixin, OnlyMyReviewMixin, OnlyMyReservationMixin, OnlyPayingMemberMixin
 from .models import Restaurant, User, UserActivateTokens, Review, Reservation, Favorite, Company, Terms, Category, RegularHoliday, ManagerRestaurantRelation, Subscription
 from .utils.pagination import pagination
@@ -1157,6 +1157,45 @@ class ManagementRestaurantDeleteView(OnlyManagementUserMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         return context
+
+class ManagementCategoryView(OnlyManagementUserMixin, ListView):
+    model = Category
+    template_name = "management/management_category.html"
+    paginate_by = 15
+    
+    def get_queryset(self):
+        if not hasattr(self, 'queryset') or self.queryset is None:
+            self.queryset = super().get_queryset()
+        if self.request.GET.get("query"):
+            self.queryset = self.queryset.filter(category_name__icontains = self.request.GET.get("query"))
+        paginator = Paginator(self.queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            self.page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            self.page_obj = paginator.page(1)
+        except EmptyPage:
+            self.page_obj = paginator.page(paginator.num_pages)
+        messages.add_message(self.request, messages.INFO, self.page_obj)
+        return self.queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_page = self.page_obj
+        current_num = current_page.number
+        total_num = current_page.paginator.num_pages
+        page_list = pagination(5, current_num, total_num)
+        context["page_list"] = page_list
+        if self.queryset:
+            context['count'] = len(self.queryset)
+        return context
+
+class ManagementCategoryCreateView(OnlyManagementUserMixin, CreateView):
+    form_class = CategoryCreateForm
+    template_name = "management/management_category_create.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('managementcategory', kwargs=dict(user_id = self.request.user.pk))
 
 class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
     model = Reservation
