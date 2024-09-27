@@ -4,7 +4,9 @@
 <div class="subscription">
 	<div class="outer-container">
 		<h2 class="center">有料会員情報を管理</h2>
+		{% if is_cancelled %}
 		<p class="center">（解約手続き済、{{ expired_date }}までサービス利用可能）</p>
+		{% endif %}
 		<form action="{% url 'customerportal' %}" method="post">
 			{% csrf_token %}
 			<button type="submit" class="btn strong-btn one-btn">有料会員情報を確認する</button><br>

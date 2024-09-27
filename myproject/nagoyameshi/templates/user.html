@@ -5,7 +5,7 @@
 	<div class="outer-container">
 		<h2 class="center">会員情報</h2>
 		<div class="top-container">
-			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" %}
+			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_administrator@nagoyameshi.net" %}
 			<div class="btn negative-btn top-ref">プロフィール編集</div>
 			<div class="btn negative-btn top-ref">パスワード変更</div>
 			{% else %}
@@ -69,7 +69,7 @@
 			{% else %}
 			<a href="{% url 'upgradeguide' %}" class="btn strong-btn two-btn">有料会員へ登録</a>
 			{% endif %}
-			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" %}
+			{% if user.email == "test_manager@nagoyameshi.net" or user.email == "test_general@nagoyameshi.net" or user.email == "test_administrator@nagoyameshi.net" %}
 			<div class="btn negative-btn two-btn">NAGOYAMESHI退会</a>
 			{% else %}
 			<a href="{% url 'resign' user.pk %}" class="btn nonactive-btn two-btn">NAGOYAMESHI退会</a>

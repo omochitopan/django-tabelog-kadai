@@ -719,27 +719,6 @@ class UpgradeGuideView(LoginRequiredMixin, TemplateView):
         context["lookup_key"] = env("STRIPE_LOOKUP_KEY")
         return context
 
-class SubscriptionView(OnlyPayingMemberMixin, TemplateView):
-    template_name = "subscription.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        is_cancelled = False
-        subscriptions = Subscription.objects.filter(user = user)
-        for lapse_date in subscriptions.values_list("lapse_date", flat=True):
-            if lapse_date == None:
-                is_subscribed = True
-                break
-            elif lapse_date > date.today():
-                context["expired_date"] = lapse_date - relativedelta(days = 1)
-                is_subscribed = True
-                is_cancelled = True
-                break
-        context["is_subscribed"] = is_subscribed
-        context["is_cancelled"] = is_cancelled
-        return context
-
 def create_checkout_session(request):
     DOMAIN = ip_port
     try:
@@ -847,6 +826,27 @@ def create_customer_portal_session(request):
         return HttpResponse("No active subscription found.", status=400)
     except stripe.error.StripeError as e:
         return HttpResponse(f"Error creating customer portal session: {str(e)}", status=500)
+
+class SubscriptionView(OnlyPayingMemberMixin, TemplateView):
+    template_name = "subscription.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        is_cancelled = False
+        subscriptions = Subscription.objects.filter(user = user)
+        for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+            if lapse_date == None:
+                is_subscribed = True
+                break
+            elif lapse_date > date.today():
+                context["expired_date"] = lapse_date - relativedelta(days = 1)
+                is_subscribed = True
+                is_cancelled = True
+                break
+        context["is_subscribed"] = is_subscribed
+        context["is_cancelled"] = is_cancelled
+        return context
 
 class SuccessView(OnlyPayingMemberMixin, TemplateView):
     template_name = "success.html"
