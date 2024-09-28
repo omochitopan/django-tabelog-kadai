@@ -1896,9 +1896,13 @@ footer .logo-container:hover {
   font-size: 16px;
 }
 
-.management-category-table th, td {
+.management-category-table th {
   border-bottom: solid 1px #ccc;
   padding: 3px;
+}
+
+.management-category-table td {
+  border-bottom: solid 1px #ccc;
 }
 
 .management-category-table .id {
