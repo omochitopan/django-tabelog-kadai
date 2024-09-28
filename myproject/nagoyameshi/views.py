@@ -876,9 +876,10 @@ class SubscriptionResignDoneView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         subscriptions = Subscription.objects.filter(user = user)
         for lapse_date in subscriptions.values_list("lapse_date", flat=True):
-            if lapse_date > date.today():
-                context["expired_date"] = lapse_date - relativedelta(days = 1)
-                break
+            if lapse_date:
+                lapse_date > date.today():
+                    context["expired_date"] = lapse_date - relativedelta(days = 1)
+                    break
         return context
 
 class ResignView(OnlyMyUserInformationMixin, UpdateView):
