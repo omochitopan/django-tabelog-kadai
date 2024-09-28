@@ -849,7 +849,7 @@ class SubscriptionView(OnlyPayingMemberMixin, TemplateView):
         context["is_cancelled"] = is_cancelled
         return context
 
-class SuccessView(OnlyPayingMemberMixin, TemplateView):
+class SuccessView(TemplateView):
     template_name = "success.html"
     
 class CancelView(LoginRequiredMixin, TemplateView):
@@ -870,6 +870,16 @@ class SubscriptionResignConfirmView(OnlyPayingMemberMixin, TemplateView):
     
 class SubscriptionResignDoneView(LoginRequiredMixin, TemplateView):
     template_name = "subscription_resign_done.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        subscriptions = Subscription.objects.filter(user = user)
+        for lapse_date in subscriptions.values_list("lapse_date", flat=True):
+            if lapse_date > date.today():
+                context["expired_date"] = lapse_date - relativedelta(days = 1)
+                break
+        return context
 
 class ResignView(OnlyMyUserInformationMixin, UpdateView):
     model = User
