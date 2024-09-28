@@ -741,7 +741,7 @@ def create_checkout_session(request):
 
 def cancel_subscription(request):
     user = request.user
-    subscription = Subscription.objects.filter(end_time = None).get(user__pk = user.pk)
+    subscription = Subscription.objects.filter(cancel_time = None).get(user__pk = user.pk)
     stripe_subscription_id = subscription.stripe_subscription_id
     try:
         stripe.Subscription.delete(stripe_subscription_id)

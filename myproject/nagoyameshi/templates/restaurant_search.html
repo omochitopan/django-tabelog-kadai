@@ -77,9 +77,9 @@
 					{% else %}
 					{% include "price_order.html" %}
 					{% endif %}
-					{% if object_list %}
 				</div>
 				<div>
+					{% if object_list %}
 					<p class="count">{{ count }}件の店舗が見つかりました。{% include "search_order.html" %}</p>
 					{% else %}
 					<p class="count">お探しの店舗は見つかりませんでした。{% include "search_order.html" %}</p>
