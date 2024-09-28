@@ -802,7 +802,7 @@ def webhook_received(request):
             while date.today() > (registration_date + relativedelta(months = 1) * i):
                 i += 1
             cancel_date = registration_date + relativedelta(months = 1) * i
-            subscription.cancel_date = cancel_date
+            subscription.lapse_date = cancel_date
             subscription.save()
             print('有料会員登録を解約しました。', event.id)
         except Subscription.DoesNotExist:
