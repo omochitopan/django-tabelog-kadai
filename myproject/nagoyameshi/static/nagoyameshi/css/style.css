@@ -1876,10 +1876,10 @@ footer .logo-container:hover {
 }
 
 .management-category .outer-container {
-  width: 400px;
+  width: 450px;
 }
 
-.management-category .strong-btn {
+.management-category .search-btn {
   width: 70px;
 }
 
@@ -1890,11 +1890,6 @@ footer .logo-container:hover {
 
 .management-category .count {
   margin-bottom: 5px;
-}
-
-.management-category .inner-container {
-  width: 300px;
-  margin: 0 auto;
 }
 
 .management-category-table {
@@ -1911,7 +1906,26 @@ footer .logo-container:hover {
 }
 
 .management-category-table .name {
-  width: 300px;
+  width: 200px;
+}
+
+.management-category-table .update {
+  width: 75px;
+}
+
+.management-category-table .delete {
+  width: 75px;
+}
+
+.management-category-table .table-btn {
+  width: 65px;
+  margin: 0 5px;
+  display: inline-block;
+  text-align: center;
+}
+
+.management-category-table .nonactive-btn:hover {
+  font-weight: bold;
 }
 
 .management-category .btn-container {
@@ -1922,17 +1936,25 @@ footer .logo-container:hover {
   width: 300px;
 }
 
-.management-category-create form {
-  margin-top: 40px;
+.management-category-create h5 {
+  margin-bottom: 30px;
 }
 
-.management-category-create .strong-btn {
-  width: 100px;
-  margin-left: 20px;
+.management-category-create input {
+  width: 200px;
+  margin: 0 50px 30px 50px;
 }
 
 .management-category-create .thin-btn {
-  margin-top: 40px;
+  margin-top: 30px;
+}
+
+.management-category-create p {
+  margin-bottom: 30px;
+}
+
+.management-category-create .nonactive-btn:hover {
+  font-weight: bold;
 }
 
 .management-user .search-container {

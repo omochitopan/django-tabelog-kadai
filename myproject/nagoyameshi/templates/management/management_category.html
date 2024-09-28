@@ -7,7 +7,7 @@
 		<div class="flex-container space-between">
             <form method="get" action="{% url 'managementcategory' request.user.pk %}">
 				<input type="text" name="query" placeholder="カテゴリ名">
-                <button type="submit" class="btn strong-btn">検索</button>
+                <button type="submit" class="btn strong-btn search-btn">検索</button>
             </form>
 			<a href="{% url 'managementcategorycreate' request.user.pk %}" class="btn new-btn">＋新規追加</a>
         </div>
@@ -17,12 +17,17 @@
 			<tr>
 				<th class="id">id</th>
 				<th class="name">カテゴリ名</th>
+				<th class="update"></th>
+				<th class="delete"></th>
 			</tr>
 			{% for category in object_list %}	
 			<tr>
 				<td>{{ category.pk }}</td>
 				<td>{{ category.category_name }}</td>
+				<td><a href="{% url 'managementcategoryupdate' request.user.pk category.pk %}" class="btn strong-btn table-btn">編集</a></td>
+				<td><a href="{% url 'managementcategorydelete' request.user.pk category.pk %}" class="btn nonactive-btn table-btn">削除</a></td>
 			</tr>
+			
 			{% endfor %}
 		</table>
 		<div class="flex-container btn-container">

@@ -1197,6 +1197,21 @@ class ManagementCategoryCreateView(OnlyManagementUserMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('managementcategory', kwargs=dict(user_id = self.request.user.pk))
 
+class ManagementCategoryUpdateView(OnlyManagementUserMixin, UpdateView):
+    model = Category
+    form_class = CategoryCreateForm
+    template_name = "management/management_category_update.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('managementcategory', kwargs=dict(user_id = self.request.user.pk))
+
+class ManagementCategoryDeleteView(OnlyManagementUserMixin, DeleteView):
+    model = Category
+    template_name = "management/management_category_delete.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('managementcategory', kwargs=dict(user_id = self.request.user.pk))
+
 class ManagementReservationRestaurantView(OnlyManagementUserMixin, ListView):
     model = Reservation
     template_name = "management/management_reservation_restaurant.html"
