@@ -79,6 +79,7 @@ class SignupConfirmView(FormView):
 
 class SignupView(CreateView):
     form_class = SignUpForm
+    template_name = "signup.html"
     success_url = reverse_lazy('usercreated')
 
 class UserCreatedView(TemplateView):
