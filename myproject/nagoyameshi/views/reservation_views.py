@@ -90,6 +90,7 @@ class ReservationFormView(LoginRequiredMixin, FormView):
             'form': form,
             'restaurant': Restaurant.objects.get(pk = self.kwargs.get("restaurant_id")),
             'kwargs': self.kwargs,
+            'is_subscribed': True
         }
         form = context['form']
         for v in form.fields.values():
