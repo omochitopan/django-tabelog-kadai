@@ -2,13 +2,14 @@ import calendar, datetime, environ
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from django.views.generic.base import TemplateView
+from ..mixins import OnlyAdministrationUserMixin
 from ..models import Restaurant, User, Reservation, Subscription
 
 env = environ.Env()
 ip_port = env('IP_PORT')
 login_url = f'{ip_port}/login/'
 
-class AdministrationUserView(TemplateView):
+class AdministrationUserView(OnlyAdministrationUserMixin, TemplateView):
     template_name = "administration/administration_user.html"
     
     def get_context_data(self, **kwargs):
@@ -85,7 +86,7 @@ class AdministrationUserView(TemplateView):
             start = datetime.date(start.year + (start.month == 12), (start.month % 12) + 1, calendar.monthrange(start.year + (start.month == 12), (start.month % 12) + 1)[1])
         return subscriber_counts, free_counts
     
-class AdministrationRestaurantView(TemplateView):
+class AdministrationRestaurantView(OnlyAdministrationUserMixin, TemplateView):
     template_name = "administration/administration_restaurant.html"
     
     def get_context_data(self, **kwargs):
@@ -148,7 +149,7 @@ class AdministrationRestaurantView(TemplateView):
             s_before += relativedelta(months = 1)
         return monthly_open_counts, monthly_closed_counts
 
-class AdministrationReservationView(TemplateView):
+class AdministrationReservationView(OnlyAdministrationUserMixin, TemplateView):
     template_name = "administration/administration_reservation.html"
     
     def get_context_data(self, **kwargs):
@@ -203,7 +204,7 @@ class AdministrationReservationView(TemplateView):
             s_before += relativedelta(months = 1)
         return reservation_counts
     
-class AdministrationSalesView(TemplateView):
+class AdministrationSalesView(OnlyAdministrationUserMixin, TemplateView):
     template_name = "administration/administration_sales.html"
     
     def get_context_data(self, **kwargs):

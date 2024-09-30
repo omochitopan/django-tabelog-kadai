@@ -59,3 +59,9 @@ class OnlyPayingMemberMixin(UserPassesTestMixin):
                 is_subscribed = True
                 break
         return is_subscribed
+
+class OnlyAdministrationUserMixin(UserPassesTestMixin):
+    raise_exception = True
+
+    def test_func(self):
+        return self.request.user.is_superuser
